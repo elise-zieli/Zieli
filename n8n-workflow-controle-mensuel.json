@@ -1,0 +1,116 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "months", "monthsInterval": 1, "triggerAtDayOfMonth": 5, "triggerAtHour": 8, "triggerAtMinute": 0 } ] }
+      },
+      "name": "Le 5 du mois a 8h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 300]
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "search",
+        "base": { "__rl": true, "value": "app3K4PQkkZFAxipC", "mode": "id" },
+        "table": { "__rl": true, "value": "tblna9EWuSbSHsXT8", "mode": "id" },
+        "returnAll": true,
+        "options": { "fields": ["Name"] }
+      },
+      "name": "Lire entreprises",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "search",
+        "base": { "__rl": true, "value": "app3K4PQkkZFAxipC", "mode": "id" },
+        "table": { "__rl": true, "value": "tblZDrxbfp6fR50I4", "mode": "id" },
+        "returnAll": true,
+        "options": { "fields": ["Date comptable", "Entreprise"] }
+      },
+      "name": "Lire transactions",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [440, 300],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "search",
+        "base": { "__rl": true, "value": "app3K4PQkkZFAxipC", "mode": "id" },
+        "table": { "__rl": true, "value": "tblnrDOjAypfP1ma8", "mode": "id" },
+        "returnAll": true,
+        "options": { "fields": ["Date", "Entreprise"] }
+      },
+      "name": "Lire previsionnel",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [660, 300],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "// Controle mensuel : pour chaque entreprise, le reel du mois termine est-il saisi,\n// et le previsionnel couvre-t-il les 6 prochains mois ?\nconst MOIS = [\u0027janvier\u0027, \u0027février\u0027, \u0027mars\u0027, \u0027avril\u0027, \u0027mai\u0027, \u0027juin\u0027, \u0027juillet\u0027, \u0027août\u0027, \u0027septembre\u0027, \u0027octobre\u0027, \u0027novembre\u0027, \u0027décembre\u0027];\n\nconst parties = new Intl.DateTimeFormat(\u0027en-GB\u0027, { timeZone: \u0027Europe/Paris\u0027, year: \u0027numeric\u0027, month: \u00272-digit\u0027 }).formatToParts(new Date());\nconst annee = Number(parties.find((p) =\u003e p.type === \u0027year\u0027).value);\nconst mois = Number(parties.find((p) =\u003e p.type === \u0027month\u0027).value);\n\nconst cleMois = (decalage) =\u003e new Date(Date.UTC(annee, mois - 1 + decalage, 1)).toISOString().slice(0, 7);\nconst nomMois = (cle) =\u003e MOIS[Number(cle.slice(5, 7)) - 1] + \u0027 \u0027 + cle.slice(0, 4);\nconst dateFr = (d) =\u003e d.slice(8, 10) + \u0027/\u0027 + d.slice(5, 7) + \u0027/\u0027 + d.slice(0, 4);\nconst echapper = (t) =\u003e String(t).replace(/\u0026/g, \u0027\u0026amp;\u0027).replace(/\u003c/g, \u0027\u0026lt;\u0027).replace(/\u003e/g, \u0027\u0026gt;\u0027);\n\nfunction plusRecentParEntreprise(noeud, champ) {\n  const resultat = {};\n  for (const ligne of $(noeud).all()) {\n    const date = ligne.json[champ];\n    for (const id of ligne.json.Entreprise || []) {\n      if (date \u0026\u0026 (!resultat[id] || date \u003e resultat[id])) resultat[id] = date;\n    }\n  }\n  return resultat;\n}\n\nconst moisTermine = cleMois(-1);\nconst horizon = cleMois(6);\nconst derniereTransaction = plusRecentParEntreprise(\u0027Lire transactions\u0027, \u0027Date comptable\u0027);\nconst dernierPrevu = plusRecentParEntreprise(\u0027Lire previsionnel\u0027, \u0027Date\u0027);\n\nlet nbActions = 0;\nlet blocs = \u0027\u0027;\n\nfor (const entreprise of $(\u0027Lire entreprises\u0027).all()) {\n  const id = entreprise.json.id;\n  const nom = entreprise.json.Name || \u0027Entreprise sans nom\u0027;\n  const actions = [];\n\n  const transaction = derniereTransaction[id];\n  if (!transaction) {\n    actions.push(\u0027Réel de \u0027 + nomMois(moisTermine) + \u0027 à saisir (aucune transaction enregistrée)\u0027);\n  } else if (transaction.slice(0, 7) \u003c moisTermine) {\n    actions.push(\u0027Réel de \u0027 + nomMois(moisTermine) + \u0027 à saisir (dernière transaction : \u0027 + dateFr(transaction) + \u0027)\u0027);\n  }\n\n  const prevu = dernierPrevu[id];\n  if (!prevu) {\n    actions.push(\u0027Prévisionnel à créer jusqu\\\u0027à \u0027 + nomMois(horizon));\n  } else if (prevu.slice(0, 7) \u003c horizon) {\n    actions.push(\u0027Prévisionnel à compléter jusqu\\\u0027à \u0027 + nomMois(horizon) + \u0027 (actuellement jusqu\\\u0027à \u0027 + nomMois(prevu.slice(0, 7)) + \u0027)\u0027);\n  }\n\n  if (actions.length \u003e 0) {\n    nbActions += actions.length;\n    blocs += \u0027\u003ch2 style=\"margin:24px 0 8px;font-family:Georgia,serif;font-size:18px;color:#1d2433;\"\u003e\u0027 + echapper(nom) + \u0027\u003c/h2\u003e\u0027\n      + \u0027\u003cul style=\"margin:0;padding-left:20px;font-family:Arial,sans-serif;font-size:15px;line-height:23px;color:#1d2433;\"\u003e\u0027\n      + actions.map((a) =\u003e \u0027\u003cli\u003e\u0027 + echapper(a) + \u0027\u003c/li\u003e\u0027).join(\u0027\u0027)\n      + \u0027\u003c/ul\u003e\u0027;\n  }\n}\n\nconst sujet = \u0027Zieli 26 : \u0027 + nbActions + (nbActions \u003e 1 ? \u0027 actions\u0027 : \u0027 action\u0027) + \u0027 à faire ce mois-ci\u0027;\nconst html = \u0027\u003cdiv style=\"max-width:560px;margin:0 auto;padding:24px;background-color:#ffffff;\"\u003e\u0027\n  + \u0027\u003cp style=\"margin:0;font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#21277e;\"\u003eContrôle mensuel des données\u003c/p\u003e\u0027\n  + blocs\n  + \u0027\u003cp style=\"margin:24px 0 0;font-family:Arial,sans-serif;font-size:12px;color:#6b665e;\"\u003eZieli 26 - Suivi de trésorerie\u003c/p\u003e\u0027\n  + \u0027\u003c/div\u003e\u0027;\n\nreturn [{ json: { nbActions, sujet, html } }];\n"
+      },
+      "name": "Verifier les donnees",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [880, 300],
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "d1",
+              "leftValue": "={{ $json.nbActions }}",
+              "rightValue": 0,
+              "operator": { "type": "number", "operation": "gt" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Actions a faire ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1100, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "zieli26bz@gmail.com",
+        "toEmail": "elise.ziri@gmail.com",
+        "subject": "={{ $json.sujet }}",
+        "emailFormat": "html",
+        "html": "={{ $json.html }}",
+        "options": { "appendAttribution": false }
+      },
+      "name": "Email controle Elise",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1320, 200],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    }
+  ],
+  "connections": {
+    "Le 5 du mois a 8h": { "main": [[{ "node": "Lire entreprises", "type": "main", "index": 0 }]] },
+    "Lire entreprises": { "main": [[{ "node": "Lire transactions", "type": "main", "index": 0 }]] },
+    "Lire transactions": { "main": [[{ "node": "Lire previsionnel", "type": "main", "index": 0 }]] },
+    "Lire previsionnel": { "main": [[{ "node": "Verifier les donnees", "type": "main", "index": 0 }]] },
+    "Verifier les donnees": { "main": [[{ "node": "Actions a faire ?", "type": "main", "index": 0 }]] },
+    "Actions a faire ?": { "main": [[{ "node": "Email controle Elise", "type": "main", "index": 0 }], []] }
+  },
+  "pinData": {}
+}

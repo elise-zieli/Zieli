@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Copie de votre explication des écarts - Zieli 26</title>
+</head>
+<body style="margin:0;padding:0;background-color:#faf8f4;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#faf8f4;">
+  <tr>
+    <td align="center" style="padding:24px 12px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;background-color:#ffffff;border:1px solid #e7e2d9;border-radius:14px;">
+        <tr>
+          <td style="background-color:#21277e;padding:16px 28px;border-radius:13px 13px 0 0;font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:bold;color:#ffffff;">
+            Zieli 26
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:28px 28px 8px;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:bold;color:#1d2433;">
+            Votre explication des écarts
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 28px 20px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:23px;color:#1d2433;">
+            Bonjour,<br><br>
+            Je l'ai bien reçue. En voici une copie, que vous pourrez reprendre lors de la préparation de votre rapport de gestion.
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 28px 20px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;">
+              <tr>
+                <td width="130" style="padding:8px 0;border-top:1px solid #e7e2d9;border-bottom:1px solid #e7e2d9;color:#6b665e;">Mois concerné</td>
+                <td style="padding:8px 0;border-top:1px solid #e7e2d9;border-bottom:1px solid #e7e2d9;color:#1d2433;">{{ $('Preparer').item.json.mois === 'plusieurs' ? 'Plusieurs mois' : (DateTime.fromFormat($('Preparer').item.json.mois ?? '', 'yyyy-MM').isValid ? DateTime.fromFormat($('Preparer').item.json.mois, 'yyyy-MM').setLocale('fr').toFormat('LLLL yyyy') : 'Non précisé') }}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 28px 24px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="background-color:#e8eef6;padding:16px 18px;border-radius:8px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:23px;color:#1d2433;">
+                  {{ ($('Preparer').item.json.texte || '(aucun texte)').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>') }}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:0 28px 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:23px;color:#1d2433;">
+            Elise
+          </td>
+        </tr>
+      </table>
+      <p style="margin:16px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#6b665e;">Zieli 26 - Suivi de trésorerie</p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,210 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "entrepriseId", "value": "={{ $json.body.entrepriseId }}", "type": "string" },
+            { "id": "a2", "name": "typeCode", "value": "={{ $json.body.type }}", "type": "string" },
+            { "id": "a3", "name": "typeLibelle", "value": "={{ ({previsionnel:\"Sur le prévisionnel\", ecarts:\"Explication des écarts\", echange:\"Besoin d'un échange\"})[$json.body.type] ?? \"\" }}", "type": "string" },
+            { "id": "a4", "name": "texte", "value": "={{ $json.body.texte }}", "type": "string" },
+            { "id": "a5", "name": "urgent", "value": "={{ $json.body.urgent === true }}", "type": "boolean" },
+            { "id": "a6", "name": "mois", "value": "={{ $json.body.mois }}", "type": "string" }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Preparer",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "create",
+        "base": { "__rl": true, "value": "app3K4PQkkZFAxipC", "mode": "id" },
+        "table": { "__rl": true, "value": "tbldrpNuforNgrkv4", "mode": "id" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date du commentaire": "={{ $now.setZone(\"Europe/Paris\").toISO() }}",
+            "Entreprise": "={{ [$json.entrepriseId] }}",
+            "Caractère urgent": "={{ $json.urgent }}",
+            "Type de commentaire": "={{ $json.typeLibelle || null }}",
+            "Texte libre": "={{ $json.texte }}",
+            "Mois concerné": "={{ $json.mois }}",
+            "Statut": "Nouveau"
+          },
+          "matchingColumns": [],
+          "schema": [
+            { "id": "Date du commentaire", "displayName": "Date du commentaire", "required": false, "defaultMatch": false, "display": true, "type": "dateTime", "canBeUsedToMatch": true },
+            { "id": "Entreprise", "displayName": "Entreprise", "required": false, "defaultMatch": false, "display": true, "type": "array", "canBeUsedToMatch": true },
+            { "id": "Caractère urgent", "displayName": "Caractère urgent", "required": false, "defaultMatch": false, "display": true, "type": "boolean", "canBeUsedToMatch": true },
+            {
+              "id": "Type de commentaire", "displayName": "Type de commentaire", "required": false, "defaultMatch": false, "display": true, "type": "options", "canBeUsedToMatch": true,
+              "options": [
+                { "name": "Sur le prévisionnel", "value": "Sur le prévisionnel" },
+                { "name": "Explication des écarts", "value": "Explication des écarts" },
+                { "name": "Besoin d'un échange", "value": "Besoin d'un échange" }
+              ]
+            },
+            { "id": "Texte libre", "displayName": "Texte libre", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            { "id": "Mois concerné", "displayName": "Mois concerné", "required": false, "defaultMatch": false, "display": true, "type": "string", "canBeUsedToMatch": true },
+            {
+              "id": "Statut", "displayName": "Statut", "required": false, "defaultMatch": false, "display": true, "type": "options", "canBeUsedToMatch": true,
+              "options": [
+                { "name": "Nouveau", "value": "Nouveau" },
+                { "name": "Traité", "value": "Traité" }
+              ]
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Enregistrer remarque",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "resource": "record",
+        "operation": "get",
+        "base": { "__rl": true, "value": "app3K4PQkkZFAxipC", "mode": "id" },
+        "table": { "__rl": true, "value": "tblna9EWuSbSHsXT8", "mode": "id" },
+        "id": "={{ $('Preparer').item.json.entrepriseId }}",
+        "options": {}
+      },
+      "name": "Lire entreprise",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $('Preparer').item.json.urgent }}",
+              "rightValue": "",
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Urgent ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "REMPLACER_PAR_TON_ADRESSE",
+        "subject": "=URGENT - Remarque de {{ $('Lire entreprise').item.json.Name }}",
+        "emailType": "text",
+        "message": "=Type : {{ $('Preparer').item.json.typeLibelle }}\nMois concerné : {{ $('Preparer').item.json.mois }}\n\n{{ $('Preparer').item.json.texte }}",
+        "options": { "appendAttribution": false }
+      },
+      "name": "Email urgent Elise",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, 200]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "REMPLACER_PAR_TON_ADRESSE",
+        "subject": "=Nouvelle remarque de {{ $('Lire entreprise').item.json.Name }}",
+        "emailType": "text",
+        "message": "=Type : {{ $('Preparer').item.json.typeLibelle }}\nMois concerné : {{ $('Preparer').item.json.mois }}\n\n{{ $('Preparer').item.json.texte }}",
+        "options": { "appendAttribution": false }
+      },
+      "name": "Email normal Elise",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1120, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "c2",
+              "leftValue": "={{ $('Preparer').item.json.typeCode }}",
+              "rightValue": "ecarts",
+              "operator": { "type": "string", "operation": "equals", "name": "filter.operator.equals" }
+            },
+            {
+              "id": "c3",
+              "leftValue": "={{ $('Preparer').item.json.texte }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "notEmpty", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "name": "Ecarts ?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "sendTo": "={{ $('Lire entreprise').item.json['email resp légal'] }}",
+        "subject": "Copie de votre explication des écarts",
+        "emailType": "text",
+        "message": "=Bonjour,\n\nVoici la copie de votre explication pour le mois {{ $('Preparer').item.json.mois }} :\n\n{{ $('Preparer').item.json.texte }}\n\nVous pourrez la retrouver lors de la préparation de votre rapport de gestion.\n\nElise",
+        "options": { "appendAttribution": false }
+      },
+      "name": "Copie dirigeant",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1560, 200]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"ok\": true }",
+        "options": {}
+      },
+      "name": "Reponse au site",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1780, 300]
+    }
+  ],
+  "connections": {
+    "Preparer": { "main": [[{ "node": "Enregistrer remarque", "type": "main", "index": 0 }]] },
+    "Enregistrer remarque": { "main": [[{ "node": "Lire entreprise", "type": "main", "index": 0 }]] },
+    "Lire entreprise": { "main": [[{ "node": "Urgent ?", "type": "main", "index": 0 }]] },
+    "Urgent ?": {
+      "main": [
+        [{ "node": "Email urgent Elise", "type": "main", "index": 0 }],
+        [{ "node": "Email normal Elise", "type": "main", "index": 0 }]
+      ]
+    },
+    "Email urgent Elise": { "main": [[{ "node": "Ecarts ?", "type": "main", "index": 0 }]] },
+    "Email normal Elise": { "main": [[{ "node": "Ecarts ?", "type": "main", "index": 0 }]] },
+    "Ecarts ?": {
+      "main": [
+        [{ "node": "Copie dirigeant", "type": "main", "index": 0 }],
+        [{ "node": "Reponse au site", "type": "main", "index": 0 }]
+      ]
+    },
+    "Copie dirigeant": { "main": [[{ "node": "Reponse au site", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {}
+}

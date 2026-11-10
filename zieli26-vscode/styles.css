@@ -1,0 +1,276 @@
+/* =========================================================
+   CHARTE GRAPHIQUE « SOBRE ET ÉDITORIALE » (validée le 06/11)
+   - Identité : bleu marine sur fond blanc cassé chaud.
+   - Titres : police à empattements (Source Serif 4).
+   - Texte et chiffres : police sans empattements (Public Sans),
+     avec des chiffres de même largeur pour que les colonnes s'alignent.
+   - Couleurs de sens à NE PAS changer : vert = entrées, orange = sorties, rouge = seuil.
+   ========================================================= */
+:root {
+    --marine: #21277e;      /* couleur principale (identité Zieli 26) */
+    --marine-clair: #e8eef6;
+    --fond: #faf8f4;        /* blanc cassé chaud (fond de page) */
+    --fond-doux: #f6f3ed;   /* fond légèrement teinté (colonnes des mois passés, sous-totaux) */
+    --carte: #ffffff;
+    --texte: #1d2433;
+    --texte-doux: #6b665e;  /* gris chaud pour les textes secondaires */
+    --bordure: #e7e2d9;     /* filets et bordures, gris chaud */
+    --beige: #f1eadc;       /* fond de la ligne « Cash in – Cash out » */
+    --entete-passe: #e9e3d8; /* fond de l'en-tête des mois passés (beige grisé) */
+    --fond-sorties: #fde9d3; /* fond de la ligne « Sorties » (orange léger, un peu plus orangé qu'avant) */
+    --filet-mois: #cdc6b9;  /* filet vertical entre les mois du tableau (un peu plus marqué) */
+
+    /* Relief des blocs : deux ombres légères teintées de marine (une proche, une diffuse).
+       Pour plus de relief, augmenter les deux derniers chiffres (opacité .06 → .10). */
+    --ombre-bloc: 0 1px 2px rgba(31, 58, 95, .06), 0 6px 20px rgba(31, 58, 95, .07);
+    --arrondi: 14px;        /* coins arrondis des blocs */
+
+    /* Tableau : couleur des montants réels et prévus */
+    --reel: #111111;        /* noir */
+    --prevu: #1d4f91;       /* bleu foncé (plus vif que le marine, pour bien se distinguer du noir) */
+
+    /* Polices : si Google Fonts ne charge pas (pas d'internet), le navigateur prend la suivante de la liste. */
+    --police-titres: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --police-texte: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --vert: #1e8e5a;   --vert-fond: #e6f4ec;
+    --orange: #c46a00; --orange-fond: #fdf1e2;
+    --rouge: #c0392b;  --rouge-fond: #fbeaea;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: var(--police-texte);
+    /* Chiffres de même largeur : 1 111 € et 8 888 € occupent la même place → colonnes alignées */
+    font-variant-numeric: tabular-nums;
+    background: var(--fond);
+    color: var(--texte);
+    line-height: 1.45;
+  }
+
+  /* Titres en police à empattements (ton éditorial) */
+  h1, h2, h3, .boite-connexion .marque { font-family: var(--police-titres); font-weight: 600; letter-spacing: -0.01em; }
+
+  .page { max-width: 1200px; margin: 0 auto; padding: 24px 20px 48px; }
+
+  /* --- En-tête --- */
+  header { display: flex; justify-content: space-between; align-items: flex-end;
+           flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  header h1 { margin: 0; font-size: 30px; color: var(--marine); }
+  header .sous-titre { margin: 4px 0 0; color: var(--texte-doux); }
+  header .maj { color: var(--texte-doux); font-size: 14px; }
+
+  /* --- Bandeau d'alerte --- */
+  .alerte {
+    display: none;  /* caché par défaut, affiché par le script si besoin */
+    background: var(--rouge-fond); border-left: 5px solid var(--rouge);
+    color: var(--rouge); padding: 14px 18px; border-radius: 8px;
+    margin-bottom: 20px; font-size: 17px; font-weight: 600;
+  }
+  .alerte.visible { display: block; }
+  /* Texte de l'alerte en noir */
+  .alerte { color: var(--texte) !important; }
+  /* Précision sur les écarts : plus petite et en italique */
+  .note-alerte { font-size: 14px; font-style: italic; }
+  /* Bandeau neutre (aucun passage sous le seuil) : bleu clair au lieu de rouge */
+  .alerte.info { background: var(--marine-clair); border-left-color: var(--marine); }
+
+  /* --- Cartes chiffres clés --- */
+  .cartes { display: grid; grid-template-columns: minmax(0, 420px); gap: 16px; margin-bottom: 20px; }
+  .carte {
+    background: var(--carte); border: 0; border-radius: var(--arrondi);
+    padding: 20px; border-top: 5px solid var(--vert);
+    box-shadow: var(--ombre-bloc);   /* relief (voir les variables en haut du fichier) */
+  }
+  .carte.vigilance { border-top-color: var(--orange); }
+  .carte.alerte-carte { border-top-color: var(--rouge); }
+  .carte .titre { font-size: 15px; color: var(--texte-doux); margin: 0 0 8px; }
+  .carte .chiffre { font-size: 36px; font-weight: 700; margin: 0; }
+  .carte .detail { font-size: 14px; color: var(--texte-doux); margin: 8px 0 0; }
+
+  /* --- Blocs (graphique, tableau) --- */
+  /* Blocs en relief : plus de bordure grise, une ombre douce à la place (style plus moderne) */
+  .bloc { background: var(--carte); border: 0; box-shadow: var(--ombre-bloc);
+          border-radius: var(--arrondi); padding: 24px; margin-bottom: 24px; }
+  .bloc h2 { margin: 0 0 4px; font-size: 22px; color: var(--marine); }
+  .bloc .aide { margin: 0 0 16px; color: var(--texte-doux); font-size: 14px; }
+
+  .legende { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--texte-doux); margin-top: 8px; }
+  .legende span::before { content: ""; display: inline-block; width: 22px; height: 0;
+                          margin-right: 6px; vertical-align: middle; border-top: 3px solid var(--marine); }
+  .legende .prevu::before { border-top-style: dashed; }
+  .legende .seuil::before { border-top: 2px solid var(--rouge); opacity: .45; }
+  .legende .ligne-entrees::before { border-top: 1.5px solid #1e8e5a; }
+  .legende .ligne-sorties::before { border-top: 1.5px solid #e08a1e; }
+
+  svg text { font-family: inherit; }
+  /* Sur petit écran, le graphique garde une taille lisible et défile horizontalement */
+  #graphique { overflow-x: auto; position: relative; }
+  .point-cliquable { cursor: pointer; }
+  .point-cliquable:hover .point-visible { stroke-width: 4; }
+  /* Bulle qui affiche le montant quand on clique sur un point */
+  .bulle {
+    display: none; position: absolute; transform: translate(-50%, -100%);
+    background: var(--marine); color: #fff; padding: 10px 14px; border-radius: 8px;
+    font-size: 14px; line-height: 1.5; white-space: nowrap; pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  }
+  .bulle.visible { display: block; }
+  .bulle strong { font-size: 18px; }
+  .bulle .ligne-doux { opacity: .8; font-size: 13px; }
+  #graphique svg { min-width: 820px; }
+
+  /* --- Tableau mensuel --- */
+  .defilement { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 900px; }
+  th, td { padding: 8px 10px; text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  /* Colonne des libellés figée à gauche quand on fait défiler le tableau.
+     ⚠ Seulement la case du coin (th.coin) et la 1re case des lignes du corps : sinon le 1er mois
+     des lignes d'en-tête (« septembre ») restait collé à gauche par-dessus les libellés (bug corrigé le 07/11). */
+  thead th.coin, tbody td:first-child { position: sticky; left: 0; background: var(--carte); z-index: 1; }
+  thead th.coin { z-index: 2; }
+  thead th { color: var(--texte-doux); font-weight: 600; border-bottom: 2px solid var(--bordure); }
+  /* En-tête des mois passés : beige grisé (plus de bleu, réservé aux soldes) */
+  thead .mois-passe { background: var(--entete-passe); color: var(--texte); }
+  thead .sous th { font-size: 12px; font-weight: 500; }
+  tbody tr { border-bottom: 1px solid var(--bordure); }
+  tr.important td { font-weight: 700; }
+  tr.solde td { font-weight: 700; color: var(--marine); background: var(--marine-clair); }
+  tr.solde td:first-child { background: var(--marine-clair); }
+  tr.cliquable td:first-child { cursor: pointer; color: var(--marine); }
+  tr.cliquable td:first-child::before { content: "▸ "; }
+  tr.cliquable.ouvert td:first-child::before { content: "▾ "; }
+  tr.detail-ligne td { color: var(--texte-doux); font-size: 13px; }
+  tr.detail-ligne td:first-child { padding-left: 56px; }
+  tr.detail-partie td { color: var(--texte); font-weight: 600; background: var(--fond-doux); }
+  tr.detail-partie td:first-child { background: var(--fond-doux); }
+  tr.detail-categorie td:first-child { padding-left: 72px; }
+  tr.detail-ligne { display: none; }
+  tr.detail-ligne.visible { display: table-row; }
+  tr td.ecart-neg, tr.detail-ligne td.ecart-neg { color: var(--rouge); font-weight: 600; }
+  tr td.ecart-pos, tr.detail-ligne td.ecart-pos { color: var(--vert); }
+  td.sous-seuil { color: var(--rouge) !important; }
+  /* Parenthèse invisible après les montants positifs du tableau : aligne les chiffres avec les
+     montants négatifs écrits entre parenthèses, ex. « (3 500 €) » (voir eurosTableau dans app.js). */
+  .paren-fantome { visibility: hidden; }
+  .col-passe { background: var(--fond-doux); }
+  .col-optionnelle { display: none; }
+  .col-optionnelle.visible { display: table-cell; }
+  th.mois-repliable { cursor: pointer; }
+  th.bascule-pct { cursor: pointer; }
+  .badge-pct { display: inline-block; font-size: 11px; font-weight: 700; padding: 0 5px; margin-left: 2px;
+               border: 1px solid var(--bordure); border-radius: 4px; color: var(--marine); background: #fff; }
+  .badge-pct.ouvert { background: var(--marine); color: #fff; border-color: var(--marine); }
+  td.col-pct, th.col-pct { color: var(--marine); font-style: italic; font-size: 11px; padding: 8px 4px; width: 1%; }
+  .en-cours { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--marine);
+              padding: 1px 6px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
+  th.mois-repliable:hover { text-decoration: underline; }
+
+  /* --- Distinguer le réel du prévisionnel (validé le 06/11) --- */
+  /* Bandeau « Réalisé » / « Prévisionnel » au-dessus des mois */
+  thead tr.zones th.zone { text-align: left; font-size: 12px; font-weight: 700; text-transform: uppercase;
+                           letter-spacing: .08em; color: var(--marine); padding: 6px 10px;
+                           border-bottom: 2px solid var(--marine); }
+  /* Filet vertical fin entre les mois (seulement entre deux mois, pas à l'intérieur d'un mois) */
+  th.debut-mois, td.debut-mois { border-left: 1px solid var(--filet-mois); }
+  /* Trait vertical marine : là où s'arrête le réel et commence le prévisionnel.
+     Placé APRÈS le filet des mois pour le remplacer sur le mois en cours. */
+  th.debut-prevision, td.debut-prevision { border-left: 3px solid var(--marine); }
+  /* Couleurs réel / prévu. « #tableau » rend la règle prioritaire sur les couleurs des lignes
+     (solde, total disponible…). Le rouge « sous le seuil » reste prioritaire (!important plus haut). */
+  #tableau td.val-reel, #tableau th.val-reel { color: var(--reel); }
+  #tableau td.val-prevu, #tableau th.val-prevu { color: var(--prevu); font-style: italic; }
+
+  /* Ligne « Total disponible » : bleu un peu plus soutenu que la ligne du solde */
+  tbody tr.total-dispo td { background: #d3e2f4; font-weight: 700; color: var(--marine); }
+  tbody tr.total-dispo td.ecart-neg { color: var(--rouge); }
+  tbody tr.total-dispo td.ecart-pos { color: var(--vert); }
+
+  /* --- Niveaux de dépliage du tableau (validé le 07/11) : décalage du libellé vers la droite --- */
+  tr.niveau-1 td:first-child { padding-left: 24px; }
+  tr.niveau-2 td:first-child { padding-left: 40px; }
+  /* « Cash in – Cash out » : fond beige sur TOUTE la ligne (y compris les colonnes des mois passés) */
+  #tableau tr.flux-net td { background: var(--beige); }
+  /* « Solde épargne fin de mois » : fond blanc sur toute la ligne */
+  #tableau tr.epargne-solde td { background: #fff; }
+
+  /* --- Fonds de couleur : vert léger pour les entrées, orange léger pour les sorties --- */
+  tbody tr[data-ouvre="entrees"] td { background: #e6f4ec; }
+  tbody tr[data-ouvre="sorties"] td { background: var(--fond-sorties); }
+  tbody tr[data-groupe="entrees"] td,
+  tbody tr.detail-partie[data-groupe="entrees"] td:first-child { background: #f2faf5; }
+  tbody tr[data-groupe="sorties"] td,
+  tbody tr.detail-partie[data-groupe="sorties"] td:first-child { background: #fef8f0; }
+
+  /* --- Formulaire de commentaires --- */
+  .champs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 14px; }
+  form label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; color: var(--texte); }
+  form select, form input, form textarea {
+    font: inherit; font-weight: 400; padding: 10px 12px; border: 1px solid var(--bordure);
+    border-radius: 8px; background: #fff; color: var(--texte);
+  }
+  form textarea { resize: vertical; }
+  /* Bloc « Caractère urgent » (boutons Oui / Non) */
+  .choix-urgent { border: 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; }
+  .choix-urgent legend { font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 6px; width: 100%; }
+  .choix-urgent .option { flex-direction: row; align-items: center; gap: 6px; font-weight: 400; cursor: pointer; }
+  .choix-urgent input { accent-color: var(--marine); width: 18px; height: 18px; margin: 0; }
+  .choix-urgent .aide-urgent { color: var(--texte-doux); font-size: 13px; }
+  /* Liste « Mois concerné » : pas besoin de toute la largeur */
+  .champ-court select { max-width: 320px; }
+  /* Mention « Urgent » dans la liste des demandes envoyées */
+  .badge-urgent { display: inline-block; font-size: 11px; font-weight: 700; color: #fff; background: var(--rouge);
+                  padding: 1px 6px; border-radius: 10px; margin-right: 4px; }
+  .pleine-largeur { margin-bottom: 14px; }
+  form button {
+    font: inherit; font-weight: 600; background: var(--marine); color: #fff; border: 0;
+    padding: 12px 22px; border-radius: 8px; cursor: pointer;
+  }
+  form button:hover { opacity: .9; }
+  .confirmation { color: var(--vert); font-weight: 600; margin: 12px 0 0; min-height: 1em; }
+  #liste-commentaires h3 { font-size: 15px; color: var(--marine); margin: 20px 0 8px; }
+  .commentaire { border-left: 3px solid var(--marine-clair); padding: 6px 12px; margin-bottom: 8px; font-size: 14px; }
+  .commentaire .meta { color: var(--texte-doux); font-size: 13px; }
+
+  /* --- Connexion --- */
+  .ecran-connexion, #tableau-de-bord { display: none; }
+  .ecran-connexion.visible { display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 20px; }
+  #tableau-de-bord.visible { display: block; }
+  .boite-connexion {
+    background: var(--carte); border: 1px solid var(--bordure); border-radius: 12px;
+    padding: 32px; width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .boite-connexion .marque { margin: 0; font-weight: 700; color: var(--marine); letter-spacing: .5px; }
+  .boite-connexion h1 { margin: 0; font-size: 22px; }
+  .boite-connexion .aide { margin: 0; color: var(--texte-doux); font-size: 14px; }
+  .boite-connexion .erreur { color: var(--rouge); margin: 0; min-height: 1em; font-size: 14px; }
+  .lien-discret { color: var(--marine); font-size: 14px; }
+  .comptes-demo { background: var(--marine-clair); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--texte); line-height: 1.6; }
+  .barre-utilisateur { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+                       gap: 10px; margin-bottom: 16px; font-size: 14px; color: var(--texte-doux); }
+  .barre-utilisateur .compte { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .bouton-discret { font: inherit; background: none; border: 1px solid var(--bordure); border-radius: 8px;
+                    padding: 6px 12px; cursor: pointer; color: var(--marine); }
+  #message-synchro { color: var(--rouge); }
+  .alerte { white-space: pre-line; }
+  #bouton-expliquer:not([hidden]) { display: block; margin: -8px 0 20px; }
+  .zone-admin { display: none; }
+  .zone-admin.visible { display: block; }
+  .zone-admin label { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--texte); }
+  .zone-admin select { font: inherit; padding: 6px 10px; border: 1px solid var(--bordure); border-radius: 8px; }
+  .boite-connexion label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
+  .boite-connexion input { font: inherit; padding: 10px 12px; border: 1px solid var(--bordure); border-radius: 8px; }
+  .boite-connexion button { font: inherit; font-weight: 600; background: var(--marine); color: #fff; border: 0;
+                            padding: 12px; border-radius: 8px; cursor: pointer; }
+
+  footer { text-align: center; color: var(--texte-doux); font-size: 13px; }
+
+  /* --- Téléphone : les blocs s'empilent --- */
+  @media (max-width: 760px) {
+    .cartes { grid-template-columns: 1fr; }
+    .champs { grid-template-columns: 1fr; }
+    .carte .chiffre { font-size: 30px; }
+    header h1 { font-size: 22px; }
+  }

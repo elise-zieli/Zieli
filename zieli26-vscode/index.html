@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zieli 26 – Tableau de trésorerie</title>
+
+<!-- =========================================================
+     1. STYLE (apparence de la page)
+     Pour changer une couleur, modifie les variables en haut de styles.css.
+     ========================================================= -->
+<!-- Polices Google Fonts : Source Serif 4 (titres) et Public Sans (texte et chiffres).
+     Nécessite internet ; sinon, des polices de secours sont utilisées (voir styles.css). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+<!-- Écran de connexion (affiché si personne n'est connecté) -->
+<div class="ecran-connexion" id="ecran-connexion">
+  <form class="boite-connexion" id="form-connexion">
+    <p class="marque">Zieli 26</p>
+    <h1>Votre tableau de trésorerie</h1>
+    <p class="aide">Connectez-vous pour accéder aux chiffres de votre entreprise.</p>
+    <label>Email
+      <input type="email" id="champ-email" autocomplete="username" required>
+    </label>
+    <label>Mot de passe
+      <input type="password" id="champ-mdp" autocomplete="current-password" required>
+    </label>
+    <button type="submit">Se connecter</button>
+    <p class="erreur" id="erreur-connexion"></p>
+    <a href="#" class="lien-discret" onclick="document.getElementById('erreur-connexion').textContent = 'Contactez Elise pour recevoir un nouveau mot de passe.'; return false;">Mot de passe oublié ?</a>
+    <div class="comptes-demo">
+      <strong>Comptes de test des dirigeants</strong> (mot de passe : demo)<br>
+      libraire@utopie.example — voit uniquement la librairie<br>
+      boulanger@fournildor.example — voit uniquement la boulangerie
+    </div>
+  </form>
+</div>
+
+<div class="page" id="tableau-de-bord">
+
+  <!-- Barre du haut : qui est connecté -->
+  <div class="barre-utilisateur">
+    <div class="zone-admin" id="zone-admin">
+      <label>Entreprise affichée
+        <select id="choix-entreprise"></select>
+      </label>
+    </div>
+    <div class="compte">
+      <span id="message-synchro" role="status"></span>
+      <button type="button" class="bouton-discret" id="bouton-synchro" hidden>Synchronisation</button>
+      <span id="utilisateur-connecte"></span>
+      <button type="button" class="bouton-discret" id="bouton-deconnexion">Se déconnecter</button>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       2. STRUCTURE DE LA PAGE (les zones vides sont remplies par le script)
+       ========================================================= -->
+  <header>
+    <div>
+      <h1 id="nom-entreprise"></h1>
+      <p class="sous-titre">Suivi de votre trésorerie</p>
+    </div>
+    <div class="maj" id="date-maj"></div>
+  </header>
+
+  <section class="cartes">
+    <div class="carte" id="carte-disponible">
+      <!-- Pas de date ici : c'est la date « Mis à jour le … » affichée au-dessus qui fait foi (décision du 07/11). -->
+      <p class="titre">Total disponible</p>
+      <p class="chiffre" id="chiffre-disponible"></p>
+      <p class="detail" id="detail-disponible"></p>
+    </div>
+  </section>
+
+  <section class="bloc">
+    <h2>Évolution de votre compte courant</h2>
+    <div id="graphique"></div>
+    <div class="legende">
+      <span class="reel">Réel</span>
+      <span class="prevu">Prévu</span>
+      <span class="ligne-entrees">Encaissements du mois</span>
+      <span class="ligne-sorties">Dépenses du mois</span>
+      <span class="seuil" id="legende-seuil"></span>
+    </div>
+  </section>
+
+  <div class="alerte" id="alerte"></div>
+
+  <!-- Affiché seulement quand le bandeau signale des écarts : amène au formulaire « Une remarque ? ». -->
+  <button type="button" class="bouton-discret" id="bouton-expliquer" hidden>Expliquer ces écarts</button>
+
+
+
+  <section class="bloc">
+    <h2>Détail mois par mois</h2>
+    <div class="defilement"><table id="tableau"></table></div>
+  </section>
+
+  <section class="bloc" id="bloc-commentaires">
+    <h2>Une remarque ?</h2>
+    <p class="aide">Un changement à prévoir, un écart à expliquer, ou envie d'en parler ? Écrivez-le ici, je reviens vers vous. Tous les champs sont facultatifs.</p>
+    <form id="form-commentaire">
+      <label class="pleine-largeur">Type de remarque
+        <select id="champ-type">
+          <option value="">— Choisir —</option>
+          <option value="previsionnel">Sur le prévisionnel</option>
+          <option value="ecarts">Explication des écarts</option>
+          <option value="echange">Besoin d'un échange</option>
+        </select>
+      </label>
+      <label class="pleine-largeur">Votre commentaire
+        <textarea id="champ-texte" rows="3"
+          placeholder=""></textarea>
+      </label>
+      <!-- Caractère urgent : deux boutons ronds (« radio ») ; un seul choix possible, « Non » par défaut. -->
+      <fieldset class="pleine-largeur choix-urgent">
+        <legend>Caractère urgent</legend>
+        <label class="option"><input type="radio" name="urgent" value="non" checked> Non</label>
+        <label class="option"><input type="radio" name="urgent" value="oui"> Oui</label>
+        <span class="aide-urgent">Si oui, je vous recontacte au plus vite.</span>
+      </fieldset>
+      <label class="pleine-largeur champ-court">Mois concerné
+        <select id="champ-mois"></select>
+      </label>
+      <button type="submit">Envoyer à Elise</button>
+      <p class="confirmation" id="confirmation"></p>
+    </form>
+    <div id="liste-commentaires"></div>
+  </section>
+
+  <footer>Zieli 26 – données de démonstration (fictives)</footer>
+</div>
+
+<!-- =========================================================
+     3. SCRIPT (données + calculs + affichage)
+     ========================================================= -->
+<script src="donnees.js"></script>
+<!-- Remplace les chiffres fictifs par ceux d'Airtable (fourni par serveur.ps1). -->
+<script src="api/donnees-airtable.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
