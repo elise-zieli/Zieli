@@ -10,7 +10,7 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 ## 0. À faire maintenant (par ordre)
 
 1. **Tester le site en ligne** (https://zieli-jedha.netlify.app/) : nouvelle charte et logos, vrais chiffres Airtable, remarque envoyée → email reçu.
-2. **n8n** : vérifier que les 3 workflows sont **activés** (remarques, contrôle mensuel, point de trésorerie) et remplacer « Zieli 26 » par « Zieli » dans leurs e-mails (ou réimporter les fichiers `n8n-workflow-*.json` mis à jour).
+2. **n8n** : vérifier que les 3 workflows sont **activés** (remarques, contrôle mensuel, point de trésorerie). *(« Zieli 26 » → « Zieli » fait à la main le 12/11 dans les nœuds « Verifier les donnees » et « Fabriquer les PowerPoint ».)*
 3. **Airtable** : supprimer le champ « Mot de passe » de la table Utilisateurs, s'il existe encore *(à confirmer)*.
 4. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
 5. **Préparer la présentation** (16-17/11), voir section 8.
