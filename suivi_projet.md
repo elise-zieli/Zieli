@@ -9,13 +9,11 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 
 ## 0. À faire maintenant (par ordre)
 
-1. **Airtable — logos** : glisser les 2 fichiers de `zieli26-vscode/logos-demo` dans le champ **Logo** de la table Entreprises, puis cliquer sur « Synchronisation ».
-2. **Tester le site en ligne** (https://zieli-jedha.netlify.app/) : nouvelle charte et logos, vrais chiffres Airtable, remarque envoyée → email reçu.
-3. **n8n** : vérifier que les 3 workflows sont **activés** (remarques, contrôle mensuel, point de trésorerie) et remplacer « Zieli 26 » par « Zieli » dans leurs e-mails (ou réimporter les fichiers `n8n-workflow-*.json` mis à jour).
-4. **Couleur orange de la carte** : choisir 1,5 × ou 2 × le seuil (voir section 9).
-5. **Airtable** : supprimer le champ « Mot de passe » de la table Utilisateurs, s'il existe encore *(à confirmer)*.
-6. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
-7. **Préparer la présentation** (16-17/11), voir section 8.
+1. **Tester le site en ligne** (https://zieli-jedha.netlify.app/) : nouvelle charte et logos, vrais chiffres Airtable, remarque envoyée → email reçu.
+2. **n8n** : vérifier que les 3 workflows sont **activés** (remarques, contrôle mensuel, point de trésorerie) et remplacer « Zieli 26 » par « Zieli » dans leurs e-mails (ou réimporter les fichiers `n8n-workflow-*.json` mis à jour).
+3. **Airtable** : supprimer le champ « Mot de passe » de la table Utilisateurs, s'il existe encore *(à confirmer)*.
+4. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
+5. **Préparer la présentation** (16-17/11), voir section 8.
 
 > Lovable n'est plus utilisé (décision du 12/11) : le site est construit dans VS Code et publié sur Netlify.
 
@@ -188,7 +186,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 ## 6. Écran (de haut en bas) et automatisations
 
 1. **Barre du haut :** nom, rôle, « Se déconnecter », bouton « Synchronisation » ; menu « Entreprise affichée » pour l'Admin.
-2. **Carte « Total disponible »** : soldes réels à la date de mise à jour, détail compte courant / épargne. Couleur selon le **compte courant** : rouge si < seuil, orange si < 2 × seuil (dans le code ; la décision du 09/11 disait 1,5 × : à trancher, voir section 9), bleu marine au-delà. La carte montre le présent, le bandeau l'avenir.
+2. **Carte « Total disponible »** : soldes réels à la date de mise à jour, détail compte courant / épargne. Couleur selon le **compte courant** : rouge si < seuil, orange si < 1,5 × seuil, bleu pétrole au-delà. La carte montre le présent, le bandeau l'avenir.
 3. **Graphique sur 12 mois :** solde du compte courant (plein pour le réel, pointillés pour le prévu), point « aujourd'hui », encaissements (vert), décaissements (orange), seuil (rouge), montant au survol.
 4. **Bandeau d'alerte**, toujours affiché, avec le point bas : déjà sous le seuil (rouge) / passage sous le seuil prévu (rouge) / aucun passage (bleu clair). Bouton « Expliquer ces écarts » dessous.
 5. **Tableau mensuel** (validé le 12/11), lignes dans cet ordre, toutes visibles :
@@ -245,7 +243,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | 1.8 bis | GitHub ↔ VS Code | fait (dépôt `elise-zieli/Zieli`) |
 | 1.9 | V1 : chiffres Airtable, remarques n8n, mise en ligne Netlify | fait le 12/11 (à tester en ligne) |
 | 1.9 bis | Workflows n8n contrôle mensuel et point de trésorerie | construits (vérifier qu'ils sont activés) |
-| 1.9 ter | Nouvelle charte Zieli (Manrope, bleu pétrole, logo) + logo des clients | fait le 12/11 (logos à déposer dans Airtable) |
+| 1.9 ter | Nouvelle charte Zieli (Manrope, bleu pétrole, logo) + logo des clients | fait le 12/11 (logos fictifs dans Airtable) |
 | 1.10 | Test auprès de la libraire (15/11) | à faire |
 | 1.11 | Ajustements et présentation Jedha (16-17/11) | à faire |
 
@@ -266,7 +264,6 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 - Jedha accepte-t-il un projet final sans Lovable (site sur Netlify) ? À demander au prof.
 - **Vraie connexion sécurisée** (avant tout usage réel) : sans Lovable, il faudra la construire autrement, par exemple avec Netlify Identity ou les fonctions Netlify.
-- **Couleur orange de la carte** : décidé à 1,5 × le seuil le 09/11, mais le code utilise 2 × (`SEUIL_VIGILANCE` dans app.js). Choisir et aligner.
 - Jedha fournit-il des crédits Airtable ou n8n ?
 - Fréquence de mise à jour du réel : avec une mise à jour mensuelle via Sage, la carte reste figée la plupart du mois.
 - Au test, la libraire comprend-elle le réel partiel, le dépliage du tableau, les parenthèses et « Solde du mois » ?
@@ -282,7 +279,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Affichage sur 12 mois glissants ; un mois sans données s'affiche « — », sans estimation automatique.
 - Janvier 2027 de la librairie corrigé, prévisionnel de mai 2027 créé.
 - Seuils : librairie 5 000 € (10 000 € pendant la démo), boulangerie 12 000 €.
-- Couleur de la carte selon le compte courant, coefficient 1,5 (le code applique 2 : voir section 9).
+- Couleur de la carte selon le compte courant, coefficient 1,5 (code aligné le 12/11 : il appliquait 2).
 - Le point bas inclut le mois en cours.
 - Les explications d'écarts passent par le formulaire « Une remarque ? » ; le dirigeant reçoit une copie par email.
 

@@ -179,8 +179,8 @@ const DONNEES = ENTREPRISES[ENTREPRISE_ID];
 // Propre à chaque entreprise : champ « seuilAlerte » dans donnees.js (plus tard : table Entreprises d'Airtable).
 // Si le champ manque, on prend 5 000 € par défaut (?? = « sinon »).
 const SEUIL_ALERTE = DONNEES.seuilAlerte ?? 5000;
-// Zone de vigilance (bordure orange de la carte) : jusqu'à 2 fois le seuil.
-const SEUIL_VIGILANCE = SEUIL_ALERTE * 2;
+// Zone de vigilance (bordure orange de la carte) : jusqu'à 1,5 fois le seuil (décision du 09/11, confirmée le 12/11).
+const SEUIL_VIGILANCE = SEUIL_ALERTE * 1.5;
 
 // Ordre d'affichage des parties dans le tableau.
 // Les entrées : uniquement « Activité ». Les sorties : les 5 parties ci-dessous.
@@ -356,7 +356,7 @@ const aujourdhui = (() => {
 const premierSousSeuil = aVenir.find((m) => m.fin < SEUIL_ALERTE);
 
 // Donne la classe CSS de couleur d'une carte selon le solde :
-// rouge sous le seuil, orange jusqu'à 2 fois le seuil, vert (rien de spécial) au-dessus.
+// rouge sous le seuil, orange jusqu'à 1,5 fois le seuil, vert (rien de spécial) au-dessus.
 function niveau(solde) {
   if (solde < SEUIL_ALERTE) return "alerte-carte";
   if (solde < SEUIL_VIGILANCE) return "vigilance";
