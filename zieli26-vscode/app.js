@@ -907,7 +907,7 @@ const EXEMPLES = {
 const NOMS_TYPES = {
   previsionnel: "Sur le prévisionnel",
   ecarts: "Explication des écarts",
-  echange: "Besoin d'un échange",
+  echange: "Besoin d'un échange / autre",
 };
 
 // Remplit le menu « Mois concerné ». Les mois proposés dépendent du type de remarque :

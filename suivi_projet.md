@@ -10,9 +10,8 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 ## 0. À faire maintenant (par ordre)
 
 1. **Tester le site en ligne** (https://zieli-jedha.netlify.app/) : nouvelle charte et logos, vrais chiffres Airtable, remarque envoyée → email reçu.
-2. **Airtable** : supprimer le champ « Mot de passe » de la table Utilisateurs, s'il existe encore *(à confirmer)*.
-3. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
-4. **Préparer la présentation** (16-17/11), voir section 8.
+2. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
+3. **Préparer la présentation** (16-17/11), voir section 8.
 
 > n8n à jour le 12/11 (3 workflows) : nouveau PowerPoint, nouveaux e-mails, récapitulatif envoyé aux clients à 12 h, contrôle à 8 h.
 > Règle à retenir : les fichiers `.js` se collent dans les **nœuds de code**, les fichiers `.html` / `.txt` dans les **nœuds e-mail** ; après modification, **Save puis Publish**.
@@ -207,7 +206,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
    - Clic sur « % » : part de chaque ligne dans le total des encaissements ou des décaissements.
    - Réel en noir, prévu en bleu foncé italique ; négatifs entre parenthèses ; écart défavorable en rouge, favorable en vert.
    - Téléphone : colonne des libellés étroite (130 px), libellés sur plusieurs lignes, mois qui défilent à côté.
-6. **Bloc « Une remarque ? »** : type (Sur le prévisionnel / Explication des écarts / Besoin d'un échange), commentaire, urgent (oui / non), mois concerné. Tous facultatifs, formulaire vide refusé.
+6. **Bloc « Une remarque / une question ? »** : type (Sur le prévisionnel / Explication des écarts / Besoin d'un échange / autre), commentaire, urgent (oui / non), mois concerné. Tous facultatifs, formulaire vide refusé.
 
 **Charte (validée et appliquée au site le 12/11)** — maquettes : https://claude.ai/artifact/T15BV3oe3hnQPRUAmTwaB5
 - Typographie : **Manrope** partout (titres, texte, chiffres).
@@ -243,7 +242,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | # | Étape | Statut |
 |---|---|---|
 | 0.1-1.2 | Cadrage, MVP, besoin du dirigeant | validé |
-| 1.3 | Base Airtable | validé (reste : supprimer « Mot de passe » *à confirmer*) |
+| 1.3 | Base Airtable | validé (champ « Mot de passe » supprimé le 12/11) |
 | 1.4-1.7 | Structure du tableau, prévisionnel/réel, alertes, répartition des rôles | validé |
 | 1.8 | Maquette HTML/CSS/JS | validé, tableau retravaillé le 12/11 |
 | 1.8 bis | GitHub ↔ VS Code | fait (dépôt `elise-zieli/Zieli`) |
@@ -301,6 +300,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Champ **Logo** ajouté dans la table Entreprises ; logo du client affiché à gauche de son nom (logos fictifs dans `logos-demo`).
 - Charte appliquée au site (connexion, en-tête, couleurs, boutons, graphique).
 - **E-mails relus et réécrits** : prénom du dirigeant (champ « Responsable légal »), « récapitulatif mensuel » partout, charte Zieli (bandeau « zieli » bleu pétrole), coordonnées du dirigeant dans les e-mails de remarques, « tout est à jour » dans le contrôle mensuel.
+- Bloc du site renommé « Une remarque / une question ? » ; option « Besoin d'un échange / autre » (sur le site seulement : Airtable et les e-mails gardent « Besoin d'un échange »).
 - **Horaires** : contrôle mensuel à Elise le 5 à 8 h ; récapitulatif aux clients le 5 à **12 h** (au lieu de 9 h).
 - **Un seul bloc de commentaires** dans le PowerPoint (le formulaire ne précise pas encaissements / décaissements).
 - **PowerPoint mensuel refait** : police Calibri (présente partout), bleu pétrole, logo du client en haut à gauche, mois en pastille, logo Zieli en bas à droite ; diapositive 2 = tableau du site (Réel, % du réel, Prévu, Écart) avec commentaires à côté ; blocs en relief sur la diapositive 3.
