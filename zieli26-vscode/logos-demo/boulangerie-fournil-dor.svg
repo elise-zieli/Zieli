@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Logo fictif de l'Atelier Boulanger Fournil d'Or">
+  <circle cx="60" cy="60" r="58" fill="#f6e7c8" stroke="#b5832a" stroke-width="4"/>
+  <!-- épi de blé -->
+  <path d="M60 98 V36" stroke="#8a5a14" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#c8902d">
+    <ellipse cx="60" cy="30" rx="6" ry="10"/>
+    <ellipse cx="50" cy="44" rx="6" ry="10" transform="rotate(-30 50 44)"/>
+    <ellipse cx="70" cy="44" rx="6" ry="10" transform="rotate(30 70 44)"/>
+    <ellipse cx="50" cy="60" rx="6" ry="10" transform="rotate(-30 50 60)"/>
+    <ellipse cx="70" cy="60" rx="6" ry="10" transform="rotate(30 70 60)"/>
+    <ellipse cx="50" cy="76" rx="6" ry="10" transform="rotate(-30 50 76)"/>
+    <ellipse cx="70" cy="76" rx="6" ry="10" transform="rotate(30 70 76)"/>
+  </g>
+</svg>

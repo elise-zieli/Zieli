@@ -1,5 +1,5 @@
 // =====================================================================
-// ZIELI 26 – fonction Netlify « synchroniser » (adresse /api/synchroniser)
+// ZIELI – fonction Netlify « synchroniser » (adresse /api/synchroniser)
 // Bouton « Synchronisation ». Sur Netlify il n'y a pas de copie en mémoire :
 // chaque chargement de la page relit déjà Airtable. Il suffit donc de répondre
 // « ok » pour que la page se recharge avec les derniers chiffres.

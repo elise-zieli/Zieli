@@ -1,5 +1,5 @@
 # =====================================================================
-# ZIELI 26 - serveur.ps1
+# ZIELI - serveur.ps1
 # Petit serveur local (accessible uniquement depuis cet ordinateur).
 # - distribue les fichiers du site ;
 # - lit la base Airtable "zieli26" et fournit les chiffres a la page
@@ -37,7 +37,7 @@ $PR_MOIS = 'fldk5cU02LEVGmX3D'; $PR_MONTANT = 'fldhIbKEWXfZHsffP'
 $PR_ENT = 'fldfr4IRb9Qso1ZOw'; $PR_CAT = 'fldwSzh6mDwB3y1OF'
 # Champs Entreprises (lus par leur nom ; le "e accent" est ecrit par son code pour garder ce fichier en ASCII)
 $E_NOM = 'Name'; $E_COURANT = 'Solde initial courant'; $E_DATE = 'Date du solde initial'
-$E_EPARGNE = "Solde initial $([char]0xE9)pargne"; $E_SEUIL = "Seuil d'alerte"
+$E_EPARGNE = "Solde initial $([char]0xE9)pargne"; $E_SEUIL = "Seuil d'alerte"; $E_LOGO = 'Logo'
 
 # Identifiants utilises par les comptes de demonstration de donnees.js.
 # Une entreprise absente de cette liste garde son identifiant Airtable (visible par l'Admin).
@@ -46,10 +46,9 @@ $CLES_ENTREPRISES = @{
   'recSL1ALPdEGzbmKI' = 'ent-boulangerie'
 }
 
-# Les chiffres sont gardes 5 minutes en memoire pour limiter les appels a Airtable.
-$DUREE_CACHE_SECONDES = 300
+# Les chiffres sont lus une fois au premier affichage, puis gardes en memoire.
+# Ils ne sont relus dans Airtable qu'avec le bouton "Synchronisation".
 $script:cacheJs = $null
-$script:cacheQuand = [datetime]::MinValue
 
 function Lire-Table([string]$Jeton, [string]$Table, [string[]]$Champs) {
   $lignes = New-Object System.Collections.ArrayList
@@ -79,6 +78,20 @@ function Lire-Table([string]$Jeton, [string]$Table, [string[]]$Champs) {
 
 function Mois-Decale([string]$Cle, [int]$Decalage) {
   return [datetime]::ParseExact("$Cle-01", 'yyyy-MM-dd', $inv).AddMonths($Decalage).ToString('yyyy-MM', $inv)
+}
+
+# Logo de l'entreprise (champ "Logo" d'Airtable) : l'image est telechargee puis recopiee
+# dans la page ("data:..."), car les liens d'images Airtable expirent au bout de quelques heures.
+# Renvoie $null s'il n'y a pas de logo ou s'il est trop lourd (plus de 1 Mo).
+function Lire-Logo($Pieces) {
+  $piece = @($Pieces) | Select-Object -First 1
+  if (-not $piece -or -not $piece.url) { return $null }
+  if ($piece.size -and $piece.size -gt 1048576) { return $null }
+  $client = New-Object System.Net.WebClient
+  try { $octets = $client.DownloadData([string]$piece.url) } catch { return $null } finally { $client.Dispose() }
+  $type = [string]$piece.type
+  if (-not $type) { $type = 'image/png' }
+  return "data:$type;base64," + [Convert]::ToBase64String($octets)
 }
 
 function Est-Nombre($Valeur) {
@@ -185,6 +198,8 @@ function Construire-Js {
     }
     # Sans champ "Seuil d'alerte" dans Airtable, app.js applique 5 000 EUR.
     if (Est-Nombre $f.$E_SEUIL) { $objet['seuilAlerte'] = [double]$f.$E_SEUIL }
+    $logo = Lire-Logo $f.$E_LOGO
+    if ($logo) { $objet['logo'] = $logo }
 
     $cle = $e.id
     if ($CLES_ENTREPRISES.ContainsKey($e.id)) { $cle = $CLES_ENTREPRISES[$e.id] }
@@ -194,7 +209,7 @@ function Construire-Js {
   $json = $resultat | ConvertTo-Json -Depth 8 -Compress
   # Accents ecrits par leur code : ce fichier doit rester en ASCII pour PowerShell 5.1.
   $tiret = [string][char]0x2013; $e1 = [string][char]0xE9; $e2 = [string][char]0xE8
-  $pied = "Zieli 26 $tiret donn${e1}es Airtable (base zieli26)"
+  $pied = "Zieli $tiret donn${e1}es Airtable (base zieli26)"
   if ($ignorees -gt 0) { $pied += " $tiret $ignorees ligne(s) Airtable incompl${e2}te(s) non compt${e1}e(s)" }
 
   return "document.getElementById('bouton-synchro').hidden=false;`n" +
@@ -218,18 +233,15 @@ function Script-Erreur([string]$Message) {
 function Synchroniser {
   $js = Construire-Js
   $script:cacheJs = $js
-  $script:cacheQuand = Get-Date
   Write-Host "Airtable : donnees synchronisees"
 }
 
 function Obtenir-Js {
-  $age = ((Get-Date) - $script:cacheQuand).TotalSeconds
-  if ($script:cacheJs -and $age -lt $DUREE_CACHE_SECONDES) { return $script:cacheJs }
+  if ($script:cacheJs) { return $script:cacheJs }
   try {
     $js = Construire-Js
     $script:cacheJs = $js
-    $script:cacheQuand = Get-Date
-    Write-Host "Airtable : donnees actualisees"
+    Write-Host "Airtable : donnees lues"
     return $js
   }
   catch {

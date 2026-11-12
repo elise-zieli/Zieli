@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zieli 26 – Tableau de trésorerie</title>
+<title>Zieli – Tableau de trésorerie</title>
 
 <!-- =========================================================
      1. STYLE (apparence de la page)
      Pour changer une couleur, modifie les variables en haut de styles.css.
      ========================================================= -->
-<!-- Polices Google Fonts : Source Serif 4 (titres) et Public Sans (texte et chiffres).
+<!-- Police Google Fonts : Manrope (titres, texte et chiffres).
      Nécessite internet ; sinon, des polices de secours sont utilisées (voir styles.css). -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -21,7 +21,15 @@
 <!-- Écran de connexion (affiché si personne n'est connecté) -->
 <div class="ecran-connexion" id="ecran-connexion">
   <form class="boite-connexion" id="form-connexion">
-    <p class="marque">Zieli 26</p>
+    <!-- Logo Zieli (validé le 12/11) : cube + « zieli » dont le bout du z est doré.
+         Le z est la vraie lettre Manrope ; le doré est découpé dans la lettre (clipPath). -->
+    <div class="logo-zieli">
+      <svg width="62" height="62" viewBox="0 0 64 64" aria-hidden="true"><polygon points="32.0,5.7 38.5,9.5 32.0,13.3 25.5,9.5" fill="#cfe2e8"></polygon><polygon points="24.2,10.2 30.8,14.0 24.2,17.8 17.7,14.0" fill="#cfe2e8"></polygon><polygon points="16.4,14.7 23.0,18.5 16.4,22.3 9.9,18.5" fill="#cfe2e8"></polygon><polygon points="39.8,10.2 46.3,14.0 39.8,17.8 33.2,14.0" fill="#cfe2e8"></polygon><polygon points="32.0,14.7 38.5,18.5 32.0,22.3 25.5,18.5" fill="#cfe2e8"></polygon><polygon points="24.2,19.2 30.8,23.0 24.2,26.8 17.7,23.0" fill="#cfe2e8"></polygon><polygon points="47.6,14.7 54.1,18.5 47.6,22.3 41.0,18.5" fill="#cfe2e8"></polygon><polygon points="39.8,19.2 46.3,23.0 39.8,26.8 33.2,23.0" fill="#cfe2e8"></polygon><polygon points="32.0,23.7 38.5,27.5 32.0,31.3 25.5,27.5" fill="#f2b84b"></polygon><polygon points="9.2,19.6 15.8,23.4 15.8,30.9 9.2,27.1" fill="#0e4a5c"></polygon><polygon points="9.2,28.6 15.8,32.4 15.8,39.9 9.2,36.1" fill="#0e4a5c"></polygon><polygon points="9.2,37.6 15.8,41.4 15.8,48.9 9.2,45.1" fill="#0e4a5c"></polygon><polygon points="17.0,24.1 23.6,27.9 23.6,35.4 17.0,31.6" fill="#0e4a5c"></polygon><polygon points="17.0,33.1 23.6,36.9 23.6,44.4 17.0,40.6" fill="#0e4a5c"></polygon><polygon points="17.0,42.1 23.6,45.9 23.6,53.4 17.0,49.6" fill="#0e4a5c"></polygon><polygon points="24.8,28.6 31.4,32.4 31.4,39.9 24.8,36.1" fill="#0e4a5c"></polygon><polygon points="24.8,37.6 31.4,41.4 31.4,48.9 24.8,45.1" fill="#0e4a5c"></polygon><polygon points="24.8,46.6 31.4,50.4 31.4,57.9 24.8,54.1" fill="#0e4a5c"></polygon><polygon points="32.6,32.4 39.2,28.6 39.2,36.1 32.6,39.9" fill="#3f8fa3"></polygon><polygon points="32.6,41.4 39.2,37.6 39.2,45.1 32.6,48.9" fill="#3f8fa3"></polygon><polygon points="32.6,50.4 39.2,46.6 39.2,54.1 32.6,57.9" fill="#3f8fa3"></polygon><polygon points="40.4,27.9 47.0,24.1 47.0,31.6 40.4,35.4" fill="#3f8fa3"></polygon><polygon points="40.4,36.9 47.0,33.1 47.0,40.6 40.4,44.4" fill="#3f8fa3"></polygon><polygon points="40.4,45.9 47.0,42.1 47.0,49.6 40.4,53.4" fill="#3f8fa3"></polygon><polygon points="48.2,23.4 54.8,19.6 54.8,27.1 48.2,30.9" fill="#3f8fa3"></polygon><polygon points="48.2,32.4 54.8,28.6 54.8,36.1 48.2,39.9" fill="#3f8fa3"></polygon><polygon points="48.2,41.4 54.8,37.6 54.8,45.1 48.2,48.9" fill="#3f8fa3"></polygon></svg>
+      <div>
+        <svg width="112" height="40" viewBox="0 0 112 40" role="img" aria-label="Zieli" style="overflow: visible; display: block"><defs><clipPath id="z-connexion"><text x="2" y="34" font-family="Manrope, sans-serif" font-weight="800" font-size="38">z</text></clipPath></defs><text x="2" y="34" font-family="Manrope, sans-serif" font-weight="800" font-size="38" letter-spacing="-0.5" fill="#0e4a5c">zieli</text><rect x="15.5" y="26" width="20" height="12" fill="#f2b84b" clip-path="url(#z-connexion)"></rect></svg>
+        <p class="signature">Vos chiffres décodés, vos tâches allégées.</p>
+      </div>
+    </div>
     <h1>Votre tableau de trésorerie</h1>
     <p class="aide">Connectez-vous pour accéder aux chiffres de votre entreprise.</p>
     <label>Email
@@ -35,7 +43,7 @@
     <a href="#" class="lien-discret" onclick="document.getElementById('erreur-connexion').textContent = 'Contactez Elise pour recevoir un nouveau mot de passe.'; return false;">Mot de passe oublié ?</a>
     <div class="comptes-demo">
       <strong>Comptes de test des dirigeants</strong> (mot de passe : demo)<br>
-      libraire@utopie.example — voit uniquement la librairie<br>
+      libraire@chapitre-un.example — voit uniquement la librairie<br>
       boulanger@fournildor.example — voit uniquement la boulangerie
     </div>
   </form>
@@ -45,6 +53,11 @@
 
   <!-- Barre du haut : qui est connecté -->
   <div class="barre-utilisateur">
+    <!-- Petit logo Zieli (même dessin qu'à la connexion, en plus petit) -->
+    <div class="logo-zieli petit">
+      <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true"><polygon points="32.0,5.7 38.5,9.5 32.0,13.3 25.5,9.5" fill="#cfe2e8"></polygon><polygon points="24.2,10.2 30.8,14.0 24.2,17.8 17.7,14.0" fill="#cfe2e8"></polygon><polygon points="16.4,14.7 23.0,18.5 16.4,22.3 9.9,18.5" fill="#cfe2e8"></polygon><polygon points="39.8,10.2 46.3,14.0 39.8,17.8 33.2,14.0" fill="#cfe2e8"></polygon><polygon points="32.0,14.7 38.5,18.5 32.0,22.3 25.5,18.5" fill="#cfe2e8"></polygon><polygon points="24.2,19.2 30.8,23.0 24.2,26.8 17.7,23.0" fill="#cfe2e8"></polygon><polygon points="47.6,14.7 54.1,18.5 47.6,22.3 41.0,18.5" fill="#cfe2e8"></polygon><polygon points="39.8,19.2 46.3,23.0 39.8,26.8 33.2,23.0" fill="#cfe2e8"></polygon><polygon points="32.0,23.7 38.5,27.5 32.0,31.3 25.5,27.5" fill="#f2b84b"></polygon><polygon points="9.2,19.6 15.8,23.4 15.8,30.9 9.2,27.1" fill="#0e4a5c"></polygon><polygon points="9.2,28.6 15.8,32.4 15.8,39.9 9.2,36.1" fill="#0e4a5c"></polygon><polygon points="9.2,37.6 15.8,41.4 15.8,48.9 9.2,45.1" fill="#0e4a5c"></polygon><polygon points="17.0,24.1 23.6,27.9 23.6,35.4 17.0,31.6" fill="#0e4a5c"></polygon><polygon points="17.0,33.1 23.6,36.9 23.6,44.4 17.0,40.6" fill="#0e4a5c"></polygon><polygon points="17.0,42.1 23.6,45.9 23.6,53.4 17.0,49.6" fill="#0e4a5c"></polygon><polygon points="24.8,28.6 31.4,32.4 31.4,39.9 24.8,36.1" fill="#0e4a5c"></polygon><polygon points="24.8,37.6 31.4,41.4 31.4,48.9 24.8,45.1" fill="#0e4a5c"></polygon><polygon points="24.8,46.6 31.4,50.4 31.4,57.9 24.8,54.1" fill="#0e4a5c"></polygon><polygon points="32.6,32.4 39.2,28.6 39.2,36.1 32.6,39.9" fill="#3f8fa3"></polygon><polygon points="32.6,41.4 39.2,37.6 39.2,45.1 32.6,48.9" fill="#3f8fa3"></polygon><polygon points="32.6,50.4 39.2,46.6 39.2,54.1 32.6,57.9" fill="#3f8fa3"></polygon><polygon points="40.4,27.9 47.0,24.1 47.0,31.6 40.4,35.4" fill="#3f8fa3"></polygon><polygon points="40.4,36.9 47.0,33.1 47.0,40.6 40.4,44.4" fill="#3f8fa3"></polygon><polygon points="40.4,45.9 47.0,42.1 47.0,49.6 40.4,53.4" fill="#3f8fa3"></polygon><polygon points="48.2,23.4 54.8,19.6 54.8,27.1 48.2,30.9" fill="#3f8fa3"></polygon><polygon points="48.2,32.4 54.8,28.6 54.8,36.1 48.2,39.9" fill="#3f8fa3"></polygon><polygon points="48.2,41.4 54.8,37.6 54.8,45.1 48.2,48.9" fill="#3f8fa3"></polygon></svg>
+      <svg width="62" height="22" viewBox="0 0 112 40" role="img" aria-label="Zieli" style="overflow: visible; display: block"><defs><clipPath id="z-entete"><text x="2" y="34" font-family="Manrope, sans-serif" font-weight="800" font-size="38">z</text></clipPath></defs><text x="2" y="34" font-family="Manrope, sans-serif" font-weight="800" font-size="38" letter-spacing="-0.5" fill="#0e4a5c">zieli</text><rect x="15.5" y="26" width="20" height="12" fill="#f2b84b" clip-path="url(#z-entete)"></rect></svg>
+    </div>
     <div class="zone-admin" id="zone-admin">
       <label>Entreprise affichée
         <select id="choix-entreprise"></select>
@@ -62,9 +75,13 @@
        2. STRUCTURE DE LA PAGE (les zones vides sont remplies par le script)
        ========================================================= -->
   <header>
-    <div>
-      <h1 id="nom-entreprise"></h1>
-      <p class="sous-titre">Suivi de votre trésorerie</p>
+    <div class="entete-entreprise">
+      <!-- Logo de l'entreprise cliente : affiché seulement si un logo est renseigné (champ « logo » des données). -->
+      <img class="logo-client" id="logo-client" alt="" hidden>
+      <div>
+        <h1 id="nom-entreprise"></h1>
+        <p class="sous-titre">Suivi de votre trésorerie</p>
+      </div>
     </div>
     <div class="maj" id="date-maj"></div>
   </header>
@@ -85,7 +102,7 @@
       <span class="reel">Réel</span>
       <span class="prevu">Prévu</span>
       <span class="ligne-entrees">Encaissements du mois</span>
-      <span class="ligne-sorties">Dépenses du mois</span>
+      <span class="ligne-sorties">Décaissements du mois</span>
       <span class="seuil" id="legende-seuil"></span>
     </div>
   </section>
@@ -134,7 +151,7 @@
     <div id="liste-commentaires"></div>
   </section>
 
-  <footer>Zieli 26 – données de démonstration (fictives)</footer>
+  <footer>Zieli – données de démonstration (fictives)</footer>
 </div>
 
 <!-- =========================================================

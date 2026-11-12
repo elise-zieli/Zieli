@@ -1,4 +1,4 @@
-# Réglages Netlify du site Zieli 26.
+# Réglages Netlify du site Zieli.
 # Le site se trouve dans le dossier zieli26-vscode ;
 # les fonctions (le « facteur ») dans zieli26-vscode/netlify/functions.
 [build]

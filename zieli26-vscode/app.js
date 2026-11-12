@@ -1,5 +1,5 @@
 // =====================================================================
-// ZIELI 26 – app.js
+// ZIELI – app.js
 // Connexion, calculs de trésorerie et affichage du tableau de bord.
 //
 // Ce fichier est lu par le navigateur APRÈS donnees.js (voir le bas de index.html).
@@ -42,8 +42,8 @@
 // 3.0 CONNEXION – qui est connecté, et quelle entreprise il a le droit de voir
 // =====================================================================
 // ⚠ MAQUETTE SEULEMENT : ici, la vérification du mot de passe se fait dans le navigateur.
-// N'importe qui peut donc lire les mots de passe dans donnees.js. Dans la vraie application
-// (Lovable), la connexion est vérifiée par le serveur.
+// N'importe qui peut donc lire les mots de passe dans donnees.js. Dans une vraie application,
+// la connexion devra être vérifiée par le serveur.
 
 // Lit la session enregistrée dans le navigateur (qui est connecté ?).
 // sessionStorage = petite mémoire du navigateur, effacée quand on ferme l'onglet.
@@ -371,6 +371,13 @@ function niveau(solde) {
 
 // Nom de l'entreprise et date de mise à jour, en haut de page.
 document.getElementById("nom-entreprise").textContent = DONNEES.entreprise;
+// Logo de l'entreprise cliente : affiché seulement si l'adresse d'une image est renseignée (champ « logo »).
+if (DONNEES.logo) {
+  const logo = document.getElementById("logo-client");
+  logo.src = DONNEES.logo;
+  logo.alt = "Logo " + DONNEES.entreprise;
+  logo.hidden = false;
+}
 document.getElementById("date-maj").textContent = "Mis à jour le " + dateFr(DONNEES.dateMiseAJour);
 
 // BANDEAU D'ALERTE – toujours affiché, il donne aussi le POINT BAS (le solde de fin de mois le plus
@@ -548,17 +555,17 @@ function dessinerGraphique() {
   svg += ligneFine(entrees, "#1e8e5a");   // vert
   svg += ligneFine(sorties, "#e08a1e");   // orange
 
-  // Courbe principale du solde (trait épais bleu marine) : plein pour le passé, pointillés ensuite.
+  // Courbe principale du solde (trait épais bleu pétrole) : plein pour le passé, pointillés ensuite.
   // Le réel (trait plein) va jusqu'au point « aujourd'hui » ; le prévu (pointillés) repart de ce point.
   const points = moisGraphique.map((m, i) => `${x(i)},${y(m.fin)}`);
   const pointAujourdhui = `${xAujourdhui},${yAujourdhui}`;
-  svg += `<polyline points="${[...points.slice(0, nbPasses), pointAujourdhui].join(" ")}" fill="none" stroke="#1f3a5f" stroke-width="3"/>`;
-  svg += `<polyline points="${[pointAujourdhui, ...points.slice(nbPasses)].join(" ")}" fill="none" stroke="#1f3a5f" stroke-width="3" stroke-dasharray="8 6"/>`;
+  svg += `<polyline points="${[...points.slice(0, nbPasses), pointAujourdhui].join(" ")}" fill="none" stroke="#0e4a5c" stroke-width="3"/>`;
+  svg += `<polyline points="${[pointAujourdhui, ...points.slice(nbPasses)].join(" ")}" fill="none" stroke="#0e4a5c" stroke-width="3" stroke-dasharray="8 6"/>`;
 
   // Un point par mois + le nom du mois sous l'axe.
   // Point rouge si le solde est sous le seuil ; point plein pour le passé, point vide (blanc) pour le prévu.
   moisGraphique.forEach((m, i) => {
-    const couleur = m.fin < SEUIL_ALERTE ? "#c0392b" : "#1f3a5f";
+    const couleur = m.fin < SEUIL_ALERTE ? "#c0392b" : "#0e4a5c";
     svg += `<g class="point-cliquable" data-index="${i}">`
       // Grand cercle invisible autour du point : plus facile à viser à la souris ou au doigt.
       + `<circle cx="${x(i)}" cy="${y(m.fin)}" r="20" fill="transparent"/>`
@@ -568,7 +575,7 @@ function dessinerGraphique() {
     svg += `<text x="${x(i)}" y="${H - 12}" text-anchor="middle" font-size="13" fill="#6b665e">${nomMoisCourt(m.cle)}</text>`;
   });
   // Le point « aujourd'hui » : plein (c'est du réel), rouge s'il est sous le seuil.
-  const couleurAuj = aujourdhui.courant < SEUIL_ALERTE ? "#c0392b" : "#1f3a5f";
+  const couleurAuj = aujourdhui.courant < SEUIL_ALERTE ? "#c0392b" : "#0e4a5c";
   svg += `<g class="point-cliquable" data-index="aujourdhui">`
     + `<circle cx="${xAujourdhui}" cy="${yAujourdhui}" r="20" fill="transparent"/>`
     + `<circle class="point-visible" cx="${xAujourdhui}" cy="${yAujourdhui}" r="6" fill="${couleurAuj}" stroke="${couleurAuj}" stroke-width="2.5"/>`
@@ -633,7 +640,7 @@ dessinerGraphique();
 // L'état du tableau : ce qui est ouvert ou fermé.
 // Un « Set » est une liste sans doublon, pratique pour noter « ouvert / pas ouvert ».
 const etatTableau = {
-  groupesOuverts: new Set(),  // lignes dépliées : "solde", "flux", "entrees", "sorties"
+  groupesOuverts: new Set(),  // lignes dépliées : "entrees", "sorties"
   moisOuverts: new Set(),     // mois passés dont on affiche Prévu et Écart, ex. "2026-09"
   pourcentages: new Set(),    // colonnes % ouvertes, ex. "2026-10|reel"
 };
@@ -694,7 +701,7 @@ function construireTableau() {
   let h2 = `<tr class="sous">`;
   affiches.forEach((m) => {
     const cols = colonnesDuMois(m);
-    // fond bleu clair pour les mois passés ; trait vertical marine avant le mois en cours
+    // fond bleu clair pour les mois passés ; trait vertical pétrole avant le mois en cours
     // (classe "debut-prevision", voir styles.css) pour marquer où commence le prévisionnel.
     // "debut-mois" = filet vertical fin à gauche de chaque mois (séparation entre les mois).
     const fond = (m.passe ? "mois-passe" : "") + " debut-mois" + (m === moisEnCours ? " debut-prevision" : "");
@@ -739,12 +746,13 @@ function construireTableau() {
   // - valeur(m, type) : fonction qui donne le montant prévu ou réel de la ligne pour le mois m.
   // - part(m, type)   : fonction qui donne le total servant de base au % (ou null : pas de %).
   // - sousSeuil       : si vrai, les montants sous le seuil sont écrits en rouge.
+  // - negatifRouge    : si vrai (lignes de solde et de total), les montants négatifs sont écrits en rouge.
   // - finDeMois       : si vrai (lignes de solde fin de mois), la colonne « Réel » du mois en cours
   //                     affiche « — » : le solde réel n'est connu que le 1er du mois suivant.
-  function cellules(valeur, { part = null, sousSeuil = false, finDeMois = false } = {}) {
+  function cellules(valeur, { part = null, sousSeuil = false, negatifRouge = false, finDeMois = false } = {}) {
     return affiches.map((m) => colonnesDuMois(m).map((c, idx) => {
       // Filet fin à gauche de la 1re colonne de chaque mois (séparation entre les mois),
-      // et trait marine épais avant la 1re colonne du mois en cours (début du prévisionnel).
+      // et trait pétrole épais avant la 1re colonne du mois en cours (début du prévisionnel).
       const classe = (m.passe ? "col-passe" : "")
         + (idx === 0 ? " debut-mois" : "")
         + (m === moisEnCours && idx === 0 ? " debut-prevision" : "");
@@ -757,7 +765,8 @@ function construireTableau() {
           return `<td class="${classe} val-reel" title="Connu le 1er du mois suivant">—</td>`;
         }
         const v = valeur(m, c);
-        const rouge = sousSeuil && v < SEUIL_ALERTE ? " sous-seuil" : "";
+        // Math.round : un montant affiché « 0 € » n'est pas mis en rouge.
+        const rouge = (sousSeuil && v < SEUIL_ALERTE) || (negatifRouge && Math.round(v) < 0) ? " sous-seuil" : "";
         const style = c === "prevu" ? " val-prevu" : " val-reel";
         return `<td class="${classe}${style}${rouge}">${eurosTableau(v)}</td>`;
       }
@@ -787,16 +796,24 @@ function construireTableau() {
   // Entrées : parties + catégories. Sorties : parties seulement (Marchandises, Personnel…),
   // pour garder le tableau court (décision du 06/11).
   // Elles sont cachées, sauf si le groupe est ouvert (classe "visible").
+  // S'il n'y a qu'une seule partie (ex. Activité pour les encaissements), sa ligne est masquée :
+  // elle répéterait le total du groupe. Ses catégories s'affichent alors directement.
   function lignesDetail(groupe, parties, part, avecCategories = true) {
     const visible = etatTableau.groupesOuverts.has(groupe) ? " visible" : "";
-    return parties.map((partie) => {
+    // Seules les parties qui ont des catégories pour cette entreprise.
+    const utilisees = parties.filter((p) => categoriesDe([p]).length > 0);
+    const masquerPartie = avecCategories && utilisees.length === 1;
+    return utilisees.map((partie) => {
       const cats = categoriesDe([partie]);
       // Ligne de la partie (somme de ses catégories).
-      let html = `<tr class="detail-ligne detail-partie${visible}" data-groupe="${groupe}"><td>${partie}</td>`
-        + cellules((m, type) => somme(cats, indexMois(m), type), { part }) + `</tr>`;
+      let html = masquerPartie ? ""
+        : `<tr class="detail-ligne detail-partie${visible}" data-groupe="${groupe}"><td>${partie}</td>`
+          + cellules((m, type) => somme(cats, indexMois(m), type), { part }) + `</tr>`;
       // Une ligne par catégorie (seulement si avecCategories est vrai).
+      // Sans ligne de partie, les catégories sont moins décalées vers la droite.
+      const classeCat = masquerPartie ? "" : " detail-categorie";
       if (avecCategories) cats.forEach((c) => {
-        html += `<tr class="detail-ligne detail-categorie${visible}" data-groupe="${groupe}"><td>${c.nom}</td>`
+        html += `<tr class="detail-ligne${classeCat}${visible}" data-groupe="${groupe}"><td>${c.nom}</td>`
           + cellules((m, type) => c[type][indexMois(m)] ?? 0, { part }) + `</tr>`;
       });
       return html;
@@ -816,37 +833,31 @@ function construireTableau() {
   const disponibilites = (m, type) => soldeFin(m, type) + epargneFin(m, type);
   // Ajoute la classe "ouvert" (flèche ▾) à une ligne cliquable si son détail est déplié.
   const ouvert = (g) => (etatTableau.groupesOuverts.has(g) ? " ouvert" : "");
-  const estOuvert = (g) => etatTableau.groupesOuverts.has(g);
 
-  // ----- 5. LE CORPS DU TABLEAU, LIGNE PAR LIGNE (validé le 07/11) -----
-  // Le tableau se déplie par niveaux :
-  //   Solde fin de mois – compte courant          ← seule ligne visible au départ (clic ▸)
-  //       Entrées / Sorties                        ← niveau 2, visibles après un clic sur « Cash in – Cash out »
-  //                                                  (clic ▸ pour le détail par poste)
-  //     Cash in – Cash out                         ← niveau 1, fond beige (clic ▸), juste au-dessus de l'épargne
-  //     Solde épargne fin de mois                  ← niveau 1, fond blanc
-  //     Total disponible (courant + épargne)       ← niveau 1
-  // Le détail (Entrées, Sorties) s'affiche AU-DESSUS de son total « Cash in – Cash out ».
+  // ----- 5. LE CORPS DU TABLEAU, LIGNE PAR LIGNE (validé le 12/11) -----
+  // Toutes les lignes principales sont visibles, dans cet ordre :
+  //   Encaissements                                 ← clic ▸ : détail par partie et catégorie
+  //   Décaissements                                 ← clic ▸ : détail par partie
+  //   Solde du mois (encaissements – décaissements)   ← fond beige
+  //   Solde fin de mois – compte courant            ← fond bleu clair
+  //   Solde épargne fin de mois                     ← fond blanc
+  //   Total disponible (courant + épargne)          ← fond bleu
   // La ligne « Solde en début de mois » a été retirée : elle répétait le solde de fin du mois précédent.
   let corps = "";
-  corps += `<tr class="solde cliquable${ouvert("solde")}" data-ouvre="solde"><td>Solde fin de mois – compte courant</td>`
-         + cellules(soldeFin, { sousSeuil: true, finDeMois: true }) + `</tr>`;
-  if (estOuvert("solde")) {
-    if (estOuvert("flux")) {
-      corps += `<tr class="cliquable important niveau-2${ouvert("entrees")}" data-ouvre="entrees"><td>Encaissements</td>`
-             + cellules((m, t) => totaux(m, t).entrees) + `</tr>`;   // pas de % : ce serait toujours 100 %
-      corps += lignesDetail("entrees", PARTIES_ENTREES, partEntrees);
-      corps += `<tr class="cliquable important niveau-2${ouvert("sorties")}" data-ouvre="sorties"><td>Dépenses</td>`
-             + cellules((m, t) => totaux(m, t).sorties) + `</tr>`;
-      corps += lignesDetail("sorties", PARTIES_SORTIES, partSorties, false);   // false = sans les catégories
-    }
-    corps += `<tr class="flux-net cliquable important niveau-1${ouvert("flux")}" data-ouvre="flux"><td>Encaissements – Dépenses</td>`
-           + cellules((m, t) => totaux(m, t).cashInOut) + `</tr>`;
-    corps += `<tr class="epargne-solde niveau-1"><td>Solde épargne fin de mois</td>`
-           + cellules(epargneFin, { finDeMois: true }) + `</tr>`;
-    corps += `<tr class="total-dispo niveau-1"><td>Total disponible (courant + épargne)</td>`
-           + cellules(disponibilites, { finDeMois: true }) + `</tr>`;
-  }
+  corps += `<tr class="cliquable important${ouvert("entrees")}" data-ouvre="entrees"><td>Encaissements</td>`
+         + cellules((m, t) => totaux(m, t).entrees) + `</tr>`;   // pas de % : ce serait toujours 100 %
+  corps += lignesDetail("entrees", PARTIES_ENTREES, partEntrees);
+  corps += `<tr class="cliquable important${ouvert("sorties")}" data-ouvre="sorties"><td>Décaissements</td>`
+         + cellules((m, t) => totaux(m, t).sorties) + `</tr>`;
+  corps += lignesDetail("sorties", PARTIES_SORTIES, partSorties, false);   // false = sans les catégories
+  corps += `<tr class="flux-net"><td>Solde du mois (encaissements – décaissements)</td>`
+         + cellules((m, t) => totaux(m, t).cashInOut, { negatifRouge: true }) + `</tr>`;
+  corps += `<tr class="solde"><td>Solde fin de mois – compte courant</td>`
+         + cellules(soldeFin, { sousSeuil: true, negatifRouge: true, finDeMois: true }) + `</tr>`;
+  corps += `<tr class="epargne-solde"><td>Solde épargne fin de mois</td>`
+         + cellules(epargneFin, { negatifRouge: true, finDeMois: true }) + `</tr>`;
+  corps += `<tr class="total-dispo"><td>Total disponible (courant + épargne)</td>`
+         + cellules(disponibilites, { negatifRouge: true, finDeMois: true }) + `</tr>`;
 
   // On insère le tableau complet dans la page.
   const tableau = document.getElementById("tableau");
@@ -859,7 +870,7 @@ function construireTableau() {
     ensemble.has(valeur) ? ensemble.delete(valeur) : ensemble.add(valeur);
     construireTableau();
   };
-  // Clic sur une ligne avec ▸ (solde, Cash in – Cash out, Entrées, Sorties) → déplier / replier.
+  // Clic sur une ligne avec ▸ (Encaissements, Décaissements) → déplier / replier.
   tableau.querySelectorAll("tr.cliquable").forEach((l) =>
     l.addEventListener("click", () => basculer(etatTableau.groupesOuverts, l.dataset.ouvre)));
   // Clic sur un mois ancien → afficher / cacher son Prévu et son Écart.

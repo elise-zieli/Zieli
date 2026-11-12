@@ -1,5 +1,5 @@
 // =====================================================================
-// ZIELI 26 – fonction Netlify « donnees-airtable » (adresse /api/donnees-airtable.js)
+// ZIELI – fonction Netlify « donnees-airtable » (adresse /api/donnees-airtable.js)
 // Lit la base Airtable "zieli26" et renvoie un petit script qui remplace
 // les chiffres fictifs de donnees.js par les vrais.
 // (Traduction de Construire-Js et Script-Erreur dans serveur.ps1.)
@@ -23,7 +23,7 @@ const PR_MOIS = "fldk5cU02LEVGmX3D", PR_MONTANT = "fldhIbKEWXfZHsffP";
 const PR_ENT = "fldfr4IRb9Qso1ZOw", PR_CAT = "fldwSzh6mDwB3y1OF";
 // Champs Entreprises (lus par leur nom)
 const E_NOM = "Name", E_COURANT = "Solde initial courant", E_DATE = "Date du solde initial";
-const E_EPARGNE = "Solde initial épargne", E_SEUIL = "Seuil d'alerte";
+const E_EPARGNE = "Solde initial épargne", E_SEUIL = "Seuil d'alerte", E_LOGO = "Logo";
 
 const attendre = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -60,6 +60,22 @@ function moisDecale(cle, decalage) {
 const estNombre = (v) => typeof v === "number" && Number.isFinite(v);
 const unSeul = (v) => (Array.isArray(v) ? (v.length === 1 ? v[0] : null) : v ?? null);
 const arrondi = (x) => Math.round(x * 100) / 100;
+
+// Logo de l'entreprise (champ « Logo » d'Airtable) : l'image est téléchargée puis recopiée
+// dans la page (« data:… »), car les liens d'images Airtable expirent au bout de quelques heures.
+// Renvoie null s'il n'y a pas de logo, s'il est trop lourd (plus de 1 Mo) ou en cas d'erreur.
+async function lireLogo(pieces) {
+  const piece = Array.isArray(pieces) ? pieces[0] : null;
+  if (!piece?.url || (piece.size && piece.size > 1048576)) return null;
+  try {
+    const reponse = await fetch(piece.url);
+    if (!reponse.ok) return null;
+    const octets = Buffer.from(await reponse.arrayBuffer());
+    return `data:${piece.type || "image/png"};base64,${octets.toString("base64")}`;
+  } catch {
+    return null;
+  }
+}
 
 // Ajoute une ligne (transaction ou prévisionnel) dans les totaux par entreprise/catégorie/mois.
 // Renvoie false si la ligne est incomplète.
@@ -150,11 +166,13 @@ async function construireJs() {
     };
     // Sans champ "Seuil d'alerte" dans Airtable, app.js applique 5 000 €.
     if (estNombre(f[E_SEUIL])) objet.seuilAlerte = f[E_SEUIL];
+    const logo = await lireLogo(f[E_LOGO]);
+    if (logo) objet.logo = logo;
 
     resultat[CLES_ENTREPRISES[e.id] ?? e.id] = objet;
   }
 
-  let pied = "Zieli 26 – données Airtable (base zieli26)";
+  let pied = "Zieli – données Airtable (base zieli26)";
   if (ignorees > 0) pied += ` – ${ignorees} ligne(s) Airtable incomplète(s) non comptée(s)`;
 
   return "document.getElementById('bouton-synchro').hidden=false;\n" +

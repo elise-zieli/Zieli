@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" role="img" aria-label="Logo fictif de la Librairie Chapitre Un">
+  <rect width="120" height="120" rx="26" fill="#7b2d3b"/>
+  <!-- livre ouvert -->
+  <path d="M60 40 C50 33 36 32 24 35 V86 C36 83 50 84 60 91 Z" fill="#fbf4ea"/>
+  <path d="M60 40 C70 33 84 32 96 35 V86 C84 83 70 84 60 91 Z" fill="#f1e4d0"/>
+  <path d="M60 40 V91" stroke="#7b2d3b" stroke-width="2.5"/>
+  <!-- le « 1 » de Chapitre Un -->
+  <path d="M72 50 L79 46 V74" fill="none" stroke="#7b2d3b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- marque-page doré -->
+  <path d="M38 33 V52 L43 48 L48 52 V33" fill="#e2b04a"/>
+</svg>

@@ -1,13 +1,16 @@
 /* =========================================================
-   CHARTE GRAPHIQUE « SOBRE ET ÉDITORIALE » (validée le 06/11)
-   - Identité : bleu marine sur fond blanc cassé chaud.
-   - Titres : police à empattements (Source Serif 4).
-   - Texte et chiffres : police sans empattements (Public Sans),
+   CHARTE GRAPHIQUE ZIELI (validée le 12/11)
+   - Identité : bleu pétrole, touche dorée, sur fond blanc cassé chaud.
+   - Police unique : Manrope (titres, texte et chiffres),
      avec des chiffres de même largeur pour que les colonnes s'alignent.
-   - Couleurs de sens à NE PAS changer : vert = entrées, orange = sorties, rouge = seuil.
+   - Boutons en pilule (bords entièrement arrondis).
+   - Couleurs de sens à NE PAS changer : vert = encaissements, orange = décaissements, rouge = seuil.
+   - Logo : cube + « zieli » (dans index.html).
    ========================================================= */
 :root {
-    --marine: #21277e;      /* couleur principale (identité Zieli 26) */
+    --principale: #0e4a5c;  /* couleur principale : bleu pétrole (identité Zieli) */
+    --principale-claire: #3f8fa3;
+    --dore: #f2b84b;        /* touche dorée (logo) */
     --marine-clair: #e8eef6;
     --fond: #faf8f4;        /* blanc cassé chaud (fond de page) */
     --fond-doux: #f6f3ed;   /* fond légèrement teinté (colonnes des mois passés, sous-totaux) */
@@ -15,23 +18,23 @@
     --texte: #1d2433;
     --texte-doux: #6b665e;  /* gris chaud pour les textes secondaires */
     --bordure: #e7e2d9;     /* filets et bordures, gris chaud */
-    --beige: #f1eadc;       /* fond de la ligne « Cash in – Cash out » */
+    --beige: #f1eadc;       /* fond de la ligne « Solde du mois (encaissements – décaissements) » */
     --entete-passe: #e9e3d8; /* fond de l'en-tête des mois passés (beige grisé) */
     --fond-sorties: #fde9d3; /* fond de la ligne « Sorties » (orange léger, un peu plus orangé qu'avant) */
     --filet-mois: #cdc6b9;  /* filet vertical entre les mois du tableau (un peu plus marqué) */
 
-    /* Relief des blocs : deux ombres légères teintées de marine (une proche, une diffuse).
+    /* Relief des blocs : deux ombres légères teintées de pétrole (une proche, une diffuse).
        Pour plus de relief, augmenter les deux derniers chiffres (opacité .06 → .10). */
-    --ombre-bloc: 0 1px 2px rgba(31, 58, 95, .06), 0 6px 20px rgba(31, 58, 95, .07);
+    --ombre-bloc: 0 1px 2px rgba(16, 40, 48, .06), 0 6px 20px rgba(16, 40, 48, .07);
     --arrondi: 14px;        /* coins arrondis des blocs */
 
     /* Tableau : couleur des montants réels et prévus */
     --reel: #111111;        /* noir */
-    --prevu: #1d4f91;       /* bleu foncé (plus vif que le marine, pour bien se distinguer du noir) */
+    --prevu: #1d4f91;       /* bleu foncé (pour bien se distinguer du noir) */
 
     /* Polices : si Google Fonts ne charge pas (pas d'internet), le navigateur prend la suivante de la liste. */
-    --police-titres: "Source Serif 4", Georgia, "Times New Roman", serif;
-    --police-texte: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --police-titres: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --police-texte: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --vert: #1e8e5a;   --vert-fond: #e6f4ec;
     --orange: #c46a00; --orange-fond: #fdf1e2;
     --rouge: #c0392b;  --rouge-fond: #fbeaea;
@@ -49,15 +52,23 @@
     line-height: 1.45;
   }
 
-  /* Titres en police à empattements (ton éditorial) */
-  h1, h2, h3, .boite-connexion .marque { font-family: var(--police-titres); font-weight: 600; letter-spacing: -0.01em; }
+  /* Titres en Manrope gras */
+  h1, h2, h3 { font-family: var(--police-titres); font-weight: 700; letter-spacing: -0.02em; }
+
+  /* --- Logo Zieli (cube + « zieli ») --- */
+  .logo-zieli { display: flex; align-items: center; gap: 12px; }
+  .logo-zieli .signature { margin: 2px 0 0; font-size: 13px; color: var(--texte-doux); }
+  .logo-zieli.petit { gap: 8px; }
+  /* Logo de l'entreprise cliente, à gauche de son nom (affiché seulement s'il existe) */
+  .entete-entreprise { display: flex; align-items: center; gap: 16px; }
+  .logo-client { width: 64px; height: 64px; object-fit: contain; border-radius: 14px; background: #fff; }
 
   .page { max-width: 1200px; margin: 0 auto; padding: 24px 20px 48px; }
 
   /* --- En-tête --- */
   header { display: flex; justify-content: space-between; align-items: flex-end;
            flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-  header h1 { margin: 0; font-size: 30px; color: var(--marine); }
+  header h1 { margin: 0; font-size: 30px; color: var(--principale); }
   header .sous-titre { margin: 4px 0 0; color: var(--texte-doux); }
   header .maj { color: var(--texte-doux); font-size: 14px; }
 
@@ -74,7 +85,7 @@
   /* Précision sur les écarts : plus petite et en italique */
   .note-alerte { font-size: 14px; font-style: italic; }
   /* Bandeau neutre (aucun passage sous le seuil) : bleu clair au lieu de rouge */
-  .alerte.info { background: var(--marine-clair); border-left-color: var(--marine); }
+  .alerte.info { background: var(--marine-clair); border-left-color: var(--principale); }
 
   /* --- Cartes chiffres clés --- */
   .cartes { display: grid; grid-template-columns: minmax(0, 420px); gap: 16px; margin-bottom: 20px; }
@@ -93,12 +104,12 @@
   /* Blocs en relief : plus de bordure grise, une ombre douce à la place (style plus moderne) */
   .bloc { background: var(--carte); border: 0; box-shadow: var(--ombre-bloc);
           border-radius: var(--arrondi); padding: 24px; margin-bottom: 24px; }
-  .bloc h2 { margin: 0 0 4px; font-size: 22px; color: var(--marine); }
+  .bloc h2 { margin: 0 0 4px; font-size: 22px; color: var(--principale); }
   .bloc .aide { margin: 0 0 16px; color: var(--texte-doux); font-size: 14px; }
 
   .legende { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--texte-doux); margin-top: 8px; }
   .legende span::before { content: ""; display: inline-block; width: 22px; height: 0;
-                          margin-right: 6px; vertical-align: middle; border-top: 3px solid var(--marine); }
+                          margin-right: 6px; vertical-align: middle; border-top: 3px solid var(--principale); }
   .legende .prevu::before { border-top-style: dashed; }
   .legende .seuil::before { border-top: 2px solid var(--rouge); opacity: .45; }
   .legende .ligne-entrees::before { border-top: 1.5px solid #1e8e5a; }
@@ -112,7 +123,7 @@
   /* Bulle qui affiche le montant quand on clique sur un point */
   .bulle {
     display: none; position: absolute; transform: translate(-50%, -100%);
-    background: var(--marine); color: #fff; padding: 10px 14px; border-radius: 8px;
+    background: var(--principale); color: #fff; padding: 10px 14px; border-radius: 8px;
     font-size: 14px; line-height: 1.5; white-space: nowrap; pointer-events: none;
     box-shadow: 0 4px 12px rgba(0,0,0,.15);
   }
@@ -137,16 +148,16 @@
   thead .sous th { font-size: 12px; font-weight: 500; }
   tbody tr { border-bottom: 1px solid var(--bordure); }
   tr.important td { font-weight: 700; }
-  tr.solde td { font-weight: 700; color: var(--marine); background: var(--marine-clair); }
+  tr.solde td { font-weight: 700; color: var(--principale); background: var(--marine-clair); }
   tr.solde td:first-child { background: var(--marine-clair); }
-  tr.cliquable td:first-child { cursor: pointer; color: var(--marine); }
+  tr.cliquable td:first-child { cursor: pointer; color: var(--principale); }
   tr.cliquable td:first-child::before { content: "▸ "; }
   tr.cliquable.ouvert td:first-child::before { content: "▾ "; }
   tr.detail-ligne td { color: var(--texte-doux); font-size: 13px; }
-  tr.detail-ligne td:first-child { padding-left: 56px; }
+  tr.detail-ligne td:first-child { padding-left: 32px; }
   tr.detail-partie td { color: var(--texte); font-weight: 600; background: var(--fond-doux); }
   tr.detail-partie td:first-child { background: var(--fond-doux); }
-  tr.detail-categorie td:first-child { padding-left: 72px; }
+  tr.detail-categorie td:first-child { padding-left: 52px; }
   tr.detail-ligne { display: none; }
   tr.detail-ligne.visible { display: table-row; }
   tr td.ecart-neg, tr.detail-ligne td.ecart-neg { color: var(--rouge); font-weight: 600; }
@@ -161,37 +172,34 @@
   th.mois-repliable { cursor: pointer; }
   th.bascule-pct { cursor: pointer; }
   .badge-pct { display: inline-block; font-size: 11px; font-weight: 700; padding: 0 5px; margin-left: 2px;
-               border: 1px solid var(--bordure); border-radius: 4px; color: var(--marine); background: #fff; }
-  .badge-pct.ouvert { background: var(--marine); color: #fff; border-color: var(--marine); }
-  td.col-pct, th.col-pct { color: var(--marine); font-style: italic; font-size: 11px; padding: 8px 4px; width: 1%; }
-  .en-cours { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--marine);
+               border: 1px solid var(--bordure); border-radius: 4px; color: var(--principale); background: #fff; }
+  .badge-pct.ouvert { background: var(--principale); color: #fff; border-color: var(--principale); }
+  td.col-pct, th.col-pct { color: var(--principale); font-style: italic; font-size: 11px; padding: 8px 4px; width: 1%; }
+  .en-cours { display: inline-block; font-size: 11px; font-weight: 600; color: #fff; background: var(--principale);
               padding: 1px 6px; border-radius: 10px; margin-left: 4px; vertical-align: middle; }
   th.mois-repliable:hover { text-decoration: underline; }
 
   /* --- Distinguer le réel du prévisionnel (validé le 06/11) --- */
   /* Bandeau « Réalisé » / « Prévisionnel » au-dessus des mois */
   thead tr.zones th.zone { text-align: left; font-size: 12px; font-weight: 700; text-transform: uppercase;
-                           letter-spacing: .08em; color: var(--marine); padding: 6px 10px;
-                           border-bottom: 2px solid var(--marine); }
+                           letter-spacing: .08em; color: var(--principale); padding: 6px 10px;
+                           border-bottom: 2px solid var(--principale); }
   /* Filet vertical fin entre les mois (seulement entre deux mois, pas à l'intérieur d'un mois) */
   th.debut-mois, td.debut-mois { border-left: 1px solid var(--filet-mois); }
   /* Trait vertical marine : là où s'arrête le réel et commence le prévisionnel.
      Placé APRÈS le filet des mois pour le remplacer sur le mois en cours. */
-  th.debut-prevision, td.debut-prevision { border-left: 3px solid var(--marine); }
+  th.debut-prevision, td.debut-prevision { border-left: 3px solid var(--principale); }
   /* Couleurs réel / prévu. « #tableau » rend la règle prioritaire sur les couleurs des lignes
      (solde, total disponible…). Le rouge « sous le seuil » reste prioritaire (!important plus haut). */
   #tableau td.val-reel, #tableau th.val-reel { color: var(--reel); }
   #tableau td.val-prevu, #tableau th.val-prevu { color: var(--prevu); font-style: italic; }
 
   /* Ligne « Total disponible » : bleu un peu plus soutenu que la ligne du solde */
-  tbody tr.total-dispo td { background: #d3e2f4; font-weight: 700; color: var(--marine); }
+  tbody tr.total-dispo td { background: #d3e2f4; font-weight: 700; color: var(--principale); }
   tbody tr.total-dispo td.ecart-neg { color: var(--rouge); }
   tbody tr.total-dispo td.ecart-pos { color: var(--vert); }
 
-  /* --- Niveaux de dépliage du tableau (validé le 07/11) : décalage du libellé vers la droite --- */
-  tr.niveau-1 td:first-child { padding-left: 24px; }
-  tr.niveau-2 td:first-child { padding-left: 40px; }
-  /* « Cash in – Cash out » : fond beige sur TOUTE la ligne (y compris les colonnes des mois passés) */
+  /* « Solde du mois (encaissements – décaissements) » : fond beige sur TOUTE la ligne (y compris les mois passés) */
   #tableau tr.flux-net td { background: var(--beige); }
   /* « Solde épargne fin de mois » : fond blanc sur toute la ligne */
   #tableau tr.epargne-solde td { background: #fff; }
@@ -216,7 +224,7 @@
   .choix-urgent { border: 0; padding: 0; display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; }
   .choix-urgent legend { font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 6px; width: 100%; }
   .choix-urgent .option { flex-direction: row; align-items: center; gap: 6px; font-weight: 400; cursor: pointer; }
-  .choix-urgent input { accent-color: var(--marine); width: 18px; height: 18px; margin: 0; }
+  .choix-urgent input { accent-color: var(--principale); width: 18px; height: 18px; margin: 0; }
   .choix-urgent .aide-urgent { color: var(--texte-doux); font-size: 13px; }
   /* Liste « Mois concerné » : pas besoin de toute la largeur */
   .champ-court select { max-width: 320px; }
@@ -225,12 +233,12 @@
                   padding: 1px 6px; border-radius: 10px; margin-right: 4px; }
   .pleine-largeur { margin-bottom: 14px; }
   form button {
-    font: inherit; font-weight: 600; background: var(--marine); color: #fff; border: 0;
-    padding: 12px 22px; border-radius: 8px; cursor: pointer;
+    font: inherit; font-weight: 600; background: var(--principale); color: #fff; border: 0;
+    padding: 12px 22px; border-radius: 999px; cursor: pointer;
   }
   form button:hover { opacity: .9; }
   .confirmation { color: var(--vert); font-weight: 600; margin: 12px 0 0; min-height: 1em; }
-  #liste-commentaires h3 { font-size: 15px; color: var(--marine); margin: 20px 0 8px; }
+  #liste-commentaires h3 { font-size: 15px; color: var(--principale); margin: 20px 0 8px; }
   .commentaire { border-left: 3px solid var(--marine-clair); padding: 6px 12px; margin-bottom: 8px; font-size: 14px; }
   .commentaire .meta { color: var(--texte-doux); font-size: 13px; }
 
@@ -242,17 +250,17 @@
     background: var(--carte); border: 1px solid var(--bordure); border-radius: 12px;
     padding: 32px; width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 14px;
   }
-  .boite-connexion .marque { margin: 0; font-weight: 700; color: var(--marine); letter-spacing: .5px; }
+  .boite-connexion .logo-zieli { margin-bottom: 6px; }
   .boite-connexion h1 { margin: 0; font-size: 22px; }
   .boite-connexion .aide { margin: 0; color: var(--texte-doux); font-size: 14px; }
   .boite-connexion .erreur { color: var(--rouge); margin: 0; min-height: 1em; font-size: 14px; }
-  .lien-discret { color: var(--marine); font-size: 14px; }
+  .lien-discret { color: var(--principale); font-size: 14px; }
   .comptes-demo { background: var(--marine-clair); border-radius: 8px; padding: 12px; font-size: 13px; color: var(--texte); line-height: 1.6; }
   .barre-utilisateur { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
                        gap: 10px; margin-bottom: 16px; font-size: 14px; color: var(--texte-doux); }
   .barre-utilisateur .compte { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-  .bouton-discret { font: inherit; background: none; border: 1px solid var(--bordure); border-radius: 8px;
-                    padding: 6px 12px; cursor: pointer; color: var(--marine); }
+  .bouton-discret { font: inherit; background: none; border: 1px solid var(--bordure); border-radius: 999px;
+                    padding: 7px 16px; cursor: pointer; color: var(--principale); }
   #message-synchro { color: var(--rouge); }
   .alerte { white-space: pre-line; }
   #bouton-expliquer:not([hidden]) { display: block; margin: -8px 0 20px; }
@@ -262,8 +270,8 @@
   .zone-admin select { font: inherit; padding: 6px 10px; border: 1px solid var(--bordure); border-radius: 8px; }
   .boite-connexion label { display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 600; }
   .boite-connexion input { font: inherit; padding: 10px 12px; border: 1px solid var(--bordure); border-radius: 8px; }
-  .boite-connexion button { font: inherit; font-weight: 600; background: var(--marine); color: #fff; border: 0;
-                            padding: 12px; border-radius: 8px; cursor: pointer; }
+  .boite-connexion button { font: inherit; font-weight: 600; background: var(--principale); color: #fff; border: 0;
+                            padding: 13px; border-radius: 999px; cursor: pointer; }
 
   footer { text-align: center; color: var(--texte-doux); font-size: 13px; }
 
@@ -273,4 +281,12 @@
     .champs { grid-template-columns: 1fr; }
     .carte .chiffre { font-size: 30px; }
     header h1 { font-size: 22px; }
+    /* Tableau : la colonne des libellés (figée à gauche) reste étroite, les libellés passent
+       à la ligne ; les mois défilent à côté. */
+    table { font-size: 12px; }
+    th, td { padding: 6px; }
+    thead th.coin, tbody td:first-child { white-space: normal; width: 130px; min-width: 130px; line-height: 1.3; }
+    tr.detail-ligne td { font-size: 12px; }
+    tr.detail-ligne td:first-child { padding-left: 14px; }
+    tr.detail-categorie td:first-child { padding-left: 24px; }
   }

@@ -1,5 +1,5 @@
 // =====================================================================
-// ZIELI 26 – netlify/lib/commun.mjs
+// ZIELI – netlify/lib/commun.mjs
 // Réglages partagés par les fonctions Netlify (traduction de serveur.ps1).
 // =====================================================================
 

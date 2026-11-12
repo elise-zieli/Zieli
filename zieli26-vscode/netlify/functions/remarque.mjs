@@ -1,5 +1,5 @@
 // =====================================================================
-// ZIELI 26 – fonction Netlify « remarque » (adresse /api/remarque)
+// ZIELI – fonction Netlify « remarque » (adresse /api/remarque)
 // Formulaire « Une remarque ? » : transmet la remarque au workflow n8n.
 // La clé du webhook reste chez Netlify : le navigateur ne la voit jamais.
 // (Traduction de Transmettre-Remarque dans serveur.ps1.)

@@ -1,5 +1,5 @@
 // =====================================================================
-// ZIELI 26 – donnees.js
+// ZIELI – donnees.js
 // DONNÉES DE DÉMONSTRATION (fictives) : 2 entreprises + les comptes de connexion.
 //
 // Ce fichier est lu par le navigateur AVANT app.js (voir le bas de index.html) :
@@ -26,7 +26,8 @@
 // ENTREPRISE 1 : LA LIBRAIRIE
 // ---------------------------------------------------------------------
 const DONNEES_LIBRAIRIE = {
-  entreprise: "Librairie l'Utopie'",          // nom affiché en haut de page
+  entreprise: "Librairie Chapitre Un",          // nom affiché en haut de page
+  logo: "logos-demo/librairie-chapitre-un.svg",   // logo fictif (fichier du dossier logos-demo)
   dateMiseAJour: "2026-11-06",               // date affichée « Mis à jour le … » (format AAAA-MM-JJ)
   seuilAlerte: 5000,                        // seuil de sécurité du compte courant, en euros : seuil donné par la libraire (07/11)
   // Soldes de départ (compte courant et épargne) à la veille du 1er mois de la liste.
@@ -112,6 +113,7 @@ const DONNEES_LIBRAIRIE = {
 // ---------------------------------------------------------------------
 const DONNEES_BOULANGERIE = {
   entreprise: "Atelier Boulanger Fournil d'Or",
+  logo: "logos-demo/boulangerie-fournil-dor.svg",  // logo fictif (fichier du dossier logos-demo)
   dateMiseAJour: "2026-11-06",               // date affichée « Mis à jour le … » (format AAAA-MM-JJ)
   seuilAlerte: 3000,                        // seuil de sécurité du compte courant, en euros : seuil FICTIF (démo)
   // Soldes de départ (compte courant et épargne) à la veille du 1er mois de la liste.
@@ -184,12 +186,12 @@ const ENTREPRISES = {
 // - role "Dirigeant" : voit uniquement l'entreprise indiquée dans « entreprise ».
 // ---------------------------------------------------------------------
 // ⚠ MAQUETTE SEULEMENT : ici, les mots de passe et toutes les données sont dans la page,
-// donc rien n'est réellement protégé. La vraie connexion sera faite par Lovable, côté serveur.
+// donc rien n'est réellement protégé. Une vraie connexion devra être faite côté serveur.
 const UTILISATEURS = [
   // Compte d'Elise : accès à toutes les entreprises.
   // Email fictif (pas de vraie adresse dans la maquette : tout le code est lisible par les visiteurs).
   { email: "elise.zieli@test.exemple", motDePasse: "MDPtest123!", nom: "Elise", role: "Admin", entreprise: null },
   // Comptes de test des dirigeants (fictifs).
-  { email: "libraire@utopie.example", motDePasse: "demo", nom: "Julie", role: "Dirigeant", entreprise: "ent-librairie" },
+  { email: "libraire@chapitre-un.example", motDePasse: "demo", nom: "Julie", role: "Dirigeant", entreprise: "ent-librairie" },
   { email: "boulanger@fournildor.example", motDePasse: "demo", nom: "Paul", role: "Dirigeant", entreprise: "ent-boulangerie" },
 ];
