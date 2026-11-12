@@ -10,10 +10,11 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 ## 0. À faire maintenant (par ordre)
 
 1. **Tester le site en ligne** (https://zieli-jedha.netlify.app/) : nouvelle charte et logos, vrais chiffres Airtable, remarque envoyée → email reçu.
-2. **n8n** : vérifier que les 3 workflows sont **activés** (remarques, contrôle mensuel, point de trésorerie). *(« Zieli 26 » → « Zieli » fait à la main le 12/11 dans les nœuds « Verifier les donnees » et « Fabriquer les PowerPoint ».)*
-3. **Airtable** : supprimer le champ « Mot de passe » de la table Utilisateurs, s'il existe encore *(à confirmer)*.
-4. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
-5. **Préparer la présentation** (16-17/11), voir section 8.
+2. **n8n** : vérifier que les 3 workflows sont **activés** (remarques, contrôle mensuel, point de trésorerie). *(« Zieli 26 » → « Zieli » fait à la main le 12/11 dans « Verifier les donnees », « Fabriquer les PowerPoint » et les nœuds e-mail du formulaire de remarques.)*
+3. **n8n — nouveau PowerPoint (validé le 12/11)** : remplacer tout le code du nœud « Fabriquer les PowerPoint » par le contenu du fichier `n8n-code-fabriquer-powerpoint.js`, enregistrer, puis tester avec « Execute step ». Dans Airtable, remplacer les logos SVG par les versions PNG de `logos-demo` (PowerPoint n'affiche pas toujours le SVG).
+4. **Airtable** : supprimer le champ « Mot de passe » de la table Utilisateurs, s'il existe encore *(à confirmer)*.
+5. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
+6. **Préparer la présentation** (16-17/11), voir section 8.
 
 > Lovable n'est plus utilisé (décision du 12/11) : le site est construit dans VS Code et publié sur Netlify.
 
@@ -106,6 +107,8 @@ Dans Chrome : **F12**, puis **Ctrl + Maj + M**, et choisir un modèle (ex. iPhon
 | `zieli26-vscode/logos-demo/` | Logos fictifs de la librairie et de la boulangerie |
 | `netlify.toml` | Réglages Netlify |
 | `n8n-workflow-*.json` | Copies de sauvegarde des 3 workflows n8n |
+| `n8n-code-fabriquer-powerpoint.js` | Code du nœud n8n « Fabriquer les PowerPoint » (nouvelle charte), à coller dans n8n |
+| `zieli26-vscode/logo-zieli.png` | Logo Zieli en image (utilisé dans les PowerPoint ; réutilisable ailleurs) |
 | `emails-n8n/` | Modèles des emails envoyés par n8n |
 | `airtable-token.txt`, `n8n-cle.txt` | Clés secrètes (jamais sur GitHub) |
 
@@ -294,6 +297,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - La librairie s'appelle **Librairie Chapitre Un** (Airtable et fichiers ; compte démo `libraire@chapitre-un.example`).
 - Champ **Logo** ajouté dans la table Entreprises ; logo du client affiché à gauche de son nom (logos fictifs dans `logos-demo`).
 - Charte appliquée au site (connexion, en-tête, couleurs, boutons, graphique).
+- **PowerPoint mensuel refait** : police Calibri (présente partout), bleu pétrole, logo du client en haut à gauche, mois en pastille, logo Zieli en bas à droite ; diapositive 2 = tableau du site (Réel, % du réel, Prévu, Écart) avec commentaires à côté ; blocs en relief sur la diapositive 3.
 - Documentation fusionnée dans ce fichier.
 
 ---
