@@ -87,7 +87,7 @@ Dans Chrome : **F12**, puis **Ctrl + Maj + M**, et choisir un modèle (ex. iPhon
 | Un montant, une catégorie, le seuil d'alerte | **Airtable** | tables Transactions, Prévisionnel, Entreprises |
 | Les chiffres de secours (fictifs) | `donnees.js` | `DONNEES_LIBRAIRIE`, `DONNEES_BOULANGERIE` |
 | Le graphique | `app.js` | section 3.5 GRAPHIQUE |
-| Le bloc « Une remarque ? » | `index.html` (champs) et `app.js` (section 3.7) | |
+| Le bloc « Une remarque / une question ? » | `index.html` (champs) et `app.js` (section 3.7) | |
 
 ### Bonnes pratiques
 - **Une modification à la fois**, puis Ctrl + S et vérifier le rendu.
@@ -105,12 +105,13 @@ Dans Chrome : **F12**, puis **Ctrl + Maj + M**, et choisir un modèle (ex. iPhon
 | `zieli26-vscode/netlify/` | Fonctions Netlify (même rôle que serveur.ps1, en ligne) |
 | `zieli26-vscode/logos-demo/` | Logos fictifs de la librairie et de la boulangerie |
 | `netlify.toml` | Réglages Netlify |
+| `test_libraire.md` | Fiche de déroulé du test avec la libraire (à imprimer) |
+| `test_libraire_exemple_fictif.md` | Exemple de fiche remplie avec des réponses **fictives** (pour la démo, présenté comme tel) |
 | `n8n-workflow-*.json` | Copies de sauvegarde des 3 workflows n8n |
 | `n8n-code-fabriquer-powerpoint.js` | Code du nœud n8n « Fabriquer les PowerPoint » (récapitulatif mensuel + e-mail au dirigeant) |
 | `n8n-code-verifier-les-donnees.js` | Code du nœud n8n « Verifier les donnees » (e-mail de contrôle mensuel) |
 | `emails-n8n/*.html`, `copie-dirigeant-objet.txt` | Textes des e-mails du formulaire de remarques (à coller dans les nœuds e-mail) |
 | `zieli26-vscode/logo-zieli.png` | Logo Zieli en image (utilisé dans les PowerPoint ; réutilisable ailleurs) |
-| `emails-n8n/` | Modèles des emails envoyés par n8n |
 | `airtable-token.txt`, `n8n-cle.txt` | Clés secrètes (jamais sur GitHub) |
 
 ---
@@ -121,7 +122,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 | Table | ID | Contenu |
 |---|---|---|
-| Entreprises | `tblna9EWuSbSHsXT8` | Nom, Solde initial courant, Solde initial épargne, Date du solde initial (31/07/2026), Seuil d'alerte, Logo (image affichée à gauche du nom ; logos fictifs dans `zieli26-vscode/logos-demo`) |
+| Entreprises | `tblna9EWuSbSHsXT8` | Nom, Solde initial courant, Solde initial épargne, Date du solde initial (31/07/2026), Seuil d'alerte, Logo (image PNG ou JPG affichée à gauche du nom, sur le site et dans le PowerPoint ; logos fictifs dans `zieli26-vscode/logos-demo`) |
 | Utilisateurs | `tblLaN6W8FfjOELV3` | Nom, email, Rôle (Admin / Dirigeant), Entreprises |
 | Catégories | `tblOpdvbRhk7UMNj6` | 18 catégories (« Ligne »), Partie, Sens (Entrée / Sortie / Interne), Ordre |
 | Transactions | `tblZDrxbfp6fR50I4` | Réel ; Montant = Crédit + Débit ; Mois (AAAA-MM) |
@@ -211,7 +212,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Typographie : **Manrope** partout (titres, texte, chiffres).
 - Couleur principale : **bleu pétrole** `#0e4a5c` (clair `#3f8fa3`, très clair `#cfe2e8`) ; touche **dorée** `#f2b84b`.
 - Fond blanc cassé chaud `#faf8f4` ; boutons **en pilule** (bords entièrement arrondis).
-- Couleurs du tableau inchangées (vert, orange, beige, bleus, rouge).
+- Couleurs du tableau : vert (encaissements), orange (décaissements), beige léger (soldes du mois et de l'épargne), bleus (solde fin de mois, total disponible), rouge (négatifs et seuil) ; renforcées le 12/11.
 - **Logo** (plan « T ») : cube 3D façon Rubik's cube (une case dorée sur le dessus) + « zieli » en minuscules, Manrope, avec le bout de la barre du bas du z en doré.
 - **Signature** : « Vos chiffres décodés, vos tâches allégées. »
 - Emplacement prévu pour le logo de chaque entreprise cliente, à gauche de son nom.
@@ -220,9 +221,9 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 **Workflows n8n**
 | Workflow | Déclenchement | Ce qu'il fait |
 |---|---|---|
-| Remarques | Formulaire « Une remarque ? » (webhook `zieli-remarques`) | Enregistre dans Airtable (Commentaires), email à Elise (urgent ou normal), copie au dirigeant pour « Explication des écarts » |
+| Remarques (n8n : « Zieli 26- formulaire ») | Formulaire « Une remarque / une question ? » (webhook `zieli-remarques`) | Enregistre dans Airtable (Commentaires), email à Elise (urgent ou normal), copie au dirigeant pour « Explication des écarts » |
 | Contrôle mensuel | Le 5 du mois à 8 h | Vérifie les données Airtable et envoie à Elise les actions à faire |
-| Point de trésorerie | Le 5 du mois à 9 h | Fabrique un PowerPoint par entreprise et l'envoie au dirigeant |
+| Récapitulatif mensuel | Le 5 du mois à 12 h | Fabrique le PowerPoint « récapitulatif mensuel » de chaque entreprise et l'envoie au dirigeant |
 
 ---
 
@@ -246,12 +247,12 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | 1.8 | Maquette HTML/CSS/JS | validé, tableau retravaillé le 12/11 |
 | 1.8 bis | GitHub ↔ VS Code | fait (dépôt `elise-zieli/Zieli`) |
 | 1.9 | V1 : chiffres Airtable, remarques n8n, mise en ligne Netlify | fait et testé en ligne le 12/11 |
-| 1.9 bis | Workflows n8n contrôle mensuel et point de trésorerie | construits (vérifier qu'ils sont activés) |
+| 1.9 bis | Workflows n8n contrôle mensuel et récapitulatif mensuel | faits, mis à jour et publiés le 12/11 |
 | 1.9 ter | Nouvelle charte Zieli (Manrope, bleu pétrole, logo) + logo des clients | fait le 12/11 (logos fictifs dans Airtable) |
 | 1.10 | Test auprès de la libraire (15/11) | à faire |
 | 1.11 | Ajustements et présentation Jedha (16-17/11) | à faire |
 
-**Test auprès de la libraire (1.10)**
+**Test auprès de la libraire (1.10)** — fiche de déroulé : `test_libraire.md`
 - **Date à confirmer :** le 15/11 tombe un dimanche. Si le test glisse au 16/11, il ne reste qu'une journée d'ajustements.
 - **Données fictives** de « Librairie Chapitre Un » : valable pour la lisibilité, moins pour la valeur.
 - **Connexion :** compte Dirigeant de la librairie (`libraire@chapitre-un.example`).
@@ -317,7 +318,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Catégorisation automatique (par règles, avec une option IA).
 - Connexion bancaire DSP2, import Sage automatique, facturation électronique.
 - Agent IA, veille sectorielle, invitation automatique des dirigeants.
-- Slide « Veille » dans le point de trésorerie mensuel : actualité du mois du secteur, à partir de pages sources données par Elise.
+- Slide « Veille » dans le récapitulatif mensuel : actualité du mois du secteur, à partir de pages sources données par Elise.
 - Explications d'écarts visibles par le dirigeant.
 - Hébergement alternatif (Cloudflare Pages, Softr).
 - Mascotte.
