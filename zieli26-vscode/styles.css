@@ -18,10 +18,10 @@
     --texte: #1d2433;
     --texte-doux: #6b665e;  /* gris chaud pour les textes secondaires */
     --bordure: #e7e2d9;     /* filets et bordures, gris chaud */
-    --beige: #f1eadc;       /* fond de la ligne « Solde du mois (encaissements – décaissements) » */
+    --beige: #f7f3eb;       /* fond de la ligne « Solde du mois (encaissements – décaissements) » : beige léger (éclairci le 12/11) */
     --entete-passe: #e9e3d8; /* fond de l'en-tête des mois passés (beige grisé) */
-    --fond-sorties: #fde9d3; /* fond de la ligne « Sorties » (orange léger, un peu plus orangé qu'avant) */
-    --filet-mois: #cdc6b9;  /* filet vertical entre les mois du tableau (un peu plus marqué) */
+    --fond-sorties: #fcdab8; /* fond de la ligne « Décaissements » (orange, plus soutenu depuis le 12/11) */
+    --filet-mois: #b3ab9d;  /* filet vertical entre les mois du tableau (plus marqué depuis le 12/11) */
 
     /* Relief des blocs : deux ombres légères teintées de pétrole (une proche, une diffuse).
        Pour plus de relief, augmenter les deux derniers chiffres (opacité .06 → .10). */
@@ -146,7 +146,7 @@
   /* En-tête des mois passés : beige grisé (plus de bleu, réservé aux soldes) */
   thead .mois-passe { background: var(--entete-passe); color: var(--texte); }
   thead .sous th { font-size: 12px; font-weight: 500; }
-  tbody tr { border-bottom: 1px solid var(--bordure); }
+  tbody tr { border-bottom: 1px solid #d8d1c4; }   /* filet entre les lignes, plus marqué depuis le 12/11 */
   tr.important td { font-weight: 700; }
   tr.solde td { font-weight: 700; color: var(--principale); background: var(--marine-clair); }
   tr.solde td:first-child { background: var(--marine-clair); }
@@ -188,24 +188,24 @@
   th.debut-mois, td.debut-mois { border-left: 1px solid var(--filet-mois); }
   /* Trait vertical marine : là où s'arrête le réel et commence le prévisionnel.
      Placé APRÈS le filet des mois pour le remplacer sur le mois en cours. */
-  th.debut-prevision, td.debut-prevision { border-left: 3px solid var(--principale); }
+  th.debut-prevision, td.debut-prevision { border-left: 5px solid var(--principale); }   /* épaissi le 12/11 pour mieux se voir */
   /* Couleurs réel / prévu. « #tableau » rend la règle prioritaire sur les couleurs des lignes
      (solde, total disponible…). Le rouge « sous le seuil » reste prioritaire (!important plus haut). */
   #tableau td.val-reel, #tableau th.val-reel { color: var(--reel); }
   #tableau td.val-prevu, #tableau th.val-prevu { color: var(--prevu); font-style: italic; }
 
   /* Ligne « Total disponible » : bleu un peu plus soutenu que la ligne du solde */
-  tbody tr.total-dispo td { background: #d3e2f4; font-weight: 700; color: var(--principale); }
+  tbody tr.total-dispo td { background: #c2d6ee; font-weight: 700; color: var(--principale); }
   tbody tr.total-dispo td.ecart-neg { color: var(--rouge); }
   tbody tr.total-dispo td.ecart-pos { color: var(--vert); }
 
   /* « Solde du mois (encaissements – décaissements) » : fond beige sur TOUTE la ligne (y compris les mois passés) */
   #tableau tr.flux-net td { background: var(--beige); }
-  /* « Solde épargne fin de mois » : fond blanc sur toute la ligne */
-  #tableau tr.epargne-solde td { background: #fff; }
+  /* « Solde compte épargne fin de mois » : fond beige léger sur toute la ligne */
+  #tableau tr.epargne-solde td { background: var(--beige); }   /* même fond que « Solde du mois » (12/11) */
 
   /* --- Fonds de couleur : vert léger pour les entrées, orange léger pour les sorties --- */
-  tbody tr[data-ouvre="entrees"] td { background: #e6f4ec; }
+  tbody tr[data-ouvre="entrees"] td { background: #d3ecdd; }
   tbody tr[data-ouvre="sorties"] td { background: var(--fond-sorties); }
   tbody tr[data-groupe="entrees"] td,
   tbody tr.detail-partie[data-groupe="entrees"] td:first-child { background: #f2faf5; }
@@ -290,3 +290,18 @@
     tr.detail-ligne td:first-child { padding-left: 14px; }
     tr.detail-categorie td:first-child { padding-left: 24px; }
   }
+
+  /* --- Lignes clés du tableau (12/11) : Encaissements, Décaissements, Total disponible ---
+     Texte un peu plus grand et filet blanc au-dessus, pour qu'elles ressortent des lignes de solde. */
+  tbody tr[data-ouvre="entrees"] td, tbody tr[data-ouvre="sorties"] td, tbody tr.total-dispo td { font-size: 15px; padding-top: 11px; padding-bottom: 11px; }
+  tbody tr[data-ouvre="sorties"] td, tbody tr.total-dispo td { border-top: 2px solid #fff; }
+  /* « Total disponible » en plus gros, et « (courant + épargne) » à la ligne, en plus petit (12/11). */
+  tbody tr.total-dispo td:first-child { font-size: 18px; line-height: 1.25; }
+  tbody tr.total-dispo .precision { display: block; font-size: 12px; font-weight: 500; }
+  /* Montants de la ligne « Total disponible » aussi en plus gros (12/11). */
+  tbody tr.total-dispo td { font-size: 17px; }
+  tbody tr.total-dispo td:first-child { font-size: 18px; }
+  /* Lignes bleues (Solde fin de mois, Total disponible) : filets verticaux bleu soutenu, ton sur ton (12/11).
+     Le trait pétrole épais (début du prévisionnel) est gardé pour la continuité du tableau. */
+  #tableau tbody tr.total-dispo td.debut-mois:not(.debut-prevision), #tableau tbody tr.solde td.debut-mois:not(.debut-prevision) { border-left-color: #8fa9c6; }
+  #tableau tbody tr.total-dispo { border-bottom: 0; }

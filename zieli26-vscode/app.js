@@ -516,7 +516,10 @@ function dessinerGraphique() {
   for (let v = Math.ceil(min / pas) * pas; v <= max; v += pas) {
     // La ligne du 0 € est plus foncée, pour bien repérer le passage en négatif.
     svg += `<line x1="${margeG}" x2="${L - margeD}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? "#a8a299" : "#efebe4"}"/>`;
-    svg += `<text x="${margeG - 10}" y="${y(v) + 4}" text-anchor="end" font-size="12" fill="#6b665e">${euros(v)}</text>`;
+    // Montant gris masqué s'il est trop proche du seuil : le montant du seuil (en rouge) prend sa place.
+    if (Math.abs(y(v) - y(SEUIL_ALERTE)) >= 14) {
+      svg += `<text x="${margeG - 10}" y="${y(v) + 4}" text-anchor="end" font-size="12" fill="#3f3b35">${euros(v)}</text>`;
+    }
   }
 
   // POINT « AUJOURD'HUI » (date de mise à jour), placé entre la fin du dernier mois clos et la fin
@@ -535,8 +538,10 @@ function dessinerGraphique() {
   svg += `<line x1="${xAujourdhui}" x2="${xAujourdhui}" y1="${margeH - 10}" y2="${H - margeB + 5}" stroke="#a8a299" stroke-dasharray="3 4"/>`;
   svg += `<text x="${xAujourdhui}" y="${margeH - 14}" text-anchor="middle" font-size="12" font-weight="600" fill="#6b665e">aujourd'hui</text>`;
 
-  // Ligne rouge horizontale du seuil d'alerte (semi-transparente), avec son nom à droite.
+  // Ligne rouge horizontale du seuil d'alerte (semi-transparente), avec son nom à droite
+  // et son montant à gauche, sur l'axe (demande du 12/11).
   svg += `<line x1="${margeG}" x2="${L - margeD}" y1="${y(SEUIL_ALERTE)}" y2="${y(SEUIL_ALERTE)}" stroke="#c0392b" stroke-width="2" stroke-opacity="0.45"/>`;
+  svg += `<text x="${margeG - 10}" y="${y(SEUIL_ALERTE) + 4}" text-anchor="end" font-size="12" fill="#c0392b">${euros(SEUIL_ALERTE)}</text>`;
   svg += `<text x="${L - margeD + 6}" y="${y(SEUIL_ALERTE) + 4}" font-size="12" fill="#c0392b">seuil d'alerte</text>`;
 
   // Nombre de mois passés dans le graphique : sert à couper chaque courbe en deux morceaux,
@@ -840,7 +845,7 @@ function construireTableau() {
   //   Décaissements                                 ← clic ▸ : détail par partie
   //   Solde du mois (encaissements – décaissements)   ← fond beige
   //   Solde fin de mois – compte courant            ← fond bleu clair
-  //   Solde épargne fin de mois                     ← fond blanc
+  //   Solde compte épargne fin de mois              ← même fond beige léger que le solde du mois
   //   Total disponible (courant + épargne)          ← fond bleu
   // La ligne « Solde en début de mois » a été retirée : elle répétait le solde de fin du mois précédent.
   let corps = "";
@@ -854,9 +859,9 @@ function construireTableau() {
          + cellules((m, t) => totaux(m, t).cashInOut, { negatifRouge: true }) + `</tr>`;
   corps += `<tr class="solde"><td>Solde fin de mois – compte courant</td>`
          + cellules(soldeFin, { sousSeuil: true, negatifRouge: true, finDeMois: true }) + `</tr>`;
-  corps += `<tr class="epargne-solde"><td>Solde épargne fin de mois</td>`
+  corps += `<tr class="epargne-solde"><td>Solde compte épargne fin de mois</td>`
          + cellules(epargneFin, { negatifRouge: true, finDeMois: true }) + `</tr>`;
-  corps += `<tr class="total-dispo"><td>Total disponible (courant + épargne)</td>`
+  corps += `<tr class="total-dispo"><td>Total disponible<span class="precision">(courant + épargne)</span></td>`
          + cellules(disponibilites, { negatifRouge: true, finDeMois: true }) + `</tr>`;
 
   // On insère le tableau complet dans la page.

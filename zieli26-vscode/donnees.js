@@ -29,7 +29,7 @@ const DONNEES_LIBRAIRIE = {
   entreprise: "Librairie Chapitre Un",          // nom affiché en haut de page
   logo: "logos-demo/librairie-chapitre-un.svg",   // logo fictif (fichier du dossier logos-demo)
   dateMiseAJour: "2026-11-06",               // date affichée « Mis à jour le … » (format AAAA-MM-JJ)
-  seuilAlerte: 5000,                        // seuil de sécurité du compte courant, en euros : seuil donné par la libraire (07/11)
+  seuilAlerte: 10000,                       // seuil de sécurité du compte courant, en euros : confirmé par la libraire (12/11)
   // Soldes de départ (compte courant et épargne) à la veille du 1er mois de la liste.
   soldeInitial: { date: "2026-05-31", courant: 17800, epargne: 10000 },
   mois: ["2026-06", "2026-07", "2026-08", "2026-09", "2026-10", "2026-11", "2026-12", "2027-01", "2027-02", "2027-03", "2027-04", "2027-05"],

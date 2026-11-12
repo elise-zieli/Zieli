@@ -9,9 +9,8 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 
 ## 0. À faire maintenant (par ordre)
 
-1. **Tester le site en ligne** (https://zieli-jedha.netlify.app/) : nouvelle charte et logos, vrais chiffres Airtable, remarque envoyée → email reçu.
-2. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
-3. **Préparer la présentation** (16-17/11), voir section 8.
+1. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
+2. **Préparer la présentation** (16-17/11), voir section 8.
 
 > n8n à jour le 12/11 (3 workflows) : nouveau PowerPoint, nouveaux e-mails, récapitulatif envoyé aux clients à 12 h, contrôle à 8 h.
 > Règle à retenir : les fichiers `.js` se collent dans les **nœuds de code**, les fichiers `.html` / `.txt` dans les **nœuds e-mail** ; après modification, **Save puis Publish**.
@@ -132,7 +131,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 | Entreprise | ID | Solde initial courant | Solde initial épargne | Seuil d'alerte |
 |---|---|---|---|---|
-| Librairie Chapitre Un | `rec53om2huapFZgGN` | 18 000 € | 10 000 € | 5 000 € (10 000 € pendant la démo pour montrer l'alerte rouge) |
+| Librairie Chapitre Un | `rec53om2huapFZgGN` | 18 000 € | 10 000 € | 10 000 € (confirmé par la libraire le 12/11) |
 | Atelier Boulanger Fournil d'Or | `recSL1ALPdEGzbmKI` | 6 000 € | 5 000 € | 12 000 € |
 
 - Le site affiche toutes les catégories qui ont au moins un montant, triées par « Ordre ».
@@ -146,7 +145,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - **Signes :** entrées en positif, sorties en négatif, partout (réel et prévu). Épargne négative = argent mis de côté ; positive = argent repris.
 - **Solde du mois** = encaissements + décaissements, hors épargne.
 - **Solde fin de mois du compte courant** = solde fin du mois précédent + solde du mois + épargne. Départ : solde initial courant au 31/07/2026.
-- **Solde épargne fin de mois** = solde épargne précédent − épargne du mois.
+- **Solde compte épargne fin de mois** = solde épargne précédent − épargne du mois.
 - **Total disponible** = compte courant + épargne.
 - **Mois passés :** au réel. **Mois en cours et à venir :** au prévu, enchaînés à partir du dernier solde réel.
 - **Le réel partiel du mois en cours n'entre pas dans les soldes de fin de mois.** Il sert seulement au solde « aujourd'hui » (carte « Total disponible ») : solde de début du mois en cours + réel arrivé depuis le 1er.
@@ -199,7 +198,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
    2. **Décaissements** (orange) : clic ▸ pour le détail par partie.
    3. **Solde du mois (encaissements – décaissements)** (beige, texte fin).
    4. **Solde fin de mois – compte courant** (bleu clair ; rouge sous le seuil).
-   5. **Solde épargne fin de mois** (blanc).
+   5. **Solde compte épargne fin de mois** (beige léger, comme le solde du mois).
    6. **Total disponible (courant + épargne)** (bleu).
    - Lignes 3 à 6 : montant négatif en rouge.
    - Mois passés : réel seul, Prévu et Écart au clic sur le mois. Mois en cours : Prévu + « Réel au [date] ». Mois à venir : prévu.
@@ -246,7 +245,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | 1.4-1.7 | Structure du tableau, prévisionnel/réel, alertes, répartition des rôles | validé |
 | 1.8 | Maquette HTML/CSS/JS | validé, tableau retravaillé le 12/11 |
 | 1.8 bis | GitHub ↔ VS Code | fait (dépôt `elise-zieli/Zieli`) |
-| 1.9 | V1 : chiffres Airtable, remarques n8n, mise en ligne Netlify | fait le 12/11 (à tester en ligne) |
+| 1.9 | V1 : chiffres Airtable, remarques n8n, mise en ligne Netlify | fait et testé en ligne le 12/11 |
 | 1.9 bis | Workflows n8n contrôle mensuel et point de trésorerie | construits (vérifier qu'ils sont activés) |
 | 1.9 ter | Nouvelle charte Zieli (Manrope, bleu pétrole, logo) + logo des clients | fait le 12/11 (logos fictifs dans Airtable) |
 | 1.10 | Test auprès de la libraire (15/11) | à faire |
@@ -261,7 +260,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 **Présentation (1.11)**
 - Demander au prof le format attendu (durée, démo en direct, support).
 - Proposé : enregistrer le 16/11 une vidéo de secours de la démo.
-- Scénario des alertes : carte de la librairie en neutre ; carte de la boulangerie en orange (16 370 € pour 12 000 €) ; passage en direct du seuil de la librairie à 10 000 € dans Airtable → bandeau rouge (point bas de janvier à 9 912 €), puis bouton « Synchronisation ».
+- Scénario des alertes : librairie (seuil 10 000 € depuis le 12/11) → carte neutre (22 712 € > 15 000 €) mais bandeau rouge dès l'ouverture (point bas de janvier à 9 912 €) ; boulangerie → carte orange (16 370 € pour 12 000 €). Le changement de seuil en direct n'est plus nécessaire ; pour montrer la Synchronisation, on peut par exemple changer en direct le seuil de la boulangerie dans Airtable.
 
 ---
 
@@ -283,7 +282,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 **09/11**
 - Affichage sur 12 mois glissants ; un mois sans données s'affiche « — », sans estimation automatique.
 - Janvier 2027 de la librairie corrigé, prévisionnel de mai 2027 créé.
-- Seuils : librairie 5 000 € (10 000 € pendant la démo), boulangerie 12 000 €.
+- Seuils : librairie 5 000 € (10 000 € pendant la démo), boulangerie 12 000 €. *(12/11 : librairie confirmée à 10 000 €.)*
 - Couleur de la carte selon le compte courant, coefficient 1,5 (code aligné le 12/11 : il appliquait 2).
 - Le point bas inclut le mois en cours.
 - Les explications d'écarts passent par le formulaire « Une remarque ? » ; le dirigeant reçoit une copie par email.
@@ -300,6 +299,8 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Champ **Logo** ajouté dans la table Entreprises ; logo du client affiché à gauche de son nom (logos fictifs dans `logos-demo`).
 - Charte appliquée au site (connexion, en-tête, couleurs, boutons, graphique).
 - **E-mails relus et réécrits** : prénom du dirigeant (champ « Responsable légal »), « récapitulatif mensuel » partout, charte Zieli (bandeau « zieli » bleu pétrole), coordonnées du dirigeant dans les e-mails de remarques, « tout est à jour » dans le contrôle mensuel.
+- Seuil de la librairie confirmé à **10 000 €** (Airtable et chiffres de secours) ; montant du seuil affiché en rouge à gauche de la ligne « seuil d'alerte » du graphique.
+- Tableau retravaillé : Encaissements, Décaissements et Total disponible plus visibles (fonds plus soutenus, texte plus grand ; « Total disponible » en gros avec « (courant + épargne) » en petit dessous) ; Solde du mois et « Solde compte épargne fin de mois » sur un beige léger identique ; quadrillage plus lisible (filets bleus sur les lignes bleues) ; trait pétrole réalisé / prévisionnel épaissi. Graphique : montants de l'axe plus foncés.
 - Bloc du site renommé « Une remarque / une question ? » ; option « Besoin d'un échange / autre » (sur le site seulement : Airtable et les e-mails gardent « Besoin d'un échange »).
 - **Horaires** : contrôle mensuel à Elise le 5 à 8 h ; récapitulatif aux clients le 5 à **12 h** (au lieu de 9 h).
 - **Un seul bloc de commentaires** dans le PowerPoint (le formulaire ne précise pas encaissements / décaissements).
