@@ -1,0 +1,1 @@
+{{ $('Preparer').item.json.mois === 'plusieurs' ? 'Votre explication des écarts pour plusieurs mois' : (DateTime.fromFormat($('Preparer').item.json.mois ?? '', 'yyyy-MM').isValid ? 'Votre explication des écarts pour ' + DateTime.fromFormat($('Preparer').item.json.mois, 'yyyy-MM').setLocale('fr').toFormat('LLLL yyyy') : 'Votre explication des écarts') }}

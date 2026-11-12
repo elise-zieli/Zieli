@@ -87,7 +87,7 @@ function entete(s, d, titre) {
     xT = 128 + cote + 28;
   }
   const largeur = 1792 - 340 - xT;
-  s.texte(xT, 32, largeur, 40, { t: d.nom + ' · Point de trésorerie', sz: 28, c: DOUX });
+  s.texte(xT, 32, largeur, 40, { t: d.nom + ' · Récapitulatif mensuel de trésorerie', sz: 28, c: DOUX });
   s.texte(xT, 70, largeur, 70, { t: titre, sz: 48, b: 1, c: PETROLE, f: SERIF });
   const mois = nomMois(M);
   s.forme(1792 - 310, 50, 310, 76, { fill: PETROLE, rad: 38, anchor: 'ctr', ombre: 1, p: [{ a: 'ctr', r: [{ t: mois.charAt(0).toUpperCase() + mois.slice(1), sz: 36, b: 1, c: BLANC }] }] });
@@ -136,7 +136,7 @@ function slideGraphique(d) {
 const PREVU_TAB = '1D4F91', FOND_DEC = 'FDE9D3';
 const COLS = [[152, 330, 'l'], [486, 150, 'r'], [648, 110, 'r'], [770, 150, 'r'], [928, 236, 'r']];
 
-function blocDetail(s, y, rang, bloc, sens, cT, cFondTitre, cFondExpl, texteExpl) {
+function blocDetail(s, y, rang, bloc, sens, cT, cFondTitre) {
   const hTitre = rang + 10, h = hTitre + rang * bloc.lignes.length + 12;
   s.forme(128, y, 1052, h, { fill: BLANC, rad: 16, ombre: 1 });
   // Ligne de titre du bloc (fond coloré, comme sur le site) avec les totaux.
@@ -158,13 +158,24 @@ function blocDetail(s, y, rang, bloc, sens, cT, cFondTitre, cFondExpl, texteExpl
     cellule(3, yL, rang, eur(l.p), { i: 1, c: PREVU_TAB });
     cellule(4, yL, rang, l.ecart, { b: l.notable, c: couleurEcart(l.e), sz: 25 });
   });
-  // Bloc commentaires, à côté, même hauteur.
-  const tailleP = 26;
-  const maxLignes = Math.max(1, Math.floor((h - 80) / (tailleP * 1.25)));
-  const maxCar = maxLignes * Math.floor(540 / (tailleP * 0.5));
-  const t = texteExpl.length > maxCar ? texteExpl.slice(0, maxCar - 1) + '…' : texteExpl;
-  s.forme(1204, y, 588, h, { fill: cFondExpl, rad: 16, m: 20, ombre: 1, p: [{ r: [{ t: 'Explications des écarts / commentaires', sz: tailleP, b: 1, c: cT }] }, { r: [{ t: t || 'Aucun commentaire pour ce mois.', sz: tailleP, i: !t, c: t ? TEXTE : DOUX }] }] });
   return h;
+}
+
+// Un seul cadre « Explications des écarts », à droite des deux tableaux (décision du 12/11 :
+// le formulaire ne précise pas le bloc concerné). Chaque explication est un paragraphe.
+function cadreExplications(s, y, h, explications) {
+  const tailleP = 26, lh = tailleP * 1.3, carParLigne = Math.floor(540 / (tailleP * 0.5));
+  let reste = Math.max(1, Math.floor((h - 90) / lh));
+  const paras = [{ r: [{ t: 'Explications des écarts', sz: 28, b: 1, c: PETROLE }] }];
+  if (!explications.length) paras.push({ r: [{ t: 'Aucun commentaire pour ce mois.', sz: tailleP, i: 1, c: DOUX }] });
+  for (const t of explications) {
+    if (reste <= 0) break;
+    const lignes = Math.ceil(t.length / carParLigne);
+    const texte = lignes <= reste ? t : t.slice(0, reste * carParLigne - 1) + '…';
+    paras.push({ r: [{ t: '• ' + texte, sz: tailleP }] });
+    reste -= Math.min(lignes, reste) + 0.4;
+  }
+  s.forme(1204, y, 588, h, { fill: 'E3EEF1', rad: 16, m: 24, ombre: 1, p: paras });
 }
 
 function slideDetail(d) {
@@ -176,8 +187,9 @@ function slideDetail(d) {
   [['Réel', TEXTE, 0], ['% du réel', PETROLE, 1], ['Prévu', PREVU_TAB, 1], ['Écart', TEXTE, 0]].forEach(([t, c, it], k) => s.texte(COLS[k + 1][0], yC, COLS[k + 1][1], 34, { t: t, sz: 22, b: 1, c: c, i: it }, { a: 'r', anchor: 'ctr' }));
   const nbLignes = d.blocEnc.lignes.length + d.blocDec.lignes.length;
   const rang = Math.max(36, Math.min(60, Math.floor((990 - 200 - 28 - 2 * 22) / (nbLignes + 2))));
-  const h1 = blocDetail(s, 200, rang, d.blocEnc, 1, VERT_T, VERT_F, VERT_F, d.explEnc);
-  blocDetail(s, 200 + h1 + 28, rang, d.blocDec, -1, ORANGE_T, FOND_DEC, ORANGE_F, d.explDep);
+  const h1 = blocDetail(s, 200, rang, d.blocEnc, 1, VERT_T, VERT_F);
+  const h2 = blocDetail(s, 200 + h1 + 28, rang, d.blocDec, -1, ORANGE_T, FOND_DEC);
+  cadreExplications(s, 200, h1 + 28 + h2, d.explications);
   s.texte(128, 1020, 1400, 34, { t: d.nom + ' · ' + nomMois(M), sz: 24, c: DOUX });
   s.logo();
   return s;
@@ -390,7 +402,7 @@ for (const e of lire('Lire entreprises')) {
   const logoClient = await lireLogoClient(e.Logo);
 
   const expl = commentaires.filter((c) => (c.Entreprise || []).indexOf(e.id) >= 0 && c['Type de commentaire'] === 'Explication des écarts' && c['Mois concerné'] === M && c['Texte libre']);
-  const textes = (b) => expl.filter((c) => !c['Bloc concerné'] || c['Bloc concerné'] === b).map((c) => String(c['Texte libre']).trim()).join(' / ');
+  const explications = expl.map((c) => String(c['Texte libre']).trim()).filter((t) => t);
 
   const encaiss = somme(estEnc, (c) => R(c.id, M));
   const depenses = -somme(estDep, (c) => R(c.id, M));
@@ -403,16 +415,18 @@ for (const e of lire('Lire entreprises')) {
   const echeances = categories.filter(estDep).map((c) => ({ nom: String(c.Ligne || '').trim(), v: -P(c.id, decaler(M, 1)) })).filter((x) => x.v > 0).sort((a, b) => b.v - a.v).slice(0, 3);
 
   const d = {
-    nom, seuil, titre, message, alerte, fenetre, pointBas, blocEnc, blocDec, logoClient, explEnc: textes('Encaissements'), explDep: textes('Dépenses'),
+    nom, seuil, titre, message, alerte, fenetre, pointBas, blocEnc, blocDec, logoClient, explications,
     pointMort: depenses / jours, depenses, jours, encaissJour: encaiss / jours, resultat: encaiss - depenses,
     autonomie: moyenne > 0 ? Math.floor((actuel.solde + actuel.epargne) / moyenne * 30) : null, echeances, cumulR, cumulP, cumulDebut: debutCumul,
   };
   const octetsPptx = pptx([slideGraphique(d), slideDetail(d), slideReperes(d)], logoClient);
-  const nomFichier = 'Zieli_Point_tresorerie_' + M + '.pptx';
+  const nomFichier = 'Zieli_Recapitulatif_mensuel_' + M + '.pptx';
+  // Prénom du dirigeant : premier mot du champ « Responsable légal » (ex. « Sandrine Extri » → « Sandrine »).
+  const prenom = String(e['Responsable légal'] || '').trim().split(/\s+/)[0] || '';
   resultats.push({
     json: {
-      email, entreprise: nom, mois: M, sujet: 'Votre point de trésorerie ' + deMois(M) + ' ' + M.slice(0, 4),
-      html: '<div style="max-width:560px;margin:0 auto;padding:24px;font-family:Arial,sans-serif;font-size:15px;line-height:23px;color:#1d2433;"><p>Bonjour,</p><p>Vous trouverez ci-joint le point de trésorerie de ' + xml(nom) + ' pour ' + nomMois(M) + '.</p><p>Elise</p></div>',
+      email, entreprise: nom, mois: M, sujet: 'Votre récapitulatif mensuel de trésorerie ' + deMois(M) + ' ' + M.slice(0, 4),
+      html: '<div style="max-width:560px;margin:0 auto;padding:24px;font-family:Arial,sans-serif;font-size:15px;line-height:23px;color:#1d2433;"><p>Bonjour' + (prenom ? ' ' + xml(prenom) : '') + ',</p><p>Vous trouverez ci-joint votre récapitulatif mensuel de suivi de trésorerie pour ' + nomMois(M) + '.</p><p>Elise</p></div>',
       controle: { titre, solde: Math.round(actuel.solde), pointBas: Math.round(pointBas.solde), pointBasMois: pointBas.mois, pointMort: Math.round(d.pointMort), encaissJour: Math.round(d.encaissJour), jours, autonomie: d.autonomie, echeances, cumulR, cumulP, cumulDebut: debutCumul, nbNotables: lignesEnc.concat(lignesDep).filter((l) => l.notable).length },
     },
     binary: { pptx: { data: Buffer.from(octetsPptx).toString('base64'), mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', fileName: nomFichier } },
