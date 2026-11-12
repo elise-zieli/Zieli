@@ -929,8 +929,9 @@ function lireUrgent() {
 
 // « Envoie » une remarque. Pour l'instant : l'ajoute en tête de la liste (unshift).
 // À remplacer plus tard par un envoi vers un webhook n8n.
-// Avec serveur.ps1, la remarque part vers n8n ; on ne l'ajoute à la liste que si l'envoi a réussi.
-// Le bouton « Synchronisation » n'est visible qu'avec ce serveur : sans lui, la remarque reste sur la page.
+// Avec serveur.ps1 (sur l'ordinateur) ou les fonctions Netlify (netlify/functions), la remarque part
+// vers n8n ; on ne l'ajoute à la liste que si l'envoi a réussi.
+// Le bouton « Synchronisation » n'est visible qu'avec l'un des deux : sinon, la remarque reste sur la page.
 async function envoyerCommentaire(commentaire) {
   if (!document.getElementById("bouton-synchro").hidden) {
     const reponse = await fetch("api/remarque", {

@@ -13,6 +13,11 @@ et sans formation financière. Priorité absolue : lisibilité et simplicité.
 | `donnees.js` | Données **fictives** de 2 entreprises + 3 comptes de démonstration |
 | `app.js` | Connexion, calculs de trésorerie, graphique, tableau, formulaire de remarques |
 | `docs/apercu_librairie.png` | Capture de référence du rendu attendu |
+| `serveur.ps1` | Serveur local (Windows) : chiffres Airtable + envoi des remarques à n8n |
+| `netlify/functions/` | Les mêmes services pour le site en ligne (https://zieli-jedha.netlify.app/) |
+
+Sur Netlify, les clés sont dans *Site configuration → Environment variables* :
+`AIRTABLE` (clé Airtable) et `n8n` (clé du webhook n8n).
 
 Pour voir la maquette : ouvrir `index.html` dans Chrome. Comptes de test des dirigeants (mot de passe `demo`) :
 `libraire@utopie.example`, `boulanger@fournildor.example`. Le compte Admin est défini dans `donnees.js`.

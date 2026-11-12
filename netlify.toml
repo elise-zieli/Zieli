@@ -1,0 +1,7 @@
+# Réglages Netlify du site Zieli 26.
+# Le site se trouve dans le dossier zieli26-vscode ;
+# les fonctions (le « facteur ») dans zieli26-vscode/netlify/functions.
+[build]
+  base = "zieli26-vscode"
+  publish = "."
+  functions = "netlify/functions"
