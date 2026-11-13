@@ -39,7 +39,7 @@
 - « J'ai abandonné Lovable : plus de liberté sur le design et pas de limite de crédits. »
 
 ## 7:00 – 8:00 · Résultats et suite
-- **Test avec la libraire** : [3 enseignements à compléter après le test].
+- **Test avec la libraire** : « La dirigeante n'est disponible que le 18/11. J'ai donc fait un **entretien fictif** pour préparer le déroulé » → montrer `test_libraire_exemple_fictif.md` en disant clairement qu'il est **fictif**. Le vrai test a lieu le 18/11.
 - **Prochaines étapes** : vraie connexion sécurisée côté serveur (chaque dirigeant ne reçoit que ses données), mentions légales / RGPD / accessibilité, puis certification Bloc 1.
 - **Mes questions** : qu'attendez-vous pour les tests de sécurité (URL directe, inter-rôles) ? Des conseils pour le dossier ?
 

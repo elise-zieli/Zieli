@@ -1,6 +1,6 @@
 # Zieli — Suivi du projet
 
-*Mis à jour le 12 novembre 2026. Document unique : notice d'utilisation, état du projet, étapes restantes et Parking.*
+*Mis à jour le 13 novembre 2026. Document unique : notice d'utilisation, état du projet, étapes restantes et Parking.*
 *Échéances : **présentation du projet au formateur le 16 novembre 2026** (pas encore la certification) ; puis **certification CDA – Bloc 1** à une date à réserver (voir section 12).*
 
 Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquette (fusionnés le 12/11).
@@ -9,11 +9,12 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 
 ## 0. À faire maintenant (par ordre)
 
-1. **Test auprès de la libraire** (au plus tard le 15/11, idéalement le 14), voir section 8.
-2. **Préparer la présentation au formateur** (16/11), voir section 8.
+1. **Préparer la présentation au formateur** (16/11), voir section 8. L'**entretien fictif** est déjà réalisé (`test_libraire_exemple_fictif.md`) : le présenter clairement comme fictif.
+2. **Test réel avec la libraire le 18/11** (la dirigeante n'est pas disponible avant), voir section 8.
 3. **Préparer la certification Bloc 1** (dossier de 30 à 40 pages, Dossier Professionnel, preuves C1 à C4), voir section 12.
 
 > n8n à jour le 12/11 (3 workflows) : nouveau PowerPoint, nouveaux e-mails, récapitulatif envoyé aux clients à 12 h, contrôle à 8 h.
+> 13/11 : 2 workflows en plus pour l'**assistant « Une question ? »** (indexation, lancée à la main ; assistant, publié). Mode d'emploi : `assistant_mode_emploi.md`.
 > Règle à retenir : les fichiers `.js` se collent dans les **nœuds de code**, les fichiers `.html` / `.txt` dans les **nœuds e-mail** ; après modification, **Save puis Publish**.
 
 > Lovable n'est plus utilisé (décision du 12/11) : le site est construit dans VS Code et publié sur Netlify.
@@ -39,7 +40,8 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 | **Airtable** (base `zieli26`) | Stocke les données (entreprises, catégories, transactions, prévisionnel, commentaires). |
 | **serveur.ps1** (sur l'ordinateur) | Serveur local : lit Airtable et transmet les remarques à n8n. Lancé par `Lancer le site.bat`. |
 | **Netlify** | Met le site en ligne : https://zieli-jedha.netlify.app/ (protégé par mot de passe). Les « fonctions » du dossier `netlify/functions` font le même travail que serveur.ps1. |
-| **n8n** (n8n.jedha.co) | 3 workflows, voir section 6. |
+| **n8n** (n8n.jedha.co) | 3 workflows, voir section 6 ; + 2 workflows de l'assistant (13/11), voir `assistant_mode_emploi.md`. |
+| **OpenAI** | Clé enregistrée uniquement dans n8n (Credential « OpenAI ») : empreintes des passages et réponses de l'assistant. |
 | **GitHub** (dépôt privé `elise-zieli/Zieli`) | Garde le code et son historique. Chaque envoi sur `main` met Netlify à jour automatiquement. |
 | **VS Code + Claude Code** | Modifier le code sur l'ordinateur, puis envoyer sur GitHub (commit + push). |
 
@@ -101,6 +103,7 @@ Dans Chrome : **F12**, puis **Ctrl + Maj + M**, et choisir un modèle (ex. iPhon
 | `zieli26-vscode/index.html` | Structure de la page (connexion + tableau de bord) |
 | `zieli26-vscode/styles.css` | Apparence (couleurs, tailles, version téléphone) |
 | `zieli26-vscode/app.js` | Connexion, calculs, graphique, tableau, formulaire de remarques |
+| `zieli26-vscode/assistant.js` | Assistant « Une question ? » (bouton en bas à droite et fenêtre de discussion) |
 | `zieli26-vscode/donnees.js` | Comptes de démonstration + chiffres fictifs de secours. **Nécessaire** : sans lui, la connexion et les chiffres Airtable ne fonctionnent pas. |
 | `zieli26-vscode/serveur.ps1`, `Lancer le site.bat` | Serveur local |
 | `zieli26-vscode/netlify/` | Fonctions Netlify (même rôle que serveur.ps1, en ligne) |
@@ -108,8 +111,10 @@ Dans Chrome : **F12**, puis **Ctrl + Maj + M**, et choisir un modèle (ex. iPhon
 | `netlify.toml` | Réglages Netlify |
 | `test_libraire.md` | Fiche de déroulé du test avec la libraire (à imprimer) |
 | `presentation_16-11.md` | Fiche de la présentation de 8 min au formateur (16/11) ; diapositives : https://claude.ai/artifact/GsNe48gYFdvPjjVMBSKhZC |
-| `test_libraire_exemple_fictif.md` | Exemple de fiche remplie avec des réponses **fictives** (pour la démo, présenté comme tel) |
-| `n8n-workflow-*.json` | Copies de sauvegarde des 3 workflows n8n |
+| `test_libraire_exemple_fictif.md` | **Entretien fictif réalisé** : fiche remplie avec des réponses fictives (pour la présentation du 16/11, présentée comme telle) |
+| `n8n-workflow-*.json` | Copies de sauvegarde des workflows n8n (dont `n8n-workflow-assistant.json` et `n8n-workflow-assistant-indexation.json`) |
+| `rag/` | Les 4 documents de l'assistant (règles de calcul, glossaire, FAQ, guides publics) : copie de référence des passages d'Airtable |
+| `assistant_mode_emploi.md` | Mode d'emploi de l'assistant : fonctionnement, installation, corriger un passage, sécurité |
 | `n8n-code-fabriquer-powerpoint.js` | Code du nœud n8n « Fabriquer les PowerPoint » (récapitulatif mensuel + e-mail au dirigeant) |
 | `n8n-code-verifier-les-donnees.js` | Code du nœud n8n « Verifier les donnees » (e-mail de contrôle mensuel) |
 | `emails-n8n/*.html`, `copie-dirigeant-objet.txt` | Textes des e-mails du formulaire de remarques (à coller dans les nœuds e-mail) |
@@ -241,7 +246,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 ---
 
-## 8. Feuille de route — état au 12/11
+## 8. Feuille de route — état au 13/11
 
 | # | Étape | Statut |
 |---|---|---|
@@ -253,12 +258,15 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | 1.9 | V1 : chiffres Airtable, remarques n8n, mise en ligne Netlify | fait et testé en ligne le 12/11 |
 | 1.9 bis | Workflows n8n contrôle mensuel et récapitulatif mensuel | faits, mis à jour et publiés le 12/11 |
 | 1.9 ter | Nouvelle charte Zieli (Manrope, bleu pétrole, logo) + logo des clients | fait le 12/11 (logos fictifs dans Airtable) |
-| 1.10 | Test auprès de la libraire (14 ou 15/11) | à faire |
+| 1.9 quater | Historique de mai à juillet dans Airtable + graphique sur 12 mois glissants avec choix de la période | fait le 13/11 |
+| 1.9 quinquies | Assistant « Une question ? » (RAG : Airtable + n8n + OpenAI) | fait, testé en local et en ligne le 13/11 ; textes affinés après les premiers tests |
+| 1.10 | Test auprès de la libraire | **entretien fictif réalisé** (`test_libraire_exemple_fictif.md`) ; **test réel le 18/11** |
 | 1.11 | Présentation du projet au formateur (16/11) | à faire |
 | 1.12 | Certification CDA – Bloc 1 (dossier, DP, démo, entretien) | à préparer, date à réserver sur JULIE |
 
 **Test auprès de la libraire (1.10)** — fiche de déroulé : `test_libraire.md`
-- **Date :** la présentation au formateur est le 16/11 ; faire le test au plus tard le 15/11 (dimanche), idéalement le 14, pour garder du temps d'ajustement.
+- **Date :** la dirigeante de la librairie n'est disponible que le **18/11**, donc après la présentation du 16/11. En attendant, un **entretien fictif** a été réalisé (`test_libraire_exemple_fictif.md`) : il sert d'exemple le 16/11, présenté clairement comme fictif. Les vrais résultats du 18/11 remplaceront l'exemple (fiche, diapositive « Le test avec la libraire », dossier de certification).
+- **Nouveau à observer le 18/11 :** comprend-elle le choix de la période du graphique, et utilise-t-elle l'assistant « Une question ? » ? Noter ses questions (elles sont aussi enregistrées dans Airtable, table « Assistant - Questions »).
 - **Données fictives** de « Librairie Chapitre Un » : valable pour la lisibilité, moins pour la valeur.
 - **Connexion :** compte Dirigeant de la librairie (`libraire@chapitre-un.example`).
 - **Critère de réussite :** sans aide et en moins de 2 minutes, elle répond à « Quel sera votre solde fin du mois prochain, et quel est votre point bas d'ici 6 mois ? ». Signal 1 : elle cite une décision qu'elle prendrait grâce au tableau. Signal 2 : elle accepte de le consulter le mois suivant, à une date fixée ensemble.
@@ -317,6 +325,8 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - **Historique ajouté pour la démo** : mai, juin et juillet 2026 (réel et prévisionnel) pour les 2 entreprises, plus le prévisionnel d'août qui manquait. Le solde initial est désormais au **30/04/2026**, et les montants sont recalculés pour que les soldes à partir d'août restent identiques (fin juillet : 18 000 € pour la librairie, 6 000 € pour la boulangerie). Environ 660 enregistrements Airtable sur 1 000.
 - **Graphique** : par défaut sur les **12 mois glissants** (5 mois passés, le mois en cours, 6 mois à venir). Choix « Du [mois] au [mois] » parmi tous les mois disponibles, avec un bouton « 12 mois glissants » pour revenir à la vue par défaut. Le point « aujourd'hui » n'apparaît que si la période contient le mois en cours. Le tableau ne change pas. Barre de période sur la ligne du titre, à droite.
 - **Assistant RAG « Une question ? »** (bouton en bas à droite du tableau de bord) : répond à partir des documents du dossier `rag/` (règles de calcul, glossaire, FAQ, guides publics), **sans voir les chiffres** de l'entreprise. Passages et empreintes dans Airtable (« Assistant - Connaissances »), questions notées sans nom (« Assistant - Questions »), 2 workflows n8n (indexation + assistant), clé OpenAI uniquement dans n8n. Mode d'emploi : `assistant_mode_emploi.md`.
+- Assistant affiné après les premiers tests : 3 passages corrigés (les lignes verte et orange n'affichent pas de montant ; parenthèses = montant négatif ; le solde de fin d'un mois est le départ du mois suivant). Il lit 4 passages pour répondre, mais n'en affiche que 2 comme sources.
+- **Test avec la libraire** : la dirigeante n'est disponible que le **18/11**. L'**entretien fictif** est réalisé et servira d'exemple le 16/11, présenté comme fictif.
 
 ---
 
