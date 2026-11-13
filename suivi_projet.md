@@ -7,11 +7,44 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 
 ---
 
-## 0. À faire maintenant (par ordre)
+## 0. Prochaines étapes (mises à jour le 13/11)
 
-1. **Préparer la présentation au formateur** (16/11), voir section 8. L'**entretien fictif** est déjà réalisé (`test_libraire_exemple_fictif.md`) : le présenter clairement comme fictif.
-2. **Test réel avec la libraire le 18/11** (la dirigeante n'est pas disponible avant), voir section 8.
-3. **Préparer la certification Bloc 1** (dossier de 30 à 40 pages, Dossier Professionnel, preuves C1 à C4), voir section 12.
+*Ce tableau sert aussi de Kanban daté pour la preuve C4 : mettre à jour le statut à chaque étape.*
+
+**A. Avant la présentation du 16/11**
+
+| # | Étape | Échéance | Statut |
+|---|---|---|---|
+| A1 | Tester en ligne les 3 types de remarque (avec et sans « Urgent ») | 14/11 | en cours (« Explication des écarts » : OK en ligne) |
+| A2 | Envoyer sur GitHub les derniers changements (prénoms Sandrine et Karim, suivi, fiche de présentation, `schema_architecture.md`) | 14/11 | **fait le 13/11** |
+| A3 | Répéter la présentation avec un chrono ; choisir les 2 ou 3 diapos de coulisses à montrer (les autres restent en réserve) | 15/11 | à faire |
+| A4 | Préparer les onglets : site connecté en libraire (Sandrine), Airtable, n8n, Gmail | 16/11 matin | à faire |
+| A5 | *(Facultatif)* Enregistrer une courte vidéo de secours de la démo | 15/11 | facultatif |
+
+**B. Le 16/11 : présentation au formateur**
+
+| # | Étape | Échéance | Statut |
+|---|---|---|---|
+| B1 | Présenter le projet (fiche `presentation_16-11.md`) ; noter ses retours, surtout sur les tests de sécurité et le dossier | 16/11 | à faire |
+
+**C. Le test réel avec la libraire**
+
+| # | Étape | Échéance | Statut |
+|---|---|---|---|
+| C1 | Entretien avec la dirigeante de la librairie, avec la fiche `test_libraire.md` | 18/11 | prévu |
+| C2 | Remplacer l'exemple fictif par les vrais résultats (fiche, suivi, dossier de certification) | 19/11 | à faire |
+| C3 | Décider du passage du projet en professionnel, à partir de ses retours | fin novembre | à faire |
+
+**D. Certification Bloc 1** (détail en section 12)
+
+| # | Étape | Échéance | Statut |
+|---|---|---|---|
+| D1 | Réserver la date sur JULIE (environ 3 mois d'attente) | dès que possible | à faire |
+| D2 | **Vraie connexion côté serveur** : chaque dirigeant ne reçoit que ses données (indispensable pour les tests d'URL directe et inter-rôles). À étudier : le faire avec **Supabase**, qui remplacerait aussi Airtable et sa limite de 1 000 lignes (voir Parking) | à dater après le 16/11 | à faire — priorité 1 |
+| D3 | Mentions légales, page RGPD, vérification de l'accessibilité (C2) | à dater | à faire |
+| D4 | Preuves C3 : schéma des tables Airtable, notes explicatives (sticky notes) dans les workflows n8n, jeu d'essai | à dater | à faire |
+| D5 | Preuves C4 : ce Kanban daté, 3 comptes rendus de réunion, un retard réel géré (test décalé au 18/11, compensé par un entretien fictif) | à dater | en cours |
+| D6 | Rédiger le dossier de projet (30 à 40 pages) et le Dossier Professionnel | à dater | à faire |
 
 > n8n à jour le 12/11 (3 workflows) : nouveau PowerPoint, nouveaux e-mails, récapitulatif envoyé aux clients à 12 h, contrôle à 8 h.
 > 13/11 : 2 workflows en plus pour l'**assistant « Une question ? »** (indexation, lancée à la main ; assistant, publié). Mode d'emploi : `assistant_mode_emploi.md`.
@@ -244,6 +277,22 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Données de test fictives : emails en `.exemple`.
 - RGPD et hébergement des données financières : à traiter avant tout usage réel.
 
+### Où sont rangées les clés, et pourquoi (13/11) — preuve C1
+
+*Seuls les noms et emplacements sont notés ici, jamais les valeurs.*
+
+| Clé | Où elle est rangée | Pourquoi |
+|---|---|---|
+| **Jeton Airtable** | Ordinateur : `airtable-token.txt` (à côté du dossier du site) · Netlify : variable `AIRTABLE` · n8n : connexion « Airtable » (*Airtable Personal Access Token*) | Lire et écrire dans la base : le serveur affiche les chiffres ; n8n note les remarques, lit les données du récapitulatif et du contrôle, lit les passages de l'assistant. |
+| **Clé n8n** (en-tête `X-Zieli-Cle`) | Ordinateur : `n8n-cle.txt` · Netlify : variable `n8n` · n8n : connexion « Header Auth » des webhooks | Prouver que c'est mon serveur qui appelle n8n : sans elle, n'importe qui pourrait envoyer de fausses remarques ou utiliser l'assistant (et dépenser les crédits OpenAI). |
+| **Clé OpenAI** | Uniquement dans n8n : connexion « OpenAI » | Empreintes des passages et réponses de l'assistant ; ni le site ni Netlify ne la voient. |
+| **Connexion Gmail** | Dans n8n : connexion « Gmail » (autorisation donnée par le compte Google) | Envoyer les e-mails : alertes, copie au dirigeant, récapitulatif du 5. |
+| **Mot de passe du site** | Réglages Netlify (protection par mot de passe) | Fermer le site au public tant que la vraie connexion côté serveur n'existe pas. |
+
+- `airtable-token.txt` et `n8n-cle.txt` sont dans `.gitignore` : jamais sur GitHub (vérifié avant chaque envoi).
+- Le navigateur ne voit aucune de ces clés : il parle seulement au serveur, qui ajoute les clés.
+- Ce ne sont **pas** des clés : l'en-tête `X-Zieli-Synchro: 1` (non secret, il empêche seulement un autre site web de déclencher les appels) et les mots de passe de démonstration `demo` dans `donnees.js` (lisibles : limite de la maquette).
+
 ---
 
 ## 8. Feuille de route — état au 13/11
@@ -261,7 +310,8 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | 1.9 quater | Historique de mai à juillet dans Airtable + graphique sur 12 mois glissants avec choix de la période | fait le 13/11 |
 | 1.9 quinquies | Assistant « Une question ? » (RAG : Airtable + n8n + OpenAI) | fait, testé en local et en ligne le 13/11 ; textes affinés après les premiers tests |
 | 1.10 | Test auprès de la libraire | **entretien fictif réalisé** (`test_libraire_exemple_fictif.md`) ; **test réel le 18/11** |
-| 1.11 | Présentation du projet au formateur (16/11) | à faire |
+| 1.10 bis | Diapositives de présentation (17 diapos : personas, démo, coulisses, clés, assistant, prochaines étapes) + fiche `presentation_16-11.md` | faites le 13/11 |
+| 1.11 | Présentation du projet au formateur (16/11) | à faire (voir section 0, étapes A et B) |
 | 1.12 | Certification CDA – Bloc 1 (dossier, DP, démo, entretien) | à préparer, date à réserver sur JULIE |
 
 **Test auprès de la libraire (1.10)** — fiche de déroulé : `test_libraire.md`
@@ -327,16 +377,20 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - **Assistant RAG « Une question ? »** (bouton en bas à droite du tableau de bord) : répond à partir des documents du dossier `rag/` (règles de calcul, glossaire, FAQ, guides publics), **sans voir les chiffres** de l'entreprise. Passages et empreintes dans Airtable (« Assistant - Connaissances »), questions notées sans nom (« Assistant - Questions »), 2 workflows n8n (indexation + assistant), clé OpenAI uniquement dans n8n. Mode d'emploi : `assistant_mode_emploi.md`.
 - Assistant affiné après les premiers tests : 3 passages corrigés (les lignes verte et orange n'affichent pas de montant ; parenthèses = montant négatif ; le solde de fin d'un mois est le départ du mois suivant). Il lit 4 passages pour répondre, mais n'en affiche que 2 comme sources.
 - **Test avec la libraire** : la dirigeante n'est disponible que le **18/11**. L'**entretien fictif** est réalisé et servira d'exemple le 16/11, présenté comme fictif.
+- **Personas** fixés : **Sandrine Extri** (Librairie Chapitre Un, Sage) et **Karim Benali** (Atelier Boulanger Fournil d'Or, Pennylane). Prénoms harmonisés partout : comptes de démonstration du site (`donnees.js`) et table Utilisateurs d'Airtable (avant : Julie, Paul, Mickael).
+- Formulaire testé en ligne : « Explication des écarts » OK (e-mail reçu par le dirigeant, capture dans la présentation) ; les autres types restent à tester.
+- Prochaines étapes réorganisées en tableau daté (section 0), qui sert aussi de Kanban pour la preuve C4.
 
 ---
 
 ## 11. Parking (ne pas traiter avant le 16/11)
 
+- **Remplacer Airtable par une alternative gratuite** (limite de 1 000 enregistrements : environ 700 au 13/11, une cinquantaine de plus par mois pour 2 entreprises, donc limite atteinte dans 5 à 6 mois environ). Pistes à comparer : **Supabase** (base PostgreSQL + système de connexion intégré, qui ferait aussi la vraie connexion de l'étape D2), **NocoDB** ou **Baserow** (proches d'Airtable, open source), **Google Sheets** (simple mais fragile pour les liens entre tables). Vérifier les limites gratuites au moment du choix. Impact : serveur local, fonctions Netlify et les 5 workflows n8n. À faire après la certification, ou en même temps que D2 si le choix est Supabase.
 - Tableau de rentabilité, budget, prix de vente, indicateurs clés.
 - Tests auprès d'un 2e dirigeant et d'autres dirigeants.
 - Estimation automatique des mois sans prévisionnel (même mois N-1, affichée « estimation automatique ») et rappel n8n quand l'horizon fait moins de 6 mois.
 - Catégorisation automatique (par règles, avec une option IA).
-- Connexion bancaire DSP2, import Sage automatique, facturation électronique.
+- **Vraie connexion à un logiciel comptable** (Sage, Pennylane…) pour importer dans ma base, avec un **paramétrage de correspondance** entre les comptes du logiciel et mes catégories ; plus tard : connexion bancaire DSP2, facturation électronique.
 - Agent IA, veille sectorielle, invitation automatique des dirigeants.
 - Slide « Veille » dans le récapitulatif mensuel : actualité du mois du secteur, à partir de pages sources données par Elise.
 - Explications d'écarts visibles par le dirigeant.
@@ -359,6 +413,11 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - 9 h 30 : quiz de 30 min (documentation technique en anglais : 2 QCU en français, 2 questions ouvertes en anglais).
 - Au créneau : **20 min de présentation avec démo en direct obligatoire** (comptes de test par rôle), puis **30 min d'entretien technique**.
 - À apporter : **dossier de projet imprimé (30 à 40 pages hors annexes)**, diaporama, **Dossier Professionnel** (modèle officiel du ministère).
+
+**Les 3 documents en une phrase**
+- **Jeu d'essai** : la liste des tests qui prouvent que l'application marche (action, données fictives, résultat attendu, résultat obtenu avec capture). Il inclut les 2 tests de sécurité exigés (URL directe, inter-rôles). Preuve C3.
+- **Dossier de projet** : le document principal, imprimé, qui raconte et justifie le projet (détail ci-dessous).
+- **Dossier Professionnel (DP)** : le modèle officiel du ministère du Travail, plus court et plus personnel : ce que j'ai concrètement fait, comment et avec quels outils. Le jury s'en sert pendant l'entretien.
 
 **Le dossier de projet (4 parties imposées)**
 1. Compétences mises en œuvre (C1 à C4 reliées au projet) — 2 à 3 p.

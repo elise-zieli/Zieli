@@ -110,7 +110,7 @@ if (!UTILISATEUR) {
 } else {
   document.getElementById("tableau-de-bord").classList.add("visible");
 
-  // Barre du haut : « Elise · Administratrice » ou « Julie · Dirigeant ».
+  // Barre du haut : « Elise · Administratrice » ou « Sandrine · Dirigeant ».
   document.getElementById("utilisateur-connecte").textContent =
     UTILISATEUR.nom + " · " + (UTILISATEUR.role === "Admin" ? "Administratrice" : "Dirigeant");
 

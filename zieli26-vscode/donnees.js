@@ -192,6 +192,6 @@ const UTILISATEURS = [
   // Email fictif (pas de vraie adresse dans la maquette : tout le code est lisible par les visiteurs).
   { email: "elise.zieli@test.exemple", motDePasse: "MDPtest123!", nom: "Elise", role: "Admin", entreprise: null },
   // Comptes de test des dirigeants (fictifs).
-  { email: "libraire@chapitre-un.example", motDePasse: "demo", nom: "Julie", role: "Dirigeant", entreprise: "ent-librairie" },
-  { email: "boulanger@fournildor.example", motDePasse: "demo", nom: "Paul", role: "Dirigeant", entreprise: "ent-boulangerie" },
+  { email: "libraire@chapitre-un.example", motDePasse: "demo", nom: "Sandrine", role: "Dirigeant", entreprise: "ent-librairie" },
+  { email: "boulanger@fournildor.example", motDePasse: "demo", nom: "Karim", role: "Dirigeant", entreprise: "ent-boulangerie" },
 ];
