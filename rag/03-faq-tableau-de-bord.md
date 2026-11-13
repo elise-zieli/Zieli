@@ -71,7 +71,7 @@ Cliquez sur le nom du mois : les colonnes Prévu et Écart apparaissent.
 Il affiche la part de chaque ligne dans le total des encaissements ou des décaissements du mois.
 
 **Pourquoi un montant est-il entre parenthèses ?**
-C'est un décaissement (de l'argent qui sort).
+Parce qu'il est négatif : les parenthèses remplacent le signe moins. (2 400 €) veut dire −2 400 €. C'est le cas de tous les décaissements (de l'argent qui sort), et d'un solde quand il est négatif.
 
 **Pourquoi un chiffre est-il en rouge ?**
 Un solde négatif, ou un solde de fin de mois sous votre seuil de sécurité.

@@ -11,7 +11,9 @@
 ## Les signes
 
 - Les **encaissements** (l'argent qui entre) sont positifs.
-- Les **décaissements** (l'argent qui sort) sont négatifs. Dans le tableau, ils sont affichés entre parenthèses, par exemple (2 400 €).
+- Les **décaissements** (l'argent qui sort) sont négatifs.
+- **Un montant entre parenthèses est un montant négatif** : les parenthèses remplacent le signe moins. (2 400 €) veut dire −2 400 €. C'est la façon habituelle d'écrire les montants négatifs en comptabilité, plus lisible qu'un petit « − ».
+- On trouve donc des parenthèses sur les décaissements (toujours négatifs), mais aussi sur un solde quand il est négatif : un « Solde du mois » de (1 714 €) veut dire que le mois a fait perdre 1 714 € de trésorerie (il est alors aussi écrit en rouge).
 
 ## Le solde du mois
 
@@ -24,6 +26,10 @@ Un solde du mois négatif s'affiche en rouge.
 ## Le solde fin de mois du compte courant
 
 **Solde fin de mois = solde fin du mois précédent + solde du mois + mouvements d'épargne.**
+
+Le solde de fin d'un mois est **toujours** le point de départ du mois suivant : le solde fin mars est exactement le solde début avril.
+
+*Exemple : fin mars 20 000 € ; en avril, 25 000 € d'encaissements et 27 000 € de décaissements, sans épargne. Avril démarre à 20 000 € et finit à 20 000 + 25 000 – 27 000 = 18 000 €. Mai démarrera à 18 000 €.*
 
 - Mettre de l'argent de côté sur l'épargne fait **baisser** le compte courant.
 - Reprendre de l'argent de l'épargne fait **monter** le compte courant.

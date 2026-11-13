@@ -10,7 +10,7 @@ Site (bouton « Une question ? »)
   → n8n, workflow « Zieli - assistant »
        1. transforme la question en « empreinte » (embedding OpenAI)
        2. la compare aux 29 passages d'Airtable (table « Assistant - Connaissances »)
-       3. garde les 2 passages les plus proches
+       3. garde les 4 passages les plus proches (les 2 premiers sont affichés comme sources)
        4. demande à OpenAI une réponse basée UNIQUEMENT sur ces passages
        5. note la question et la réponse dans Airtable (table « Assistant - Questions »)
   → la réponse revient sur le site, avec ses sources
@@ -80,7 +80,7 @@ Quand le test local est bon : me demander d'envoyer sur GitHub. Netlify utiliser
 
 ## Réglages possibles (dans le workflow « Zieli - assistant »)
 - **Modèle de réponse** : nœud « Demander a OpenAI », `gpt-4o-mini`. Si OpenAI répond « model not found », remplace-le par un modèle « mini » proposé dans ton compte.
-- **Nombre de passages** et **seuil de proximité** : nœud « Choisir les passages » (`slice(0, 2)` depuis le 13/11, au lieu de 4 ; et `0.25`).
+- **Nombre de passages** et **seuil de proximité** : nœud « Choisir les passages » (`passages.slice(0, 4)` = passages lus, `retenus.slice(0, 2)` = sources affichées ; seuil `0.25`).
 - **Consignes** (ton, longueur, limites) : nœud « Choisir les passages », texte `consignes`.
 
 ## Coût
