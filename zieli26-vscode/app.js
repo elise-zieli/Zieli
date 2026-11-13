@@ -327,8 +327,11 @@ DONNEES.mois.forEach((cle, i) => {
 });
 
 // CHOIX DES MOIS À AFFICHER
-// slice(-12) = les 12 derniers éléments de la liste → le graphique.
-const moisGraphique = moisCalcules.slice(-12);
+// Graphique : par défaut « 12 mois glissants » = les 12 derniers mois de la liste
+// (5 mois passés, le mois en cours, 6 mois à venir). Le dirigeant peut choisir une autre période
+// avec « Du … au … » (voir 3.5) ; moisGraphique est donc un « let » : il change à chaque choix.
+const debut12Mois = Math.max(0, moisCalcules.length - 12);   // position du 1er mois des 12 mois glissants
+let moisGraphique = moisCalcules.slice(debut12Mois);
 // slice(indexDernierReel - 1) = à partir de l'avant-dernier mois réel → le tableau
 // (2 mois passés, le mois en cours, 6 mois à venir).
 const affiches = moisCalcules.slice(indexDernierReel - 1);
@@ -497,7 +500,11 @@ function dessinerGraphique() {
   // Valeur la plus basse et la plus haute de l'axe vertical.
   // « ...valeurs » déplie la liste pour que Math.min / Math.max regardent chaque nombre.
   // On inclut 0 et le seuil pour qu'ils soient toujours visibles ; × 1.1 laisse 10 % d'air en haut.
-  const min = Math.min(0, ...valeurs, aujourdhui.courant, SEUIL_ALERTE);
+  // Le point « aujourd'hui » n'est dessiné que si la période choisie contient le mois en cours
+  // ET le mois d'avant (il se place entre les deux).
+  const iEnCours = moisGraphique.indexOf(moisEnCours);
+  const avecAujourdhui = iEnCours >= 1;
+  const min = Math.min(0, ...valeurs, avecAujourdhui ? aujourdhui.courant : 0, SEUIL_ALERTE);
   const max = Math.max(...valeurs, ...entrees, ...sorties, SEUIL_ALERTE) * 1.1;
 
   // Deux petites fonctions qui convertissent un mois (position i) et un montant (v)
@@ -525,7 +532,6 @@ function dessinerGraphique() {
   // POINT « AUJOURD'HUI » (date de mise à jour), placé entre la fin du dernier mois clos et la fin
   // du mois en cours, au prorata des jours écoulés (ex. 6 novembre → 6/30 du chemin).
   // Chaque point du graphique = un solde de FIN de mois ; « aujourd'hui » = le solde réel à date.
-  const iEnCours = moisGraphique.indexOf(moisEnCours);
   const jour = Number(DONNEES.dateMiseAJour.slice(8));
   const [annee, mois] = DONNEES.dateMiseAJour.slice(0, 7).split("-").map(Number);
   const joursDuMois = new Date(annee, mois, 0).getDate();   // jour 0 du mois suivant = dernier jour du mois
@@ -534,9 +540,11 @@ function dessinerGraphique() {
   const xAujourdhui = x(iEnCours - 1) + (x(iEnCours) - x(iEnCours - 1)) * prorata;
   const yAujourdhui = y(aujourdhui.courant);
 
-  // Trait vertical pointillé sur « aujourd'hui », avec l'étiquette.
-  svg += `<line x1="${xAujourdhui}" x2="${xAujourdhui}" y1="${margeH - 10}" y2="${H - margeB + 5}" stroke="#a8a299" stroke-dasharray="3 4"/>`;
-  svg += `<text x="${xAujourdhui}" y="${margeH - 14}" text-anchor="middle" font-size="12" font-weight="600" fill="#6b665e">aujourd'hui</text>`;
+  // Trait vertical pointillé sur « aujourd'hui », avec l'étiquette (seulement s'il est dans la période).
+  if (avecAujourdhui) {
+    svg += `<line x1="${xAujourdhui}" x2="${xAujourdhui}" y1="${margeH - 10}" y2="${H - margeB + 5}" stroke="#a8a299" stroke-dasharray="3 4"/>`;
+    svg += `<text x="${xAujourdhui}" y="${margeH - 14}" text-anchor="middle" font-size="12" font-weight="600" fill="#6b665e">aujourd'hui</text>`;
+  }
 
   // Ligne rouge horizontale du seuil d'alerte (semi-transparente), avec son nom à droite
   // et son montant à gauche, sur l'axe (demande du 12/11).
@@ -554,7 +562,7 @@ function dessinerGraphique() {
   const ligneFine = (serie, couleur) => {
     const pts = serie.map((v, i) => `${x(i)},${y(v)}`);
     return `<polyline points="${pts.slice(0, nbPasses).join(" ")}" fill="none" stroke="${couleur}" stroke-width="1.5"/>`
-         + `<polyline points="${pts.slice(nbPasses - 1).join(" ")}" fill="none" stroke="${couleur}" stroke-width="1.5" stroke-dasharray="5 5"/>`;
+         + `<polyline points="${pts.slice(Math.max(0, nbPasses - 1)).join(" ")}" fill="none" stroke="${couleur}" stroke-width="1.5" stroke-dasharray="5 5"/>`;
   };
   // Dessinées AVANT la courbe du solde pour rester en dessous.
   svg += ligneFine(entrees, "#1e8e5a");   // vert
@@ -563,9 +571,11 @@ function dessinerGraphique() {
   // Courbe principale du solde (trait épais bleu pétrole) : plein pour le passé, pointillés ensuite.
   // Le réel (trait plein) va jusqu'au point « aujourd'hui » ; le prévu (pointillés) repart de ce point.
   const points = moisGraphique.map((m, i) => `${x(i)},${y(m.fin)}`);
-  const pointAujourdhui = `${xAujourdhui},${yAujourdhui}`;
-  svg += `<polyline points="${[...points.slice(0, nbPasses), pointAujourdhui].join(" ")}" fill="none" stroke="#0e4a5c" stroke-width="3"/>`;
-  svg += `<polyline points="${[pointAujourdhui, ...points.slice(nbPasses)].join(" ")}" fill="none" stroke="#0e4a5c" stroke-width="3" stroke-dasharray="8 6"/>`;
+  // Si « aujourd'hui » n'est pas dans la période, la période est entièrement passée ou entièrement à venir :
+  // une seule des deux lignes est utile.
+  const jonction = avecAujourdhui ? [`${xAujourdhui},${yAujourdhui}`] : [];
+  svg += `<polyline points="${[...points.slice(0, nbPasses), ...jonction].join(" ")}" fill="none" stroke="#0e4a5c" stroke-width="3"/>`;
+  svg += `<polyline points="${[...jonction, ...points.slice(nbPasses)].join(" ")}" fill="none" stroke="#0e4a5c" stroke-width="3" stroke-dasharray="8 6"/>`;
 
   // Un point par mois + le nom du mois sous l'axe.
   // Point rouge si le solde est sous le seuil ; point plein pour le passé, point vide (blanc) pour le prévu.
@@ -581,10 +591,12 @@ function dessinerGraphique() {
   });
   // Le point « aujourd'hui » : plein (c'est du réel), rouge s'il est sous le seuil.
   const couleurAuj = aujourdhui.courant < SEUIL_ALERTE ? "#c0392b" : "#0e4a5c";
-  svg += `<g class="point-cliquable" data-index="aujourdhui">`
-    + `<circle cx="${xAujourdhui}" cy="${yAujourdhui}" r="20" fill="transparent"/>`
-    + `<circle class="point-visible" cx="${xAujourdhui}" cy="${yAujourdhui}" r="6" fill="${couleurAuj}" stroke="${couleurAuj}" stroke-width="2.5"/>`
-    + `</g>`;
+  if (avecAujourdhui) {
+    svg += `<g class="point-cliquable" data-index="aujourdhui">`
+      + `<circle cx="${xAujourdhui}" cy="${yAujourdhui}" r="20" fill="transparent"/>`
+      + `<circle class="point-visible" cx="${xAujourdhui}" cy="${yAujourdhui}" r="6" fill="${couleurAuj}" stroke="${couleurAuj}" stroke-width="2.5"/>`
+      + `</g>`;
+  }
 
   // Fin du dessin : on l'insère dans la page, avec une « bulle » vide qui servira à afficher les montants.
   svg += `</svg>`;
@@ -625,11 +637,47 @@ function dessinerGraphique() {
     // stopPropagation empêche le clic de « remonter » jusqu'à la page (qui cacherait la bulle aussitôt).
     g.addEventListener("click", (evenement) => { evenement.stopPropagation(); montrerBulle(g); });
   });
-  // Un clic ailleurs dans la page cache la bulle.
-  document.addEventListener("click", cacherBulle);
 }
-// On lance le dessin.
-dessinerGraphique();
+// Un clic ailleurs dans la page cache la bulle (branché une seule fois, même si le graphique est redessiné).
+document.addEventListener("click", () => document.getElementById("bulle")?.classList.remove("visible"));
+
+// CHOIX DE LA PÉRIODE DU GRAPHIQUE : « Du [mois] au [mois] » + bouton « 12 mois glissants ».
+// Les deux listes proposent tous les mois disponibles (de l'historique jusqu'à 6 mois à venir).
+// Le graphique a besoin d'au moins 2 mois : le mois de fin est toujours après le mois de début.
+const choixDebut = document.getElementById("graphique-debut");
+const choixFin = document.getElementById("graphique-fin");
+const bouton12Mois = document.getElementById("graphique-12-mois");
+
+// Remplit une liste déroulante avec les mois, de la position « de » à la position « a » (incluses).
+function remplirChoixMois(liste, de, a, choisi) {
+  liste.innerHTML = "";
+  for (let i = de; i <= a; i++) {
+    liste.add(new Option(nomMois(moisCalcules[i].cle), i, false, i === choisi));
+  }
+}
+
+// Affiche la période [debut ; fin] (positions dans moisCalcules) et redessine le graphique.
+function choisirPeriode(debut, fin) {
+  // Les choix possibles : début de la 1re position à l'avant-dernière ; fin toujours après le début.
+  remplirChoixMois(choixDebut, 0, moisCalcules.length - 2, debut);
+  remplirChoixMois(choixFin, debut + 1, moisCalcules.length - 1, fin);
+  moisGraphique = moisCalcules.slice(debut, fin + 1);
+  // Le bouton apparaît « enfoncé » (bleu) quand on est sur les 12 mois glissants.
+  bouton12Mois.classList.toggle("actif", debut === debut12Mois && fin === moisCalcules.length - 1);
+  dessinerGraphique();
+}
+
+choixDebut.addEventListener("change", () => {
+  const debut = Number(choixDebut.value);
+  // Si le nouveau début dépasse la fin, on décale la fin d'un mois après le début.
+  const fin = Math.max(Number(choixFin.value), debut + 1);
+  choisirPeriode(debut, fin);
+});
+choixFin.addEventListener("change", () => choisirPeriode(Number(choixDebut.value), Number(choixFin.value)));
+bouton12Mois.addEventListener("click", () => choisirPeriode(debut12Mois, moisCalcules.length - 1));
+
+// On lance le dessin, sur les 12 mois glissants.
+choisirPeriode(debut12Mois, moisCalcules.length - 1);
 
 
 

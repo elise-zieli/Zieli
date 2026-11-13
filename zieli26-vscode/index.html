@@ -96,7 +96,15 @@
   </section>
 
   <section class="bloc">
+    <!-- Titre à gauche, choix de la période du graphique à droite (12 mois glissants par défaut) -->
+    <div class="titre-graphique">
     <h2>Évolution de votre compte courant</h2>
+    <div class="periode-graphique">
+      <label>Du <select id="graphique-debut"></select></label>
+      <label>au <select id="graphique-fin"></select></label>
+      <button type="button" class="bouton-discret" id="graphique-12-mois">12 mois glissants</button>
+    </div>
+    </div>
     <div id="graphique"></div>
     <div class="legende">
       <span class="reel">Réel</span>
@@ -152,6 +160,28 @@
   </section>
 
   <footer>Zieli – données de démonstration (fictives)</footer>
+
+  <!-- ASSISTANT « Une question ? » : bouton rond en bas à droite + fenêtre de discussion.
+       Il répond à partir des documents Zieli (règles de calcul, glossaire, FAQ, guides publics),
+       sans voir les chiffres de l'entreprise. Code : assistant.js. -->
+  <button type="button" class="assistant-bouton" id="assistant-bouton" aria-expanded="false" aria-controls="assistant-fenetre">
+    <span aria-hidden="true">?</span> Une question ?
+  </button>
+  <section class="assistant-fenetre" id="assistant-fenetre" hidden aria-label="Assistant Zieli">
+    <header class="assistant-entete">
+      <div>
+        <strong>Assistant Zieli</strong>
+        <span>Je réponds à partir des guides Zieli. Je ne vois pas vos chiffres.</span>
+      </div>
+      <button type="button" class="assistant-fermer" id="assistant-fermer" aria-label="Fermer l'assistant">×</button>
+    </header>
+    <div class="assistant-messages" id="assistant-messages" aria-live="polite"></div>
+    <form class="assistant-saisie" id="assistant-saisie">
+      <label class="visuellement-cache" for="assistant-question">Votre question</label>
+      <textarea id="assistant-question" rows="2" maxlength="500" placeholder="Ex. : c'est quoi le point bas ?"></textarea>
+      <button type="submit" id="assistant-envoyer">Envoyer</button>
+    </form>
+  </section>
 </div>
 
 <!-- =========================================================
@@ -161,5 +191,6 @@
 <!-- Remplace les chiffres fictifs par ceux d'Airtable (fourni par serveur.ps1). -->
 <script src="api/donnees-airtable.js"></script>
 <script src="app.js"></script>
+<script src="assistant.js"></script>
 </body>
 </html>

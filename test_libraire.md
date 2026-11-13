@@ -1,6 +1,6 @@
 # Test du tableau de bord avec la libraire — fiche de déroulé
 
-*Date prévue : 15 ou 16 novembre 2026 · Durée : 30 à 45 minutes · Préparée le 12/11*
+*Date prévue : 14 ou 15 novembre 2026 (avant la présentation au formateur du 16/11) · Durée : 30 à 45 minutes · Préparée le 12/11*
 
 **Objectif :** vérifier qu'une dirigeante peu à l'aise avec les chiffres **comprend seule** sa trésorerie grâce au tableau de bord, et qu'elle y trouve **une vraie utilité**.
 
@@ -95,5 +95,5 @@ Lui montrer l'exemple de récapitulatif mensuel.
 
 - [ ] Noter les 3 points forts et les 3 points à améliorer.
 - [ ] Reporter les résultats dans `suivi_projet.md` (feuille de route 1.10, « À revérifier », Parking).
-- [ ] Décider des **ajustements à faire avant le 17/11** (seulement les plus importants : il ne reste qu'une journée).
+- [ ] Décider des **ajustements à faire avant la présentation du 16/11** (seulement les plus importants).
 - [ ] Garder une ou deux citations de la libraire pour la présentation.

@@ -14,7 +14,8 @@ param(
   [string]$FichierJeton = (Join-Path (Split-Path $PSScriptRoot -Parent) 'airtable-token.txt'),
   [string]$UrlAirtable = 'https://api.airtable.com/v0',
   [string]$FichierCleN8n = (Join-Path (Split-Path $PSScriptRoot -Parent) 'n8n-cle.txt'),
-  [string]$UrlN8n = 'https://n8n.jedha.co/webhook/zieli-remarques'
+  [string]$UrlN8n = 'https://n8n.jedha.co/webhook/zieli-remarques',
+  [string]$UrlAssistant = 'https://n8n.jedha.co/webhook/zieli-assistant'
 )
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -287,6 +288,45 @@ function Transmettre-Remarque([string]$Json) {
   if (($contenu | ConvertFrom-Json).ok -ne $true) { throw 'Reponse inattendue de n8n.' }
 }
 
+# Assistant (bouton "Une question ?") : transmet la question au workflow n8n "Zieli - assistant"
+# et renvoie sa reponse au navigateur. Meme cle que pour les remarques : elle reste ici.
+function Poser-Question([string]$Json) {
+  if (-not [System.IO.File]::Exists($FichierCleN8n)) {
+    throw "Cle n8n introuvable (fichier attendu : $FichierCleN8n)."
+  }
+  $cleN8n = (Get-Content -LiteralPath $FichierCleN8n -Raw).Trim()
+  if (-not $cleN8n) { throw "Le fichier de cle n8n est vide ($FichierCleN8n)." }
+
+  $demande = $Json | ConvertFrom-Json
+  $question = ([string]$demande.question).Trim()
+  if (-not $question -or $question.Length -gt 500) { throw 'Question vide ou trop longue.' }
+
+  $entreprise = [string]$demande.entreprise
+  $idAirtable = ''
+  foreach ($id in $CLES_ENTREPRISES.Keys) { if ($CLES_ENTREPRISES[$id] -eq $entreprise) { $idAirtable = $id } }
+  if (-not $idAirtable -and $entreprise -cmatch '^rec[A-Za-z0-9]{14}$') { $idAirtable = $entreprise }
+
+  # Les derniers echanges (6 au plus) servent aux questions de suite ("et pour l'epargne ?").
+  $historique = @()
+  foreach ($m in @($demande.historique)) {
+    if ($m -and ($m.role -eq 'user' -or $m.role -eq 'assistant') -and $m.content -is [string]) {
+      $historique += [ordered]@{ role = [string]$m.role; content = $m.content.Substring(0, [Math]::Min(1500, $m.content.Length)) }
+    }
+  }
+  if ($historique.Count -gt 6) { $historique = $historique[($historique.Count - 6)..($historique.Count - 1)] }
+
+  $corps = [ordered]@{ question = $question; entrepriseId = $idAirtable; historique = @($historique) } | ConvertTo-Json -Depth 5 -Compress
+
+  $appel = Invoke-WebRequest -Uri $UrlAssistant -Method Post -UseBasicParsing -TimeoutSec 60 `
+    -Headers @{ 'X-Zieli-Cle' = $cleN8n } -ContentType 'application/json; charset=utf-8' `
+    -Body ([System.Text.Encoding]::UTF8.GetBytes($corps))
+  # Lecture en UTF-8 (accents) a partir des octets recus.
+  $contenu = [System.Text.Encoding]::UTF8.GetString($appel.RawContentStream.ToArray())
+  $reponse = $contenu | ConvertFrom-Json
+  if ($reponse.ok -ne $true) { throw 'Reponse inattendue de n8n.' }
+  return ([ordered]@{ reponse = [string]$reponse.reponse; sources = @($reponse.sources) } | ConvertTo-Json -Depth 5 -Compress)
+}
+
 $types = @{
   '.html' = 'text/html; charset=utf-8'
   '.js'   = 'text/javascript; charset=utf-8'
@@ -357,6 +397,25 @@ try {
             Write-Host "n8n : ECHEC - $($_.Exception.Message)"
             $reponse.StatusCode = 502
             Envoyer $contexte ([System.Text.Encoding]::UTF8.GetBytes('erreur')) 'text/plain; charset=utf-8'
+          }
+        }
+      }
+      elseif ($cheminUrl -eq '/api/assistant') {
+        if ($contexte.Request.HttpMethod -ne 'POST' -or $contexte.Request.Headers['X-Zieli-Synchro'] -ne '1') {
+          $reponse.StatusCode = 403
+        }
+        else {
+          try {
+            $lecteur = New-Object System.IO.StreamReader($contexte.Request.InputStream, [System.Text.Encoding]::UTF8)
+            try { $recu = $lecteur.ReadToEnd() } finally { $lecteur.Dispose() }
+            $resultat = Poser-Question $recu
+            Write-Host "n8n : question a l'assistant traitee"
+            Envoyer $contexte ([System.Text.Encoding]::UTF8.GetBytes($resultat)) $types['.json']
+          }
+          catch {
+            Write-Host "n8n : ECHEC assistant - $($_.Exception.Message)"
+            $reponse.StatusCode = 502
+            Envoyer $contexte ([System.Text.Encoding]::UTF8.GetBytes('{"erreur":true}')) $types['.json']
           }
         }
       }

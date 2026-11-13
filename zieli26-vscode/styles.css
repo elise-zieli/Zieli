@@ -131,6 +131,18 @@
   .bulle strong { font-size: 18px; }
   .bulle .ligne-doux { opacity: .8; font-size: 13px; }
   #graphique svg { min-width: 820px; }
+  /* Choix de la période du graphique : « Du [mois] au [mois] » + bouton « 12 mois glissants » */
+  /* Titre à gauche, période à droite sur la même ligne ; sur petit écran, la période passe dessous */
+  .titre-graphique { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+                     gap: 10px 24px; margin-bottom: 12px; }
+  .titre-graphique h2 { margin: 0; }
+  .periode-graphique { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px;
+                       margin-left: auto; font-size: 14px; color: var(--texte-doux); }
+  .periode-graphique label { display: flex; align-items: center; gap: 8px; }
+  .periode-graphique select { font: inherit; color: var(--texte); padding: 6px 10px;
+                              border: 1px solid var(--bordure); border-radius: 8px; background: #fff; }
+  .periode-graphique .bouton-discret { padding: 6px 14px; }
+  .periode-graphique .bouton-discret.actif { background: var(--principale); color: #fff; border-color: var(--principale); }
 
   /* --- Tableau mensuel --- */
   .defilement { overflow-x: auto; }
@@ -305,3 +317,44 @@
      Le trait pétrole épais (début du prévisionnel) est gardé pour la continuité du tableau. */
   #tableau tbody tr.total-dispo td.debut-mois:not(.debut-prevision), #tableau tbody tr.solde td.debut-mois:not(.debut-prevision) { border-left-color: #8fa9c6; }
   #tableau tbody tr.total-dispo { border-bottom: 0; }
+
+  /* --- ASSISTANT « Une question ? » (13/11) : bouton rond en bas à droite + fenêtre de discussion --- */
+  .assistant-bouton { position: fixed; right: 24px; bottom: 24px; z-index: 50; display: flex; align-items: center; gap: 10px;
+                      font: inherit; font-weight: 700; font-size: 15px; color: #fff; background: var(--principale);
+                      border: 0; border-radius: 999px; padding: 12px 20px 12px 12px; cursor: pointer;
+                      box-shadow: 0 6px 20px rgba(14, 74, 92, .30); }
+  .assistant-bouton span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%;
+                           background: var(--dore); color: var(--principale); font-weight: 800; }
+  .assistant-bouton:hover { filter: brightness(1.08); }
+  .assistant-bouton.ouvert { display: none; }
+  .assistant-fenetre { position: fixed; right: 24px; bottom: 24px; z-index: 51; width: 380px; max-width: calc(100vw - 32px);
+                       height: 540px; max-height: calc(100vh - 48px); display: flex; flex-direction: column;
+                       background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 12px 40px rgba(16, 40, 48, .25); }
+  .assistant-fenetre[hidden] { display: none; }
+  /* « header.assistant-entete » : annule la règle générale « header » de la page (retour à la ligne, marge). */
+  header.assistant-entete { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+                            flex-wrap: nowrap; margin: 0; padding: 16px 18px; background: var(--principale); color: #fff; }
+  .assistant-fermer { flex-shrink: 0; }
+  .assistant-entete strong { display: block; font-size: 16px; }
+  .assistant-entete span { display: block; font-size: 12px; opacity: .85; margin-top: 2px; }
+  .assistant-fermer { font: inherit; font-size: 24px; line-height: 1; color: #fff; background: none; border: 0; cursor: pointer; padding: 0 4px; }
+  .assistant-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--beige); }
+  .assistant-message { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; white-space: pre-line; }
+  .assistant-message.assistant { align-self: flex-start; background: #fff; color: var(--texte); border-bottom-left-radius: 4px; }
+  .assistant-message.dirigeant { align-self: flex-end; background: var(--principale); color: #fff; border-bottom-right-radius: 4px; }
+  .assistant-message.attente { color: var(--texte-doux); font-style: italic; }
+  .assistant-message.erreur { color: var(--rouge); }
+  .assistant-sources { margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--bordure); font-size: 12px; color: var(--texte-doux); }
+  .assistant-sources a { color: var(--principale); }
+  .assistant-saisie { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--bordure); background: #fff; }
+  .assistant-saisie textarea { flex: 1; font: inherit; font-size: 14px; resize: none; padding: 8px 10px;
+                               border: 1px solid var(--bordure); border-radius: 10px; }
+  .assistant-saisie button { font: inherit; font-weight: 600; color: #fff; background: var(--principale); border: 0;
+                             border-radius: 999px; padding: 0 16px; cursor: pointer; }
+  .assistant-saisie button:disabled { opacity: .5; cursor: wait; }
+  /* Texte lu par les lecteurs d'écran mais invisible à l'écran (accessibilité). */
+  .visuellement-cache { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (max-width: 600px) {
+    .assistant-bouton { right: 16px; bottom: 16px; }
+    .assistant-fenetre { right: 0; bottom: 0; width: 100vw; max-width: 100vw; height: 85vh; border-radius: 18px 18px 0 0; }
+  }

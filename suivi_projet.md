@@ -1,7 +1,7 @@
 # Zieli — Suivi du projet
 
 *Mis à jour le 12 novembre 2026. Document unique : notice d'utilisation, état du projet, étapes restantes et Parking.*
-*Échéance : présentation du projet final Jedha le **17 novembre 2026**.*
+*Échéances : **présentation du projet au formateur le 16 novembre 2026** (pas encore la certification) ; puis **certification CDA – Bloc 1** à une date à réserver (voir section 12).*
 
 Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquette (fusionnés le 12/11).
 
@@ -9,8 +9,9 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 
 ## 0. À faire maintenant (par ordre)
 
-1. **Test auprès de la libraire** (15 ou 16/11), voir section 8.
-2. **Préparer la présentation** (16-17/11), voir section 8.
+1. **Test auprès de la libraire** (au plus tard le 15/11, idéalement le 14), voir section 8.
+2. **Préparer la présentation au formateur** (16/11), voir section 8.
+3. **Préparer la certification Bloc 1** (dossier de 30 à 40 pages, Dossier Professionnel, preuves C1 à C4), voir section 12.
 
 > n8n à jour le 12/11 (3 workflows) : nouveau PowerPoint, nouveaux e-mails, récapitulatif envoyé aux clients à 12 h, contrôle à 8 h.
 > Règle à retenir : les fichiers `.js` se collent dans les **nœuds de code**, les fichiers `.html` / `.txt` dans les **nœuds e-mail** ; après modification, **Save puis Publish**.
@@ -25,7 +26,7 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 - **Le projet.** Zieli est une offre de « bras droit financier » pour les dirigeants de petites PME (moins de 3 M€ de CA, moins de 30 salariés). Le MVP est un **tableau de bord de trésorerie** (prévisionnel comparé au réel) pour des dirigeants peu à l'aise avec l'informatique.
 - **Objectif du MVP :** tester la valeur auprès de quelques dirigeants, sans livrer un produit complet.
 - **Premier client test :** une librairie. Comptabilité saisie dans Sage par un freelance ; Elise met à jour le tableau chaque mois.
-- **Budget :** 0 € jusqu'au 17/11, puis 150 €/mois au maximum.
+- **Budget :** 0 € jusqu'au 16/11, puis 150 €/mois au maximum.
 - **Ne pas se disperser :** la trésorerie uniquement. Toute nouvelle idée va au **Parking** (section 11).
 
 ---
@@ -47,7 +48,7 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 - **Aucune clé ni aucun secret dans le code envoyé sur GitHub.** Les clés sont dans `airtable-token.txt` et `n8n-cle.txt` (à côté du dossier du site, exclus de GitHub), et dans Netlify.
 
 **Contraintes**
-- Airtable gratuit : 1 000 enregistrements par base (environ 490 au 09/11).
+- Airtable gratuit : 1 000 enregistrements par base (environ 660 au 13/11).
 - Netlify gratuit : largement suffisant pour le MVP.
 
 ---
@@ -106,6 +107,7 @@ Dans Chrome : **F12**, puis **Ctrl + Maj + M**, et choisir un modèle (ex. iPhon
 | `zieli26-vscode/logos-demo/` | Logos fictifs de la librairie et de la boulangerie |
 | `netlify.toml` | Réglages Netlify |
 | `test_libraire.md` | Fiche de déroulé du test avec la libraire (à imprimer) |
+| `presentation_16-11.md` | Fiche de la présentation de 8 min au formateur (16/11) ; diapositives : https://claude.ai/artifact/GsNe48gYFdvPjjVMBSKhZC |
 | `test_libraire_exemple_fictif.md` | Exemple de fiche remplie avec des réponses **fictives** (pour la démo, présenté comme tel) |
 | `n8n-workflow-*.json` | Copies de sauvegarde des 3 workflows n8n |
 | `n8n-code-fabriquer-powerpoint.js` | Code du nœud n8n « Fabriquer les PowerPoint » (récapitulatif mensuel + e-mail au dirigeant) |
@@ -122,7 +124,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 | Table | ID | Contenu |
 |---|---|---|
-| Entreprises | `tblna9EWuSbSHsXT8` | Nom, Solde initial courant, Solde initial épargne, Date du solde initial (31/07/2026), Seuil d'alerte, Logo (image PNG ou JPG affichée à gauche du nom, sur le site et dans le PowerPoint ; logos fictifs dans `zieli26-vscode/logos-demo`) |
+| Entreprises | `tblna9EWuSbSHsXT8` | Nom, Solde initial courant, Solde initial épargne, Date du solde initial (30/04/2026), Seuil d'alerte, Logo (image PNG ou JPG affichée à gauche du nom, sur le site et dans le PowerPoint ; logos fictifs dans `zieli26-vscode/logos-demo`) |
 | Utilisateurs | `tblLaN6W8FfjOELV3` | Nom, email, Rôle (Admin / Dirigeant), Entreprises |
 | Catégories | `tblOpdvbRhk7UMNj6` | 18 catégories (« Ligne »), Partie, Sens (Entrée / Sortie / Interne), Ordre |
 | Transactions | `tblZDrxbfp6fR50I4` | Réel ; Montant = Crédit + Débit ; Mois (AAAA-MM) |
@@ -132,8 +134,10 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 | Entreprise | ID | Solde initial courant | Solde initial épargne | Seuil d'alerte |
 |---|---|---|---|---|
-| Librairie Chapitre Un | `rec53om2huapFZgGN` | 18 000 € | 10 000 € | 10 000 € (confirmé par la libraire le 12/11) |
-| Atelier Boulanger Fournil d'Or | `recSL1ALPdEGzbmKI` | 6 000 € | 5 000 € | 12 000 € |
+| Librairie Chapitre Un | `rec53om2huapFZgGN` | 21 495 € | 8 000 € | 10 000 € (confirmé par la libraire le 12/11) |
+| Atelier Boulanger Fournil d'Or | `recSL1ALPdEGzbmKI` | 2 710 € | 5 000 € | 12 000 € |
+
+*Soldes initiaux au 30/04/2026 (historique de mai à juillet ajouté le 13/11). Fin juillet, on retrouve les anciens soldes de départ : 18 000 € / 10 000 € pour la librairie, 6 000 € / 5 000 € pour la boulangerie.*
 
 - Le site affiche toutes les catégories qui ont au moins un montant, triées par « Ordre ».
 - « Mis à jour le … » = date de la dernière transaction de l'entreprise.
@@ -145,7 +149,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 - **Signes :** entrées en positif, sorties en négatif, partout (réel et prévu). Épargne négative = argent mis de côté ; positive = argent repris.
 - **Solde du mois** = encaissements + décaissements, hors épargne.
-- **Solde fin de mois du compte courant** = solde fin du mois précédent + solde du mois + épargne. Départ : solde initial courant au 31/07/2026.
+- **Solde fin de mois du compte courant** = solde fin du mois précédent + solde du mois + épargne. Départ : solde initial courant au 30/04/2026.
 - **Solde compte épargne fin de mois** = solde épargne précédent − épargne du mois.
 - **Total disponible** = compte courant + épargne.
 - **Mois passés :** au réel. **Mois en cours et à venir :** au prévu, enchaînés à partir du dernier solde réel.
@@ -192,7 +196,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 
 1. **Barre du haut :** nom, rôle, « Se déconnecter », bouton « Synchronisation » ; menu « Entreprise affichée » pour l'Admin.
 2. **Carte « Total disponible »** : soldes réels à la date de mise à jour, détail compte courant / épargne. Couleur selon le **compte courant** : rouge si < seuil, orange si < 1,5 × seuil, bleu pétrole au-delà. La carte montre le présent, le bandeau l'avenir.
-3. **Graphique sur 12 mois :** solde du compte courant (plein pour le réel, pointillés pour le prévu), point « aujourd'hui », encaissements (vert), décaissements (orange), seuil (rouge), montant au survol.
+3. **Graphique sur 12 mois :** solde du compte courant (plein pour le réel, pointillés pour le prévu), point « aujourd'hui », encaissements (vert), décaissements (orange), seuil (rouge), montant au survol. Période au choix (« Du … au … ») et bouton « 12 mois glissants ».
 4. **Bandeau d'alerte**, toujours affiché, avec le point bas : déjà sous le seuil (rouge) / passage sous le seuil prévu (rouge) / aucun passage (bleu clair). Bouton « Expliquer ces écarts » dessous.
 5. **Tableau mensuel** (validé le 12/11), lignes dans cet ordre, toutes visibles :
    1. **Encaissements** (vert) : clic ▸ pour le détail. S'il n'y a qu'une partie (Activité), elle est masquée et les catégories s'affichent directement.
@@ -249,25 +253,26 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 | 1.9 | V1 : chiffres Airtable, remarques n8n, mise en ligne Netlify | fait et testé en ligne le 12/11 |
 | 1.9 bis | Workflows n8n contrôle mensuel et récapitulatif mensuel | faits, mis à jour et publiés le 12/11 |
 | 1.9 ter | Nouvelle charte Zieli (Manrope, bleu pétrole, logo) + logo des clients | fait le 12/11 (logos fictifs dans Airtable) |
-| 1.10 | Test auprès de la libraire (15/11) | à faire |
-| 1.11 | Ajustements et présentation Jedha (16-17/11) | à faire |
+| 1.10 | Test auprès de la libraire (14 ou 15/11) | à faire |
+| 1.11 | Présentation du projet au formateur (16/11) | à faire |
+| 1.12 | Certification CDA – Bloc 1 (dossier, DP, démo, entretien) | à préparer, date à réserver sur JULIE |
 
 **Test auprès de la libraire (1.10)** — fiche de déroulé : `test_libraire.md`
-- **Date à confirmer :** le 15/11 tombe un dimanche. Si le test glisse au 16/11, il ne reste qu'une journée d'ajustements.
+- **Date :** la présentation au formateur est le 16/11 ; faire le test au plus tard le 15/11 (dimanche), idéalement le 14, pour garder du temps d'ajustement.
 - **Données fictives** de « Librairie Chapitre Un » : valable pour la lisibilité, moins pour la valeur.
 - **Connexion :** compte Dirigeant de la librairie (`libraire@chapitre-un.example`).
 - **Critère de réussite :** sans aide et en moins de 2 minutes, elle répond à « Quel sera votre solde fin du mois prochain, et quel est votre point bas d'ici 6 mois ? ». Signal 1 : elle cite une décision qu'elle prendrait grâce au tableau. Signal 2 : elle accepte de le consulter le mois suivant, à une date fixée ensemble.
 
 **Présentation (1.11)**
 - Demander au prof le format attendu (durée, démo en direct, support).
-- Proposé : enregistrer le 16/11 une vidéo de secours de la démo.
+- Proposé : enregistrer le 15/11 une vidéo de secours de la démo.
 - Scénario des alertes : librairie (seuil 10 000 € depuis le 12/11) → carte neutre (22 712 € > 15 000 €) mais bandeau rouge dès l'ouverture (point bas de janvier à 9 912 €) ; boulangerie → carte orange (16 370 € pour 12 000 €). Le changement de seuil en direct n'est plus nécessaire ; pour montrer la Synchronisation, on peut par exemple changer en direct le seuil de la boulangerie dans Airtable.
 
 ---
 
 ## 9. À revérifier
 
-- Jedha accepte-t-il un projet final sans Lovable (site sur Netlify) ? À demander au prof.
+- ~~Jedha accepte-t-il un projet sans Lovable ?~~ **Oui, confirmé le 12/11.**
 - **Vraie connexion sécurisée** (avant tout usage réel) : sans Lovable, il faudra la construire autrement, par exemple avec Netlify Identity ou les fonctions Netlify.
 - Jedha fournit-il des crédits Airtable ou n8n ?
 - Fréquence de mise à jour du réel : avec une mise à jour mensuelle via Sage, la carte reste figée la plupart du mois.
@@ -308,9 +313,14 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - **PowerPoint mensuel refait** : police Calibri (présente partout), bleu pétrole, logo du client en haut à gauche, mois en pastille, logo Zieli en bas à droite ; diapositive 2 = tableau du site (Réel, % du réel, Prévu, Écart) avec commentaires à côté ; blocs en relief sur la diapositive 3.
 - Documentation fusionnée dans ce fichier.
 
+**13/11**
+- **Historique ajouté pour la démo** : mai, juin et juillet 2026 (réel et prévisionnel) pour les 2 entreprises, plus le prévisionnel d'août qui manquait. Le solde initial est désormais au **30/04/2026**, et les montants sont recalculés pour que les soldes à partir d'août restent identiques (fin juillet : 18 000 € pour la librairie, 6 000 € pour la boulangerie). Environ 660 enregistrements Airtable sur 1 000.
+- **Graphique** : par défaut sur les **12 mois glissants** (5 mois passés, le mois en cours, 6 mois à venir). Choix « Du [mois] au [mois] » parmi tous les mois disponibles, avec un bouton « 12 mois glissants » pour revenir à la vue par défaut. Le point « aujourd'hui » n'apparaît que si la période contient le mois en cours. Le tableau ne change pas. Barre de période sur la ligne du titre, à droite.
+- **Assistant RAG « Une question ? »** (bouton en bas à droite du tableau de bord) : répond à partir des documents du dossier `rag/` (règles de calcul, glossaire, FAQ, guides publics), **sans voir les chiffres** de l'entreprise. Passages et empreintes dans Airtable (« Assistant - Connaissances »), questions notées sans nom (« Assistant - Questions »), 2 workflows n8n (indexation + assistant), clé OpenAI uniquement dans n8n. Mode d'emploi : `assistant_mode_emploi.md`.
+
 ---
 
-## 11. Parking (ne pas traiter avant le 17/11)
+## 11. Parking (ne pas traiter avant le 16/11)
 
 - Tableau de rentabilité, budget, prix de vente, indicateurs clés.
 - Tests auprès d'un 2e dirigeant et d'autres dirigeants.
@@ -321,9 +331,40 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - Slide « Veille » dans le récapitulatif mensuel : actualité du mois du secteur, à partir de pages sources données par Elise.
 - Explications d'écarts visibles par le dirigeant.
 - Hébergement alternatif (Cloudflare Pages, Softr).
+- **Assistant RAG** : version 2 avec les chiffres du dirigeant connecté ; calendrier fiscal et social à ajouter aux documents.
 - Mascotte.
 - Colonne « Reste à venir », légende sous le tableau, bulle « d'où vient ce solde ».
 - Niveau orange du bandeau d'alerte et alerte par email sur les soldes.
 - Totaux calculés par n8n, suivi commercial dans Airtable.
 - Partenariats avec experts-comptables, élargissement aux associations.
 - Exercices guidés VS Code.
+
+---
+
+## 12. Certification CDA – Bloc 1 (RNCP37873BC01)
+
+*Consignes Jedha reçues le 12/11. Bloc 1 seul : « Développer une application sécurisée ». Date à réserver sur JULIE (environ 3 mois d'attente, dans les 6 mois après la formation).*
+
+**Le jour J (1 h 20, chez Jedha, 116 rue du Faubourg Saint-Martin, Paris)**
+- 9 h 30 : quiz de 30 min (documentation technique en anglais : 2 QCU en français, 2 questions ouvertes en anglais).
+- Au créneau : **20 min de présentation avec démo en direct obligatoire** (comptes de test par rôle), puis **30 min d'entretien technique**.
+- À apporter : **dossier de projet imprimé (30 à 40 pages hors annexes)**, diaporama, **Dossier Professionnel** (modèle officiel du ministère).
+
+**Le dossier de projet (4 parties imposées)**
+1. Compétences mises en œuvre (C1 à C4 reliées au projet) — 2 à 3 p.
+2. Expression des besoins (contexte, problème, personas, objectifs mesurables, In / Out of Scope, contraintes) — 6 à 8 p.
+3. Environnement technique (outils et comptes, schéma d'architecture, équivalence avec une architecture logicielle, documentation en anglais utilisée) — 4 à 6 p.
+4. Réalisations (preuves avec captures et explications) — 16 à 22 p.
+- Annexes (PRD, backlog, exports CSV / JSON, notes de réunion) — 20 p. max.
+
+**Preuves attendues et état au 12/11**
+| Compétence | Preuve attendue | État |
+|---|---|---|
+| C1 Environnement | Tableau des outils, rôles et accès ; historique des versions ; exports JSON n8n | En bonne voie (section 2, GitHub, `n8n-workflow-*.json`) |
+| C2 Interfaces | Wireframe vs écran final ; test responsive ; mentions légales, RGPD, RGAA | Maquettes et responsive OK ; **mentions légales / RGPD / accessibilité à faire** |
+| C3 Composants métier | Schéma relationnel Airtable ; workflows n8n avec sticky notes ; jeu de tests sans donnée sensible visible | Schéma à dessiner ; **sticky notes à vérifier** ; **jeu d'essai à faire** |
+| C4 Gestion de projet | In / Out of Scope ; Kanban avec dates cibles (début et fin) ; un retard réel géré ; 3 Daily Meeting Notes | **À rassembler** (journal et Parking du suivi utiles) |
+| Tests de sécurité | **Test d'URL directe** (page protégée sans connexion) et **test inter-rôles** (un utilisateur ne voit pas les données d'un autre) | ⚠ **Échoueraient aujourd'hui** : connexion dans la page, données de toutes les entreprises chargées → vraie connexion côté serveur à construire |
+
+**Points à clarifier avec le formateur**
+- Projet sans Lovable : **accepté (confirmé le 12/11)**. Dans le dossier, l'historique GitHub remplace l'historique Lovable, et les maquettes sont comparées à l'écran final du site.

@@ -1,0 +1,129 @@
+{
+    "name":  "Zieli - assistant indexation",
+    "nodes":  [
+                  {
+                      "parameters":  {
+
+                                     },
+                      "name":  "Lancer a la main",
+                      "type":  "n8n-nodes-base.manualTrigger",
+                      "typeVersion":  1,
+                      "position":  [
+                                       0,
+                                       0
+                                   ],
+                      "id":  "04f2e076-bebd-4249-a875-ee50295b890a"
+                  },
+                  {
+                      "parameters":  {
+                                         "resource":  "record",
+                                         "operation":  "search",
+                                         "base":  {
+                                                      "__rl":  true,
+                                                      "value":  "app3K4PQkkZFAxipC",
+                                                      "mode":  "id"
+                                                  },
+                                         "table":  {
+                                                       "__rl":  true,
+                                                       "value":  "tblOmbXZr14S1Q7Z5",
+                                                       "mode":  "id"
+                                                   },
+                                         "filterByFormula":  "{Embedding} = \u0027\u0027",
+                                         "returnAll":  true,
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "name":  "Lire passages sans embedding",
+                      "type":  "n8n-nodes-base.airtable",
+                      "typeVersion":  2.1,
+                      "position":  [
+                                       240,
+                                       0
+                                   ],
+                      "id":  "131e2273-f489-440d-afba-ccf3e2af41bb"
+                  },
+                  {
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "https://api.openai.com/v1/embeddings",
+                                         "authentication":  "predefinedCredentialType",
+                                         "nodeCredentialType":  "openAiApi",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ model: \"text-embedding-3-small\", input: $json.Titre + \"\\n\" + $json.Texte }) }}",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "name":  "Calculer embedding",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       480,
+                                       0
+                                   ],
+                      "id":  "4a59b0b5-49b9-406d-9e16-e298d6fa31f4"
+                  },
+                  {
+                      "parameters":  {
+                                         "method":  "PATCH",
+                                         "url":  "=https://api.airtable.com/v0/app3K4PQkkZFAxipC/tblOmbXZr14S1Q7Z5/{{ $(\u0027Lire passages sans embedding\u0027).item.json.id }}",
+                                         "authentication":  "predefinedCredentialType",
+                                         "nodeCredentialType":  "airtableTokenApi",
+                                         "sendBody":  true,
+                                         "specifyBody":  "json",
+                                         "jsonBody":  "={{ JSON.stringify({ fields: { Embedding: JSON.stringify($json.data[0].embedding.map(v =\u003e Math.round(v * 1e5) / 1e5)) } }) }}",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "name":  "Enregistrer embedding",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       720,
+                                       0
+                                   ],
+                      "id":  "93d3050e-747e-4861-901b-1964f54732ff"
+                  }
+              ],
+    "connections":  {
+                        "Lancer a la main":  {
+                                                 "main":  [
+                                                              [
+                                                                  {
+                                                                      "node":  "Lire passages sans embedding",
+                                                                      "type":  "main",
+                                                                      "index":  0
+                                                                  }
+                                                              ]
+                                                          ]
+                                             },
+                        "Lire passages sans embedding":  {
+                                                             "main":  [
+                                                                          [
+                                                                              {
+                                                                                  "node":  "Calculer embedding",
+                                                                                  "type":  "main",
+                                                                                  "index":  0
+                                                                              }
+                                                                          ]
+                                                                      ]
+                                                         },
+                        "Calculer embedding":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Enregistrer embedding",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1"
+                 }
+}
