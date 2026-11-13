@@ -45,6 +45,7 @@ Remplace `recap_claude_code.md`, `COMMENT_UTILISER.md` et le README de la maquet
 | D4 | Preuves C3 : schéma des tables Airtable, notes explicatives (sticky notes) dans les workflows n8n, jeu d'essai | à dater | à faire |
 | D5 | Preuves C4 : ce Kanban daté, 3 comptes rendus de réunion, un retard réel géré (test décalé au 18/11, compensé par un entretien fictif) | à dater | en cours |
 | D6 | Rédiger le dossier de projet (30 à 40 pages) et le Dossier Professionnel | à dater | à faire |
+| D7 | **Fiabiliser les calculs** dans le contrôle du 5 à 8 h (`n8n-code-verifier-les-donnees.js`) : 1) n8n refait les totaux du mois à partir des transactions et les compare à la table « Synthèse mensuelle » d'Airtable (alerte en cas d'écart : transaction sans catégorie, mauvais mois, non reliée) ; 2) l'e-mail affiche des **chiffres témoins** par entreprise (solde fin du mois dernier, point bas et son mois, total disponible) à comparer avec le site avant l'envoi de midi. À reprendre dans le jeu d'essai (preuve C3) | après le 16/11 | à faire |
 
 > n8n à jour le 12/11 (3 workflows) : nouveau PowerPoint, nouveaux e-mails, récapitulatif envoyé aux clients à 12 h, contrôle à 8 h.
 > 13/11 : 2 workflows en plus pour l'**assistant « Une question ? »** (indexation, lancée à la main ; assistant, publié). Mode d'emploi : `assistant_mode_emploi.md`.
@@ -184,6 +185,12 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 ---
 
 ## 5. Règles de calcul
+
+**Qui calcule quoi (13/11)**
+1. **Airtable** stocke les lignes brutes ; seules petites formules : Montant et Mois de chaque ligne. La table « Synthèse mensuelle » fait aussi des totaux, mais le site ne s'en sert pas.
+2. **Le serveur** (fonction Netlify, ou `serveur.ps1` en local) additionne réel et prévu par entreprise × catégorie × mois.
+3. **Le navigateur** (`app.js`) calcule tout le reste : totaux par partie, solde du mois, solde fin de mois cumulé, épargne, total disponible, écarts, %, réel à date, point bas, couleurs.
+4. **n8n** refait ses propres calculs pour le récapitulatif PowerPoint et le contrôle (nœud « Fabriquer les PowerPoint »). ⚠ La logique existe donc en deux exemplaires (`app.js` et n8n) : toute règle modifiée doit l'être aux deux endroits. Contrôle prévu : étape D7.
 
 - **Signes :** entrées en positif, sorties en négatif, partout (réel et prévu). Épargne négative = argent mis de côté ; positive = argent repris.
 - **Solde du mois** = encaissements + décaissements, hors épargne.

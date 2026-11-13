@@ -56,7 +56,7 @@
 ## 6:30 – 8:00 · Prochaines étapes et questions
 - **Diapo 15 « Prochaines étapes »** :
   - « Pour la bonne conduite du projet, j'ai réalisé un **entretien fictif**, car la dirigeante de la librairie n'est disponible que le 18 novembre. Je passerai mon projet en professionnel après l'entretien réel du 18. » Si on demande, montrer `test_libraire_exemple_fictif.md` en disant clairement qu'il est **fictif**.
-  - Avant la certification : vraie connexion côté serveur, mentions légales / RGPD / accessibilité, puis le Bloc 1 (jeu d'essai, dossier de projet, Dossier Professionnel).
+  - Avant la certification : vraie connexion côté serveur, mentions légales / RGPD / accessibilité, le Bloc 1 (jeu d'essai, dossier de projet, Dossier Professionnel), et fiabiliser les calculs : le contrôle du 5 vérifiera que les totaux d'Airtable égalent ceux de n8n, et que les chiffres du site égalent ceux du PowerPoint.
   - Pour faire évoluer Zieli : une base sans limite (alternative à Airtable), l'import depuis le logiciel comptable, un assistant qui connaît les chiffres du dirigeant et son calendrier fiscal et social, un agent de veille sectorielle.
 - **Diapo 16 « Mes questions »** : qu'attendez-vous pour les tests de sécurité (URL directe, inter-rôles) ? Des conseils pour le dossier ?
 
