@@ -23,12 +23,15 @@ Elle dépend du compte courant comparé à votre seuil de sécurité : rouge s'i
 **Comment lire le graphique ?**
 - Le trait épais bleu : le solde de votre compte courant à la fin de chaque mois. Trait plein = réel ; pointillés = prévu.
 - Le point « aujourd'hui » : votre solde à la date de mise à jour.
-- La ligne verte : les encaissements du mois. La ligne orange : les décaissements du mois.
+- La ligne verte : les encaissements du mois. La ligne orange : les décaissements du mois. Ces deux lignes montrent la tendance d'un coup d'œil ; elles n'affichent pas de montant, même au survol.
 - La ligne rouge : votre seuil de sécurité, avec son montant à gauche.
 - Un point rouge : un mois qui finit sous le seuil.
 
-**Comment voir le montant d'un mois ?**
-Passez la souris sur un point, ou touchez-le sur téléphone.
+**Comment voir le solde d'un mois ?**
+Passez la souris sur un point du trait bleu, ou touchez-le sur téléphone : une bulle affiche le mois et le solde de fin de mois.
+
+**Et le montant des encaissements ou des décaissements ?**
+Il se lit dans le tableau « Détail mois par mois », sous le graphique.
 
 **Comment changer la période affichée ?**
 Choisissez un mois dans « Du … » et un mois dans « au … », en haut à droite du graphique. Le bouton « 12 mois glissants » revient à la vue habituelle : les 5 derniers mois, le mois en cours et les 6 mois à venir.
