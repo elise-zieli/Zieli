@@ -1054,6 +1054,13 @@ document.getElementById("form-commentaire").addEventListener("submit", async (ev
   // puis enregistré dans la table Commentaires d'Airtable).
   const boutonEnvoi = evenement.target.querySelector('button[type="submit"]');
   boutonEnvoi.disabled = true;   // évite d'envoyer deux fois la même remarque
+  // Pendant l'envoi (quelques secondes) : petit cercle qui tourne + « Envoi en cours… »
+  // dans le bouton, pour que le dirigeant voie que sa remarque est en train de partir
+  // (conseil du formateur, 13/11). Le style du cercle est dans styles.css (« .chargement »).
+  const texteBouton = boutonEnvoi.textContent;
+  boutonEnvoi.innerHTML = '<span class="chargement" aria-hidden="true"></span> Envoi en cours…';
+  boutonEnvoi.setAttribute("aria-busy", "true");
+  document.getElementById("confirmation").textContent = "";
   try {
     await envoyerCommentaire({
       entreprise: DONNEES.entreprise,
@@ -1070,7 +1077,10 @@ document.getElementById("form-commentaire").addEventListener("submit", async (ev
     msg.style.color = "var(--rouge)";
     return;
   } finally {
+    // Dans tous les cas (réussi ou échoué), le bouton redevient normal.
     boutonEnvoi.disabled = false;
+    boutonEnvoi.textContent = texteBouton;
+    boutonEnvoi.removeAttribute("aria-busy");
   }
 
   // On vide le formulaire (« Non » redevient coché), on remet la liste des mois,

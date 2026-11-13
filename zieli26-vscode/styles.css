@@ -358,3 +358,11 @@
     .assistant-bouton { right: 16px; bottom: 16px; }
     .assistant-fenetre { right: 0; bottom: 0; width: 100vw; max-width: 100vw; height: 85vh; border-radius: 18px 18px 0 0; }
   }
+
+  /* --- Envoi du formulaire en cours (13/11) : petit cercle qui tourne dans le bouton « Envoyer à Elise » --- */
+  .chargement { display: inline-block; width: 16px; height: 16px; margin-right: 8px; vertical-align: -3px;
+                border: 3px solid rgba(255, 255, 255, .35); border-top-color: #fff; border-radius: 50%;
+                animation: tourner .8s linear infinite; }
+  @keyframes tourner { to { transform: rotate(360deg); } }
+  form button[aria-busy="true"] { cursor: wait; opacity: .85; }
+  @media (prefers-reduced-motion: reduce) { .chargement { animation-duration: 2.4s; } }

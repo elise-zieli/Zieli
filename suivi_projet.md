@@ -387,6 +387,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - **Personas** fixés : **Sandrine Extri** (Librairie Chapitre Un, Sage) et **Karim Benali** (Atelier Boulanger Fournil d'Or, Pennylane). Prénoms harmonisés partout : comptes de démonstration du site (`donnees.js`) et table Utilisateurs d'Airtable (avant : Julie, Paul, Mickael).
 - Formulaire testé en ligne : « Explication des écarts » OK (e-mail reçu par le dirigeant, capture dans la présentation) ; les autres types restent à tester.
 - Prochaines étapes réorganisées en tableau daté (section 0), qui sert aussi de Kanban pour la preuve C4.
+- **Examen blanc devant le formateur** : conseil retenu, un indicateur pendant l'envoi du formulaire. Le bouton « Envoyer à Elise » affiche maintenant un petit cercle qui tourne et « Envoi en cours… » jusqu'à la confirmation (ou au message d'erreur).
 
 ---
 
@@ -395,6 +396,7 @@ Identifiant de la base : `app3K4PQkkZFAxipC`.
 - **Remplacer Airtable par une alternative gratuite** (limite de 1 000 enregistrements : environ 700 au 13/11, une cinquantaine de plus par mois pour 2 entreprises, donc limite atteinte dans 5 à 6 mois environ). Pistes à comparer : **Supabase** (base PostgreSQL + système de connexion intégré, qui ferait aussi la vraie connexion de l'étape D2), **NocoDB** ou **Baserow** (proches d'Airtable, open source), **Google Sheets** (simple mais fragile pour les liens entre tables). Vérifier les limites gratuites au moment du choix. Impact : serveur local, fonctions Netlify et les 5 workflows n8n. À faire après la certification, ou en même temps que D2 si le choix est Supabase.
 - Tableau de rentabilité, budget, prix de vente, indicateurs clés.
 - Tests auprès d'un 2e dirigeant et d'autres dirigeants.
+- **Trame de prévisionnel à remplir par le dirigeant** : partir de la balance fournisseurs (et des comptes clients et charges) de l'année précédente, réparties mois par mois. Pour chaque mois à venir, une **double case** : à gauche le montant de l'an dernier (proposé), à droite le chiffre que le dirigeant juge le plus juste. Ses choix alimentent ensuite le prévisionnel dans la base. **Une ligne par fournisseur ou partenaire** (le nom que le dirigeant connaît), avec sa catégorie notée dessous. Maquette cliquable (13/11) : `zieli26-vscode/maquette-trame.html` (chiffres d'exemple, rien d'enregistré). À préciser : nombre de mois affichés, case « pourquoi ? » pour un chiffre modifié, rempli seul ou en rendez-vous, et import automatique. Va avec l'idée suivante (estimation à partir de N-1).
 - Estimation automatique des mois sans prévisionnel (même mois N-1, affichée « estimation automatique ») et rappel n8n quand l'horizon fait moins de 6 mois.
 - Catégorisation automatique (par règles, avec une option IA).
 - **Vraie connexion à un logiciel comptable** (Sage, Pennylane…) pour importer dans ma base, avec un **paramétrage de correspondance** entre les comptes du logiciel et mes catégories ; plus tard : connexion bancaire DSP2, facturation électronique.
